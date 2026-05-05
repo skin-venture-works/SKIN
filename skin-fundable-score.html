@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="skin-os.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SKIN Fundable Score — Analyst Tool</title>
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--mono); font-size: 15px; line-height: 1.65;
+  min-height: 100vh; overflow-x: hidden;
+}
+
+/* ── SHELL ── */
+.shell {
+  display: grid;
+  grid-template-columns: 280px 1fr 340px;
+  grid-template-rows: 56px 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  grid-column: 1/-1;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; border-bottom: 1px solid var(--border);
+  background: var(--bg); z-index: 100;
+}
+.brand { display: flex; align-items: baseline; gap: 10px; transition: opacity 0.15s; }
+.brand:hover { opacity: 0.75; }
+.brand .logo { font-family: var(--sans); font-weight: 800; font-size: 16px; letter-spacing: 0.12em; color: var(--text); }
+.brand .sep { color: var(--text-dim); }
+.brand .label { font-family: var(--mono); font-size: 13px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.topbar-actions { display: flex; align-items: center; gap: 10px; }
+
+.btn-ghost {
+  font-family: var(--mono); font-size: 13px;
+  padding: 6px 14px; border-radius: 2px;
+  border: 1px solid var(--border); background: none;
+  color: var(--text-muted); cursor: pointer;
+  transition: all 0.15s; letter-spacing: 0.05em;
+}
+.btn-ghost:hover { border-color: var(--border-h); color: var(--text); }
+.btn-primary {
+  font-family: var(--mono); font-size: 13px; font-weight: 500;
+  padding: 6px 16px; border-radius: 2px;
+  background: var(--accent); color: var(--bg);
+  border: none; cursor: pointer; letter-spacing: 0.05em;
+  transition: opacity 0.15s;
+}
+.btn-primary:hover { opacity: 0.85; }
+
+/* ── LEFT NAV — investor type + dimension ── */
+.left-nav {
+  border-right: 1px solid var(--border);
+  overflow-y: auto; padding: 18px 0; background: var(--bg);
+}
+.nav-section-label {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.16em; color: var(--text-dim);
+  text-transform: uppercase; padding: 0 18px 10px;
+  margin-top: 4px;
+}
+
+/* Investor type selector */
+.investor-types { padding: 0 14px 14px; display: flex; flex-direction: column; gap: 4px; }
+.inv-btn {
+  text-align: left;
+  font-family: var(--mono); font-size: 13px;
+  padding: 9px 14px; border-radius: 2px;
+  border: 1px solid var(--border); background: none;
+  color: var(--text-muted); cursor: pointer;
+  transition: all 0.15s; display: flex; justify-content: space-between; align-items: center;
+}
+.inv-btn:hover { border-color: var(--border-h); color: var(--text); }
+.inv-btn.active {
+  border-color: var(--accent); color: var(--accent);
+  background: var(--bg2);
+}
+.inv-btn .check-pct {
+  font-size: 11px; color: var(--text-dim);
+  font-family: var(--mono);
+}
+.inv-btn.active .check-pct { color: var(--accent); }
+
+.nav-divider { height: 1px; background: var(--border); margin: 8px 0; }
+
+/* Dimension nav */
+.dim-list { padding: 0; }
+.dim-item {
+  display: grid;
+  grid-template-columns: 28px 1fr 50px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+}
+.dim-item:hover { background: var(--bg2); }
+.dim-item.active {
+  background: var(--bg2);
+  border-left-color: var(--accent);
+}
+.dim-num {
+  font-family: var(--mono); font-size: 12px;
+  color: var(--text-dim);
+}
+.dim-item.active .dim-num { color: var(--accent); }
+.dim-label {
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  color: var(--text-muted);
+}
+.dim-item.active .dim-label { color: var(--text); }
+.dim-mini {
+  font-family: var(--mono); font-size: 12px;
+  color: var(--text-dim);
+  text-align: right;
+}
+.dim-mini.h { color: var(--score-high); }
+.dim-mini.m { color: var(--score-mid); }
+.dim-mini.l { color: var(--score-low); }
+
+.dim-dot {
+  display: inline-block;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--border-active); margin-left: 6px;
+}
+.dim-dot.h { background: var(--score-high); }
+.dim-dot.m { background: var(--score-mid); }
+.dim-dot.l { background: var(--score-low); }
+
+/* ── CENTER — scoring form ── */
+.scorer {
+  overflow-y: auto;
+  background: var(--bg);
+}
+.dim-panel { display: none; padding: 0 0 60px; }
+.dim-panel.active { display: block; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.panel-head {
+  padding: 32px 40px 20px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.panel-head::before {
+  content: attr(data-num);
+  position: absolute;
+  right: 32px; top: 28px;
+  font-family: var(--serif); font-size: 88px; font-style: italic;
+  color: var(--text-dim); opacity: 0.18; line-height: 1;
+}
+.panel-crumb {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+  color: var(--text-dim); text-transform: uppercase; margin-bottom: 12px;
+}
+.panel-crumb span { color: var(--accent); }
+.panel-title {
+  font-family: var(--serif); font-size: 44px; font-weight: 600;
+  line-height: 1.05; color: var(--text); margin-bottom: 12px;
+}
+.panel-sub {
+  font-size: 14px; color: var(--text-muted); line-height: 1.65;
+  max-width: 540px; margin-bottom: 16px;
+}
+.weight-badge {
+  display: inline-block; font-family: var(--mono); font-size: 12px;
+  padding: 4px 10px; border-radius: 2px;
+  background: var(--bg3); color: var(--text-muted);
+  letter-spacing: 0.06em;
+}
+
+/* Signal rows */
+.signals-form { padding: 20px 40px; }
+.section-label {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+  color: var(--text-dim); text-transform: uppercase;
+  padding: 12px 0 14px;
+}
+.signal-row {
+  display: grid;
+  grid-template-columns: 1fr 280px 50px;
+  gap: 24px; align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.signal-meta { display: flex; flex-direction: column; gap: 2px; }
+.signal-name {
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  color: var(--text);
+}
+.signal-help {
+  font-size: 12px; color: var(--text-muted); line-height: 1.5;
+}
+.signal-killer {
+  font-size: 11px; color: var(--score-low);
+  font-family: var(--mono); letter-spacing: 0.05em;
+  text-transform: uppercase; margin-top: 2px;
+}
+
+.slider-wrap {
+  display: flex; align-items: center; gap: 12px;
+}
+.slider-wrap input[type=range] {
+  flex: 1; height: 4px;
+  background: var(--bg3); border-radius: 2px;
+  -webkit-appearance: none; appearance: none;
+  cursor: pointer;
+}
+.slider-wrap input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 14px; height: 14px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.slider-wrap input[type=range]::-moz-range-thumb {
+  width: 14px; height: 14px;
+  background: var(--accent);
+  border-radius: 50%; border: none;
+  cursor: pointer;
+}
+.slider-labels {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--text-dim);
+  font-family: var(--mono);
+  margin-top: 4px;
+}
+
+.signal-val {
+  font-family: var(--mono); font-size: 16px;
+  text-align: right;
+  color: var(--text);
+}
+
+.panel-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 40px;
+  border-top: 1px solid var(--border);
+}
+.btn-nav {
+  font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em;
+  padding: 8px 18px; border-radius: 2px;
+  border: 1px solid var(--border); background: none;
+  color: var(--text-muted); cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-nav:hover { border-color: var(--border-h); color: var(--text); }
+.step-text { font-size: 12px; color: var(--text-dim); font-family: var(--mono); }
+
+/* ── RIGHT — verdict panel ── */
+.verdict-panel {
+  border-left: 1px solid var(--border);
+  background: var(--bg2);
+  overflow-y: auto;
+  padding: 28px 24px;
+}
+
+.score-display {
+  text-align: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+.score-eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+  color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px;
+}
+.score-num {
+  font-family: var(--serif); font-size: 64px; font-weight: 600;
+  line-height: 1; color: var(--text); margin-bottom: 4px;
+}
+.score-suffix {
+  font-family: var(--mono); font-size: 13px;
+  color: var(--text-muted); margin-bottom: 14px;
+}
+
+.verdict-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--sans); font-size: 13px; font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 6px 14px; border-radius: 2px;
+}
+.verdict-badge.fundable    { background: rgba(143,184,154,0.15); color: var(--score-high); border: 1px solid rgba(143,184,154,0.3); }
+.verdict-badge.borderline  { background: rgba(200,184,122,0.15); color: var(--score-mid);  border: 1px solid rgba(200,184,122,0.3); }
+.verdict-badge.notyet      { background: rgba(200,138,122,0.15); color: var(--score-low);  border: 1px solid rgba(200,138,122,0.3); }
+.verdict-badge.killer      { background: rgba(200,138,122,0.25); color: var(--score-low);  border: 1px solid rgba(200,138,122,0.5); }
+
+/* Dimension breakdown */
+.dim-breakdown {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.bd-label {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+  color: var(--text-dim); text-transform: uppercase; margin-bottom: 12px;
+}
+.bd-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 36px;
+  gap: 10px; align-items: center;
+  padding: 6px 0;
+  font-size: 12px;
+}
+.bd-name { color: var(--text-muted); font-family: var(--sans); font-size: 13px; }
+.bd-bar-wrap { background: var(--bg3); height: 4px; border-radius: 2px; overflow: hidden; }
+.bd-bar { height: 100%; background: var(--accent); transition: width 0.3s, background 0.3s; }
+.bd-val { font-family: var(--mono); font-size: 12px; color: var(--text); text-align: right; }
+
+/* Blockers */
+.blockers {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+.blocker-item {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+.blocker-item:last-child { border-bottom: none; }
+.blocker-item .bx-num {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--score-low);
+  color: var(--bg);
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  text-align: center; line-height: 16px;
+  margin-right: 8px;
+}
+.blocker-empty {
+  font-size: 12px; color: var(--text-dim); font-style: italic;
+}
+
+/* Timeline */
+.timeline-block {
+  font-size: 12px; color: var(--text-muted); line-height: 1.7;
+  padding: 12px 14px;
+  background: var(--bg3); border-radius: 2px;
+  border-left: 2px solid var(--accent);
+}
+.timeline-block strong {
+  color: var(--text); font-weight: 600;
+  display: block; margin-bottom: 4px;
+  font-family: var(--sans); font-size: 13px;
+}
+
+/* ── MOBILE ── */
+.mobile-dim-nav { display: none; grid-column: 1/-1; }
+.mobile-score-bar { display: none; grid-column: 1/-1; }
+
+@media (max-width: 1100px) {
+  .shell { grid-template-columns: 240px 1fr 280px; }
+  .panel-head { padding: 28px 28px 18px; }
+  .signals-form { padding: 20px 28px; }
+}
+
+@media (max-width: 860px) {
+  .shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: 56px auto auto 1fr;
+    height: auto; min-height: 100vh; overflow: visible;
+  }
+  .left-nav { display: none; }
+  .verdict-panel { display: none; }
+
+  .mobile-score-bar {
+    display: flex !important;
+    align-items: center; justify-content: space-between;
+    padding: 12px 18px;
+    background: var(--bg2); border-bottom: 1px solid var(--border);
+  }
+  .mobile-score-num { font-family: var(--serif); font-size: 28px; font-weight: 600; }
+  .mobile-score-label { font-size: 12px; color: var(--text-muted); }
+  .mobile-score-verdict { font-family: var(--sans); font-size: 11px; letter-spacing: 0.1em; color: var(--accent); }
+
+  .mobile-dim-nav {
+    display: flex !important;
+    overflow-x: auto; gap: 6px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border); background: var(--bg);
+    scrollbar-width: none;
+  }
+  .mobile-dim-nav::-webkit-scrollbar { display: none; }
+  .mobile-dim-btn {
+    flex-shrink: 0; font-family: var(--mono); font-size: 13px;
+    padding: 6px 14px; border: 1px solid var(--border);
+    border-radius: 20px; background: none; color: var(--text-muted);
+    cursor: pointer; white-space: nowrap;
+  }
+  .mobile-dim-btn.active { border-color: var(--accent); color: var(--accent); background: var(--bg2); }
+
+  .scorer { height: auto; overflow: visible; }
+  .panel-head { padding: 24px 20px 16px; }
+  .panel-title { font-size: 32px; }
+  .panel-head::before { font-size: 56px; }
+  .signals-form { padding: 16px 20px; }
+  .signal-row { grid-template-columns: 1fr; gap: 8px; padding: 14px 0; }
+  .signal-val { text-align: left; }
+  .panel-footer { padding: 16px 20px; }
+
+  .topbar { padding: 0 16px; }
+  .brand .sep, .brand .label { display: none; }
+  .btn-ghost, .btn-primary { padding: 5px 10px; font-size: 12px; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <a href="index.html" class="brand" style="text-decoration:none;color:inherit;">
+      <span class="logo">SKIN</span>
+      <span class="sep">/</span>
+      <span class="label">Fundable Score · Analyst Tool</span>
+    </a>
+    <div class="topbar-actions">
+      <button class="btn-ghost" onclick="resetAll()">Reset</button>
+      <button class="btn-ghost" onclick="window.location.href='skin-score-engine.html'">← Pulse Score</button>
+      <button class="btn-primary" onclick="exportFundableReport()">Export</button>
+    </div>
+  </header>
+
+  <!-- LEFT NAV -->
+  <nav class="left-nav scrollbar-thin">
+    <div class="nav-section-label">Investor type</div>
+    <div class="investor-types">
+      <button class="inv-btn" data-stage="angel" onclick="setStage('angel')">Angel <span class="check-pct">$25K–$250K</span></button>
+      <button class="inv-btn active" data-stage="preseed" onclick="setStage('preseed')">Pre-seed VC <span class="check-pct">$250K–$1.5M</span></button>
+      <button class="inv-btn" data-stage="seed" onclick="setStage('seed')">Seed VC <span class="check-pct">$1.5M–$5M</span></button>
+      <button class="inv-btn" data-stage="seriesa" onclick="setStage('seriesa')">Series A <span class="check-pct">$5M–$20M</span></button>
+      <button class="inv-btn" data-stage="accelerator" onclick="setStage('accelerator')">Accelerator <span class="check-pct">YC / EF / TS</span></button>
+      <button class="inv-btn" data-stage="crowd" onclick="setStage('crowd')">Crowdfunding <span class="check-pct">Wefunder / Republic</span></button>
+    </div>
+
+    <div class="nav-divider"></div>
+    <div class="nav-section-label">Fundability dimensions</div>
+    <div class="dim-list">
+      <div class="dim-item active" onclick="goTo(1)">
+        <span class="dim-num">01</span>
+        <span class="dim-label">Founder Signal</span>
+        <span class="dim-mini" id="mini-1">—<span class="dim-dot" id="dot-1"></span></span>
+      </div>
+      <div class="dim-item" onclick="goTo(2)">
+        <span class="dim-num">02</span>
+        <span class="dim-label">Market Signal</span>
+        <span class="dim-mini" id="mini-2">—<span class="dim-dot" id="dot-2"></span></span>
+      </div>
+      <div class="dim-item" onclick="goTo(3)">
+        <span class="dim-num">03</span>
+        <span class="dim-label">Traction Signal</span>
+        <span class="dim-mini" id="mini-3">—<span class="dim-dot" id="dot-3"></span></span>
+      </div>
+      <div class="dim-item" onclick="goTo(4)">
+        <span class="dim-num">04</span>
+        <span class="dim-label">Round Readiness</span>
+        <span class="dim-mini" id="mini-4">—<span class="dim-dot" id="dot-4"></span></span>
+      </div>
+      <div class="dim-item" onclick="goTo(5)">
+        <span class="dim-num">05</span>
+        <span class="dim-label">Narrative Quality</span>
+        <span class="dim-mini" id="mini-5">—<span class="dim-dot" id="dot-5"></span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE SCORE BAR -->
+  <div class="mobile-score-bar" id="mobile-score-bar">
+    <div>
+      <div class="mobile-score-label">Fundable Score™</div>
+      <div class="mobile-score-verdict" id="mobile-verdict">CALIBRATING</div>
+    </div>
+    <div class="mobile-score-num" id="mobile-score-num">50</div>
+  </div>
+
+  <!-- MOBILE DIM NAV -->
+  <nav class="mobile-dim-nav" id="mobile-nav-fund" aria-label="Fundability dimensions">
+    <button class="mobile-dim-btn active" onclick="goToMobile(1)">01 Founder</button>
+    <button class="mobile-dim-btn" onclick="goToMobile(2)">02 Market</button>
+    <button class="mobile-dim-btn" onclick="goToMobile(3)">03 Traction</button>
+    <button class="mobile-dim-btn" onclick="goToMobile(4)">04 Round</button>
+    <button class="mobile-dim-btn" onclick="goToMobile(5)">05 Narrative</button>
+  </nav>
+
+  <!-- CENTER: SCORING -->
+  <main class="scorer scrollbar-thin">
+
+    <!-- DIM 1: FOUNDER SIGNAL -->
+    <div class="dim-panel active" id="p1">
+      <div class="panel-head" data-num="01">
+        <div class="panel-crumb">Fundable Score / <span>Dimension 01</span></div>
+        <div class="panel-title">Founder Signal</div>
+        <p class="panel-sub">The earliest-stage investor decision is binary — bet on founder or don't. Tier-1 deal-killers (founder-market fit, conviction credibility) override every other dimension if absent.</p>
+        <div class="weight-badge" id="weight-1">Weight: 35% at pre-seed</div>
+      </div>
+      <div class="signals-form">
+        <div class="section-label">Tier 1 — Deal-killers if absent</div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Founder-market fit</div>
+            <div class="signal-help">Lived experience, deep domain proximity, or proven prior success in adjacent space.</div>
+            <div class="signal-killer">⚑ Tier-1 killer if &lt; 30</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-1-1" oninput="updateSignal(1, '1-1', this.value)">
+          </div>
+          <div class="signal-val" id="v-1-1">50</div>
+        </div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Conviction credibility</div>
+            <div class="signal-help">Can the founder articulate WHY they specifically — not just any smart person — should solve this problem?</div>
+            <div class="signal-killer">⚑ Tier-1 killer if &lt; 30</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-1-2" oninput="updateSignal(1, '1-2', this.value)">
+          </div>
+          <div class="signal-val" id="v-1-2">50</div>
+        </div>
+
+        <div class="section-label">Tier 2 — Differentiators</div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Team completeness</div>
+            <div class="signal-help">Does the team have the skills to execute the next 18 months — or is there a critical gap they can't see?</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-1-3" oninput="updateSignal(1, '1-3', this.value)">
+          </div>
+          <div class="signal-val" id="v-1-3">50</div>
+        </div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Co-founder cohesion</div>
+            <div class="signal-help">Evidence the team has shipped together, made hard decisions together, and has clear decision rights.</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-1-4" oninput="updateSignal(1, '1-4', this.value)">
+          </div>
+          <div class="signal-val" id="v-1-4">50</div>
+        </div>
+
+        <div class="section-label">Tier 3 — Valuation movers</div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Network strength</div>
+            <div class="signal-help">Quality of advisors, prior investors, and warm intro paths to target funds.</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-1-5" oninput="updateSignal(1, '1-5', this.value)">
+          </div>
+          <div class="signal-val" id="v-1-5">50</div>
+        </div>
+
+      </div>
+      <div class="panel-footer">
+        <span class="step-text">Dimension 1 of 5</span>
+        <button class="btn-nav" onclick="goTo(2)">Market Signal →</button>
+      </div>
+    </div>
+
+    <!-- DIM 2: MARKET SIGNAL -->
+    <div class="dim-panel" id="p2">
+      <div class="panel-head" data-num="02">
+        <div class="panel-crumb">Fundable Score / <span>Dimension 02</span></div>
+        <div class="panel-title">Market Signal</div>
+        <p class="panel-sub">Investors fund markets, not companies. The question isn't "is this a real market" — it's "is this a market that can return the fund."</p>
+        <div class="weight-badge" id="weight-2">Weight: 25% at pre-seed</div>
+      </div>
+      <div class="signals-form">
+        <div class="section-label">Tier 1 — Deal-killers if absent</div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">TAM credibility at stage</div>
+            <div class="signal-help">Believable path to $1B+ outcome at the stage they're raising. Not just a big number — a defensible story.</div>
+            <div class="signal-killer">⚑ Tier-1 killer if &lt; 30 at seed+</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-2-1" oninput="updateSignal(2, '2-1', this.value)">
+          </div>
+          <div class="signal-val" id="v-2-1">50</div>
+        </div>
+
+        <div class="section-label">Tier 2 — Differentiators</div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Timing argument</div>
+            <div class="signal-help">Specific, named forcing function — regulatory, technology, or behavioral — that opens the window now.</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-2-2" oninput="updateSignal(2, '2-2', this.value)">
+          </div>
+          <div class="signal-val" id="v-2-2">50</div>
+        </div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Competitive moat path</div>
+            <div class="signal-help">A credible answer to "why won't a well-funded incumbent copy this in 12 months?"</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-2-3" oninput="updateSignal(2, '2-3', this.value)">
+          </div>
+          <div class="signal-val" id="v-2-3">50</div>
+        </div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Category clarity</div>
+            <div class="signal-help">Does the company sit in a category investors recognize and route capital toward?</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-2-4" oninput="updateSignal(2, '2-4', this.value)">
+          </div>
+          <div class="signal-val" id="v-2-4">50</div>
+        </div>
+
+      </div>
+      <div class="panel-footer">
+        <button class="btn-nav" onclick="goTo(1)">← Founder</button>
+        <span class="step-text">Dimension 2 of 5</span>
+        <button class="btn-nav" onclick="goTo(3)">Traction →</button>
+      </div>
+    </div>
+
+    <!-- DIM 3: TRACTION SIGNAL -->
+    <div class="dim-panel" id="p3">
+      <div class="panel-head" data-num="03">
+        <div class="panel-crumb">Fundable Score / <span>Dimension 03</span></div>
+        <div class="panel-title">Traction Signal</div>
+        <p class="panel-sub">The proof point that converts conviction to capital. Weight increases dramatically with stage — at Series A, this dimension overrides almost everything else.</p>
+        <div class="weight-badge" id="weight-3">Weight: 15% at pre-seed</div>
+      </div>
+      <div class="signals-form">
+        <div class="section-label">Tier 1 — Deal-killers at seed+</div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Demand evidence</div>
+            <div class="signal-help">Revenue, retention, waitlist with conversion data, or signed LOIs. Something that proves people want this.</div>
+            <div class="signal-killer">⚑ Tier-1 killer at seed+ if &lt; 30</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-3-1" oninput="updateSignal(3, '3-1', this.value)">
+          </div>
+          <div class="signal-val" id="v-3-1">50</div>
+        </div>
+
+        <div class="section-label">Tier 2 — Differentiators</div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Growth velocity</div>
+            <div class="signal-help">Rate of growth over last 90 days. Investors fund momentum, not absolute size at early stages.</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-3-2" oninput="updateSignal(3, '3-2', this.value)">
+          </div>
+          <div class="signal-val" id="v-3-2">50</div>
+        </div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Retention quality</div>
+            <div class="signal-help">Are users staying? Are revenue cohorts holding up? Strong retention can offset weaker growth at early stages.</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-3-3" oninput="updateSignal(3, '3-3', this.value)">
+          </div>
+          <div class="signal-val" id="v-3-3">50</div>
+        </div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Unit economics direction</div>
+            <div class="signal-help">Improving, flat, or deteriorating as the company has grown. Direction matters more than absolute level at early stages.</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-3-4" oninput="updateSignal(3, '3-4', this.value)">
+          </div>
+          <div class="signal-val" id="v-3-4">50</div>
+        </div>
+
+      </div>
+      <div class="panel-footer">
+        <button class="btn-nav" onclick="goTo(2)">← Market</button>
+        <span class="step-text">Dimension 3 of 5</span>
+        <button class="btn-nav" onclick="goTo(4)">Round →</button>
+      </div>
+    </div>
+
+    <!-- DIM 4: ROUND READINESS -->
+    <div class="dim-panel" id="p4">
+      <div class="panel-head" data-num="04">
+        <div class="panel-crumb">Fundable Score / <span>Dimension 04</span></div>
+        <div class="panel-title">Round Readiness</div>
+        <p class="panel-sub">Even a strong company can fail to raise if the round itself is structured wrong. This dimension is about how the ask is framed — not the substance behind it.</p>
+        <div class="weight-badge" id="weight-4">Weight: 15% at pre-seed</div>
+      </div>
+      <div class="signals-form">
+        <div class="section-label">Tier 1 — Deal-killers</div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Milestone clarity</div>
+            <div class="signal-help">Can the founder name the specific proof point this round gets them to — and why it changes the next-round story?</div>
+            <div class="signal-killer">⚑ Tier-1 killer if &lt; 30</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-4-1" oninput="updateSignal(4, '4-1', this.value)">
+          </div>
+          <div class="signal-val" id="v-4-1">50</div>
+        </div>
+
+        <div class="section-label">Tier 2 — Differentiators</div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Stage-ask fit</div>
+            <div class="signal-help">Is the round size and valuation appropriate for the traction? Asking too high signals naivety. Asking too low signals fear.</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-4-2" oninput="updateSignal(4, '4-2', this.value)">
+          </div>
+          <div class="signal-val" id="v-4-2">50</div>
+        </div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Use of funds specificity</div>
+            <div class="signal-help">"Hire 2 sales, run 90 days of channel tests" beats "expand the team and grow." Specificity signals operational maturity.</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-4-3" oninput="updateSignal(4, '4-3', this.value)">
+          </div>
+          <div class="signal-val" id="v-4-3">50</div>
+        </div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Risk transparency</div>
+            <div class="signal-help">Does the founder name the top 2 risks and what they're doing about each? Hidden risks signal naivety; named risks signal sophistication.</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-4-4" oninput="updateSignal(4, '4-4', this.value)">
+          </div>
+          <div class="signal-val" id="v-4-4">50</div>
+        </div>
+
+      </div>
+      <div class="panel-footer">
+        <button class="btn-nav" onclick="goTo(3)">← Traction</button>
+        <span class="step-text">Dimension 4 of 5</span>
+        <button class="btn-nav" onclick="goTo(5)">Narrative →</button>
+      </div>
+    </div>
+
+    <!-- DIM 5: NARRATIVE QUALITY -->
+    <div class="dim-panel" id="p5">
+      <div class="panel-head" data-num="05">
+        <div class="panel-crumb">Fundable Score / <span>Dimension 05</span></div>
+        <div class="panel-title">Narrative Quality</div>
+        <p class="panel-sub">Wefunder data ($617M / 2,833 founders) confirms: campaigns and pitches that connect personally outperform technically superior competitors. This is the smallest weight — but the easiest to fix.</p>
+        <div class="weight-badge" id="weight-5">Weight: 10% at pre-seed</div>
+      </div>
+      <div class="signals-form">
+        <div class="section-label">Tier 3 — Valuation movers (no deal-killers here)</div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Origin story sharpness</div>
+            <div class="signal-help">Specific, personal, believable reason why this founder owns this problem. Generic origins ("noticed a gap") are credibility destroyers.</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-5-1" oninput="updateSignal(5, '5-1', this.value)">
+          </div>
+          <div class="signal-val" id="v-5-1">50</div>
+        </div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Pitch coherence</div>
+            <div class="signal-help">Does the deck flow? Are the data points consistent? Can the founder explain it in 90 seconds without losing the thread?</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-5-2" oninput="updateSignal(5, '5-2', this.value)">
+          </div>
+          <div class="signal-val" id="v-5-2">50</div>
+        </div>
+
+        <div class="signal-row">
+          <div class="signal-meta">
+            <div class="signal-name">Vision-evidence balance</div>
+            <div class="signal-help">Strong narrative balances ambitious vision with concrete evidence. Vision-only feels delusional. Evidence-only feels small.</div>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="100" value="50" id="s-5-3" oninput="updateSignal(5, '5-3', this.value)">
+          </div>
+          <div class="signal-val" id="v-5-3">50</div>
+        </div>
+
+      </div>
+      <div class="panel-footer">
+        <button class="btn-nav" onclick="goTo(4)">← Round</button>
+        <span class="step-text">Dimension 5 of 5</span>
+        <button class="btn-nav" onclick="exportFundableReport()">Export Report</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- RIGHT: VERDICT PANEL -->
+  <aside class="verdict-panel scrollbar-thin">
+
+    <div class="score-display">
+      <div class="score-eyebrow">Fundable Score™</div>
+      <div class="score-num" id="score-num">50</div>
+      <div class="score-suffix" id="score-stage">Pre-seed VC · /100</div>
+      <div class="verdict-badge borderline" id="verdict-badge">◎ CALIBRATING</div>
+    </div>
+
+    <div class="dim-breakdown">
+      <div class="bd-label">Dimension breakdown</div>
+      <div class="bd-row">
+        <span class="bd-name">Founder</span>
+        <div class="bd-bar-wrap"><div class="bd-bar" id="bar-1" style="width:50%"></div></div>
+        <span class="bd-val" id="bdval-1">50</span>
+      </div>
+      <div class="bd-row">
+        <span class="bd-name">Market</span>
+        <div class="bd-bar-wrap"><div class="bd-bar" id="bar-2" style="width:50%"></div></div>
+        <span class="bd-val" id="bdval-2">50</span>
+      </div>
+      <div class="bd-row">
+        <span class="bd-name">Traction</span>
+        <div class="bd-bar-wrap"><div class="bd-bar" id="bar-3" style="width:50%"></div></div>
+        <span class="bd-val" id="bdval-3">50</span>
+      </div>
+      <div class="bd-row">
+        <span class="bd-name">Round</span>
+        <div class="bd-bar-wrap"><div class="bd-bar" id="bar-4" style="width:50%"></div></div>
+        <span class="bd-val" id="bdval-4">50</span>
+      </div>
+      <div class="bd-row">
+        <span class="bd-name">Narrative</span>
+        <div class="bd-bar-wrap"><div class="bd-bar" id="bar-5" style="width:50%"></div></div>
+        <span class="bd-val" id="bdval-5">50</span>
+      </div>
+    </div>
+
+    <div class="blockers">
+      <div class="bd-label">Top blockers</div>
+      <div id="blockers-list">
+        <div class="blocker-empty">Score the dimensions to surface blockers.</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="bd-label">Readiness timeline</div>
+      <div class="timeline-block" id="timeline-block">
+        <strong>Calibrating</strong>
+        Adjust signals to generate a verdict and timeline.
+      </div>
+    </div>
+
+  </aside>
+
+</div>
+
+<script>
+/* ============================================================
+   SKIN Fundable Score — Engine
+
+   Logic:
+   - Each dimension is averaged from its signal sliders.
+   - Weights vary by investor stage.
+   - Tier-1 signals scoring < 30 trigger a "deal-killer" override
+     that caps the verdict at NOT YET, regardless of total score.
+   ============================================================ */
+
+const STAGES = {
+  angel:       { label: 'Angel',          shortLabel: 'Angel',       weights: [0.40, 0.20, 0.10, 0.20, 0.10] },
+  preseed:     { label: 'Pre-seed VC',    shortLabel: 'Pre-seed',    weights: [0.35, 0.25, 0.15, 0.15, 0.10] },
+  seed:        { label: 'Seed VC',        shortLabel: 'Seed',        weights: [0.25, 0.20, 0.30, 0.15, 0.10] },
+  seriesa:     { label: 'Series A',       shortLabel: 'Series A',    weights: [0.20, 0.20, 0.35, 0.15, 0.10] },
+  accelerator: { label: 'Accelerator',    shortLabel: 'Accelerator', weights: [0.45, 0.20, 0.10, 0.10, 0.15] },
+  crowd:       { label: 'Crowdfunding',   shortLabel: 'Crowdfunding',weights: [0.30, 0.15, 0.15, 0.10, 0.30] }
+};
+
+// Tier-1 signals by dimension — scoring below threshold = deal-killer
+const TIER1 = {
+  1: ['1-1', '1-2'],     // founder-market fit, conviction credibility
+  2: ['2-1'],            // TAM credibility (only at seed+)
+  3: ['3-1'],            // demand evidence (only at seed+)
+  4: ['4-1'],            // milestone clarity
+};
+
+const TIER1_THRESHOLD = 30;
+
+// Stage-specific tier-1 enforcement
+const TIER1_BY_STAGE = {
+  angel:       { 1: ['1-1', '1-2'],            4: ['4-1'] },
+  preseed:     { 1: ['1-1', '1-2'],            4: ['4-1'] },
+  seed:        { 1: ['1-1', '1-2'], 2: ['2-1'], 3: ['3-1'], 4: ['4-1'] },
+  seriesa:     { 1: ['1-1', '1-2'], 2: ['2-1'], 3: ['3-1'], 4: ['4-1'] },
+  accelerator: { 1: ['1-1', '1-2'] },
+  crowd:       { 1: ['1-1'], 5: [] }
+};
+
+// Signal-id → display name
+const SIGNAL_NAMES = {
+  '1-1': 'Founder-market fit',
+  '1-2': 'Conviction credibility',
+  '1-3': 'Team completeness',
+  '1-4': 'Co-founder cohesion',
+  '1-5': 'Network strength',
+  '2-1': 'TAM credibility at stage',
+  '2-2': 'Timing argument',
+  '2-3': 'Competitive moat path',
+  '2-4': 'Category clarity',
+  '3-1': 'Demand evidence',
+  '3-2': 'Growth velocity',
+  '3-3': 'Retention quality',
+  '3-4': 'Unit economics direction',
+  '4-1': 'Milestone clarity',
+  '4-2': 'Stage-ask fit',
+  '4-3': 'Use of funds specificity',
+  '4-4': 'Risk transparency',
+  '5-1': 'Origin story sharpness',
+  '5-2': 'Pitch coherence',
+  '5-3': 'Vision-evidence balance'
+};
+
+// Engine state
+let currentStage = 'preseed';
+let currentDim = 1;
+const signals = {};
+
+// Initialize all signals at 50
+['1-1','1-2','1-3','1-4','1-5','2-1','2-2','2-3','2-4','3-1','3-2','3-3','3-4','4-1','4-2','4-3','4-4','5-1','5-2','5-3'].forEach(id => {
+  signals[id] = 50;
+});
+
+/* ── Stage selector ── */
+function setStage(stage) {
+  currentStage = stage;
+  document.querySelectorAll('.inv-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.inv-btn[data-stage="${stage}"]`).classList.add('active');
+
+  // Update weight badges
+  const w = STAGES[stage].weights;
+  for (let i = 0; i < 5; i++) {
+    const el = document.getElementById(`weight-${i + 1}`);
+    if (el) el.textContent = `Weight: ${Math.round(w[i] * 100)}% at ${STAGES[stage].shortLabel}`;
+  }
+
+  recompute();
+}
+
+/* ── Dimension navigation ── */
+function goTo(n) {
+  currentDim = n;
+  document.querySelectorAll('.dim-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('p' + n).classList.add('active');
+  document.querySelectorAll('.dim-item').forEach((it, i) => it.classList.toggle('active', i === n - 1));
+  document.querySelectorAll('#mobile-nav-fund .mobile-dim-btn').forEach((b, i) => b.classList.toggle('active', i === n - 1));
+
+  const scorer = document.querySelector('.scorer');
+  if (scorer && scorer.scrollHeight > scorer.clientHeight) {
+    scorer.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function goToMobile(n) {
+  goTo(n);
+  const active = document.querySelector('#mobile-nav-fund .mobile-dim-btn.active');
+  if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+}
+
+/* ── Signal input ── */
+function updateSignal(dim, signalId, val) {
+  signals[signalId] = parseInt(val);
+  document.getElementById(`v-${signalId}`).textContent = val;
+  recompute();
+}
+
+/* ── Compute dimension scores ── */
+function dimensionScore(dim) {
+  const ids = Object.keys(signals).filter(id => id.startsWith(dim + '-'));
+  if (ids.length === 0) return 50;
+  const sum = ids.reduce((acc, id) => acc + signals[id], 0);
+  return Math.round(sum / ids.length);
+}
+
+/* ── Compute total fundable score ── */
+function fundableScore() {
+  const w = STAGES[currentStage].weights;
+  let score = 0;
+  for (let i = 1; i <= 5; i++) {
+    score += dimensionScore(i) * w[i - 1];
+  }
+  return Math.round(score);
+}
+
+/* ── Identify blockers ── */
+function findBlockers() {
+  const blockers = [];
+  const tier1Map = TIER1_BY_STAGE[currentStage] || {};
+
+  // Tier-1 deal-killers first (most severe)
+  for (const dim in tier1Map) {
+    for (const sigId of tier1Map[dim]) {
+      if (signals[sigId] < TIER1_THRESHOLD) {
+        blockers.push({
+          severity: 'killer',
+          name: SIGNAL_NAMES[sigId],
+          score: signals[sigId],
+          msg: `Deal-killer for ${STAGES[currentStage].shortLabel} — investors stop reading.`
+        });
+      }
+    }
+  }
+
+  // Then dimension-level weakness
+  for (let i = 1; i <= 5; i++) {
+    const dimScore = dimensionScore(i);
+    if (dimScore < 40 && blockers.filter(b => b.severity === 'killer').length === 0) {
+      const dimNames = ['Founder', 'Market', 'Traction', 'Round Readiness', 'Narrative'];
+      blockers.push({
+        severity: 'weak',
+        name: dimNames[i - 1] + ' dimension weak',
+        score: dimScore,
+        msg: 'Below threshold for this stage. Strengthen before approaching investors.'
+      });
+    }
+  }
+
+  return blockers.slice(0, 3); // top 3
+}
+
+/* ── Verdict logic ── */
+function verdict(score, blockers) {
+  const hasKiller = blockers.some(b => b.severity === 'killer');
+
+  if (hasKiller) return {
+    type: 'killer',
+    label: '✗ DEAL-KILLER PRESENT',
+    timeline: {
+      title: 'Not fundable until killer is resolved',
+      text: 'A Tier-1 signal is below threshold. No amount of strength elsewhere compensates. Address the specific blocker before any investor conversation.'
+    }
+  };
+
+  if (score >= 75) return {
+    type: 'fundable',
+    label: '✓ FUNDABLE',
+    timeline: {
+      title: 'Ready — start conversations now',
+      text: 'Strong across all required dimensions for ' + STAGES[currentStage].shortLabel + '. Begin warm intros within 14 days. Momentum compounds; delay erodes it.'
+    }
+  };
+
+  if (score >= 60) return {
+    type: 'borderline',
+    label: '◎ BORDERLINE',
+    timeline: {
+      title: '30–60 days from ready',
+      text: 'Close, but one or two dimensions need sharpening. Fix the specific blockers below, run a soft outreach test, then go full process.'
+    }
+  };
+
+  return {
+    type: 'notyet',
+    label: '✗ NOT YET',
+    timeline: {
+      title: '90+ days of work needed',
+      text: 'Multiple dimensions below threshold. Don\'t pitch — prep. Use the time to build the proof points investors will demand.'
+    }
+  };
+}
+
+/* ── Render everything ── */
+function recompute() {
+  const score = fundableScore();
+  const blockers = findBlockers();
+  const v = verdict(score, blockers);
+
+  // Score number
+  const numEl = document.getElementById('score-num');
+  numEl.textContent = score;
+  numEl.style.color = scoreColor(score);
+
+  // Stage label
+  document.getElementById('score-stage').textContent = STAGES[currentStage].label + ' · /100';
+
+  // Verdict badge
+  const badge = document.getElementById('verdict-badge');
+  badge.className = 'verdict-badge ' + v.type;
+  badge.textContent = v.label;
+
+  // Mobile bar
+  const mNum = document.getElementById('mobile-score-num');
+  const mV = document.getElementById('mobile-verdict');
+  if (mNum) { mNum.textContent = score; mNum.style.color = scoreColor(score); }
+  if (mV) { mV.textContent = v.label; mV.style.color = scoreColor(score); }
+
+  // Dimension breakdown
+  for (let i = 1; i <= 5; i++) {
+    const ds = dimensionScore(i);
+    const bar = document.getElementById(`bar-${i}`);
+    const val = document.getElementById(`bdval-${i}`);
+    const mini = document.getElementById(`mini-${i}`);
+    const dot = document.getElementById(`dot-${i}`);
+    if (bar) { bar.style.width = ds + '%'; bar.style.background = scoreColor(ds); }
+    if (val) val.textContent = ds;
+    if (mini) {
+      mini.firstChild.textContent = ds;
+      mini.className = 'dim-mini ' + scoreClass(ds);
+    }
+    if (dot) dot.className = 'dim-dot ' + scoreClass(ds);
+  }
+
+  // Blockers
+  const blockEl = document.getElementById('blockers-list');
+  if (blockers.length === 0) {
+    blockEl.innerHTML = '<div class="blocker-empty">No blockers detected. Score the dimensions to refine this list.</div>';
+  } else {
+    blockEl.innerHTML = blockers.map((b, i) => `
+      <div class="blocker-item">
+        <span class="bx-num">${i + 1}</span>
+        <strong style="color:var(--text);font-weight:500;">${b.name}</strong> (${b.score})
+        <div style="margin-top:4px;padding-left:24px;">${b.msg}</div>
+      </div>
+    `).join('');
+  }
+
+  // Timeline
+  const timelineEl = document.getElementById('timeline-block');
+  timelineEl.innerHTML = `<strong>${v.timeline.title}</strong>${v.timeline.text}`;
+}
+
+function scoreColor(s) {
+  if (s >= 70) return 'var(--score-high)';
+  if (s >= 45) return 'var(--score-mid)';
+  return 'var(--score-low)';
+}
+function scoreClass(s) {
+  if (s >= 70) return 'h';
+  if (s >= 45) return 'm';
+  return 'l';
+}
+
+/* ── Reset ── */
+function resetAll() {
+  if (!confirm('Reset all signals to 50?')) return;
+  Object.keys(signals).forEach(id => {
+    signals[id] = 50;
+    const slider = document.getElementById('s-' + id);
+    const val = document.getElementById('v-' + id);
+    if (slider) slider.value = 50;
+    if (val) val.textContent = 50;
+  });
+  recompute();
+}
+
+/* ── Export ── */
+function exportFundableReport() {
+  const score = fundableScore();
+  const blockers = findBlockers();
+  const v = verdict(score, blockers);
+  const stage = STAGES[currentStage];
+
+  const report = {
+    skin_fundable_report: {
+      generated_at: new Date().toISOString(),
+      investor_type: stage.label,
+      fundable_score: score,
+      verdict: v.label.replace(/[✓✗◎]\s*/, ''),
+      verdict_type: v.type,
+      timeline: v.timeline,
+      dimensions: {
+        founder_signal:    { score: dimensionScore(1), weight: stage.weights[0] },
+        market_signal:     { score: dimensionScore(2), weight: stage.weights[1] },
+        traction_signal:   { score: dimensionScore(3), weight: stage.weights[2] },
+        round_readiness:   { score: dimensionScore(4), weight: stage.weights[3] },
+        narrative_quality: { score: dimensionScore(5), weight: stage.weights[4] }
+      },
+      blockers: blockers,
+      signal_detail: Object.fromEntries(
+        Object.entries(signals).map(([id, val]) => [SIGNAL_NAMES[id], val])
+      )
+    }
+  };
+
+  const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `skin-fundable-report-${Date.now()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Init
+recompute();
+
+</script>
+<script src="skin-os.js"></script>
+</body>
+</html>
