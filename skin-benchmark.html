@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="skin-os.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SKIN Benchmark — Market Positioning Map</title>
+<style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--mono); font-size: 15px; line-height: 1.65;
+  min-height: 100vh; overflow-x: hidden;
+}
+
+/* ── SHELL ── */
+.shell {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  grid-template-rows: 56px 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  grid-column: 1/-1;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; border-bottom: 1px solid var(--border);
+  background: var(--bg); z-index: 100;
+}
+.brand { display: flex; align-items: baseline; gap: 10px; transition: opacity 0.15s; }
+.brand:hover { opacity: 0.75; }
+.brand .logo { font-family: var(--sans); font-weight: 800; font-size: 16px; letter-spacing: 0.12em; color: var(--text); }
+.brand .sep { color: var(--text-dim); }
+.brand .label { font-family: var(--mono); font-size: 13px; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.topbar-actions { display: flex; align-items: center; gap: 10px; }
+
+.btn-ghost {
+  font-family: var(--mono); font-size: 13px;
+  padding: 6px 14px; border-radius: 2px;
+  border: 1px solid var(--border); background: none;
+  color: var(--text-muted); cursor: pointer;
+  transition: all 0.15s; letter-spacing: 0.05em;
+}
+.btn-ghost:hover { border-color: var(--border-h); color: var(--text); }
+.btn-primary {
+  font-family: var(--mono); font-size: 13px; font-weight: 500;
+  padding: 6px 16px; border-radius: 2px;
+  background: var(--accent); color: var(--bg);
+  border: none; cursor: pointer; letter-spacing: 0.05em;
+}
+.btn-primary:hover { opacity: 0.85; }
+
+/* ── LEFT PANEL — entity manager ── */
+.left-panel {
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+}
+
+.view-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+.view-tab {
+  flex: 1;
+  font-family: var(--mono); font-size: 13px;
+  padding: 14px 16px; border: none; background: none;
+  color: var(--text-muted); cursor: pointer;
+  border-bottom: 2px solid transparent;
+  letter-spacing: 0.06em;
+  transition: all 0.15s;
+}
+.view-tab:hover { color: var(--text); }
+.view-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: var(--bg2);
+}
+
+.section-label {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.16em; color: var(--text-dim);
+  text-transform: uppercase; padding: 18px 18px 10px;
+}
+
+/* Entity form */
+.entity-form { padding: 0 18px 18px; }
+.field { margin-bottom: 12px; }
+.field-label {
+  font-family: var(--mono); font-size: 12px;
+  color: var(--text-muted); margin-bottom: 5px;
+  display: block;
+}
+.field-input {
+  width: 100%;
+  font-family: var(--mono); font-size: 14px;
+  padding: 7px 10px; border-radius: 2px;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--text);
+  transition: border-color 0.15s;
+}
+.field-input:focus { outline: none; border-color: var(--accent); }
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.entity-type {
+  display: flex; gap: 4px; flex-wrap: wrap;
+}
+.type-pill {
+  font-family: var(--mono); font-size: 12px;
+  padding: 5px 10px; border-radius: 20px;
+  border: 1px solid var(--border); background: none;
+  color: var(--text-muted); cursor: pointer;
+  transition: all 0.15s;
+}
+.type-pill:hover { border-color: var(--border-h); color: var(--text); }
+.type-pill.selected {
+  border-color: var(--accent); color: var(--accent);
+  background: var(--bg2);
+}
+
+.btn-add {
+  width: 100%;
+  font-family: var(--mono); font-size: 13px; font-weight: 500;
+  padding: 9px 14px; border-radius: 2px;
+  background: var(--accent); color: var(--bg);
+  border: none; cursor: pointer;
+  margin-top: 4px;
+}
+.btn-add:hover { opacity: 0.88; }
+.btn-add:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* Entity list */
+.entity-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 0 16px;
+}
+.entity-item {
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 10px;
+}
+.ei-meta { flex: 1; min-width: 0; }
+.ei-name {
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ei-type {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--text-dim); margin-top: 2px;
+  letter-spacing: 0.05em;
+}
+.ei-coords {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--text-muted); margin-top: 2px;
+}
+.ei-remove {
+  font-family: var(--mono); font-size: 11px;
+  padding: 3px 7px; border-radius: 2px;
+  border: 1px solid var(--border); background: none;
+  color: var(--text-dim); cursor: pointer;
+  flex-shrink: 0;
+}
+.ei-remove:hover { color: var(--score-low); border-color: var(--score-low); }
+
+.entity-item.client {
+  background: linear-gradient(90deg, rgba(200,184,122,0.05) 0%, transparent 100%);
+  border-left: 2px solid var(--accent);
+}
+.entity-item.client .ei-name::before {
+  content: '★ ';
+  color: var(--accent);
+}
+
+.entity-empty {
+  padding: 20px 18px;
+  font-size: 12px; color: var(--text-dim);
+  font-style: italic;
+}
+
+/* ── MAIN — map canvas ── */
+.main {
+  overflow-y: auto;
+  background: var(--bg);
+  padding: 32px 40px;
+}
+
+.map-header {
+  margin-bottom: 24px;
+}
+.map-eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+  color: var(--text-dim); text-transform: uppercase; margin-bottom: 12px;
+}
+.map-title {
+  font-family: var(--serif); font-size: 44px; font-weight: 600;
+  line-height: 1.05; color: var(--text); margin-bottom: 12px;
+}
+.map-sub {
+  font-size: 14px; color: var(--text-muted); line-height: 1.65;
+  max-width: 640px;
+}
+
+/* The map itself */
+.map-wrap {
+  position: relative;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 60px 60px 80px;
+  margin-bottom: 28px;
+}
+
+.map-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.4 / 1;
+  background:
+    linear-gradient(to right, var(--border) 1px, transparent 1px) 0 0 / 12.5% 100%,
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px) 0 0 / 100% 12.5%;
+  background-color: var(--bg3);
+  border-radius: 2px;
+  overflow: visible;
+}
+
+/* Quadrant labels — under the map background */
+.quadrant {
+  position: absolute;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--text-dim); letter-spacing: 0.1em;
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: 0.6;
+}
+.q-tl { top: 14px; left: 18px; }
+.q-tr { top: 14px; right: 18px; }
+.q-bl { bottom: 14px; left: 18px; }
+.q-br { bottom: 14px; right: 18px; }
+
+/* Cross axes */
+.axis-h, .axis-v {
+  position: absolute;
+  background: var(--border-active);
+  pointer-events: none;
+}
+.axis-h { left: 0; right: 0; top: 50%; height: 1px; }
+.axis-v { top: 0; bottom: 0; left: 50%; width: 1px; }
+
+/* Axis labels — outside canvas */
+.axis-label-x {
+  position: absolute;
+  bottom: -42px; left: 50%; transform: translateX(-50%);
+  font-family: var(--mono); font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.axis-label-y {
+  position: absolute;
+  left: -42px; top: 50%; transform: translateY(-50%) rotate(-90deg);
+  font-family: var(--mono); font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Axis end labels */
+.end-x-left, .end-x-right, .end-y-top, .end-y-bottom {
+  position: absolute;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+.end-x-left { left: 0; bottom: -22px; }
+.end-x-right { right: 0; bottom: -22px; text-align: right; }
+.end-y-top { left: -28px; top: 0; transform: rotate(-90deg); transform-origin: 0 0; }
+.end-y-bottom { left: -28px; bottom: 0; transform: rotate(-90deg); transform-origin: 0 100%; }
+
+/* Plot points */
+.plot-point {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  border: 2px solid var(--bg2);
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 5;
+}
+.plot-point:hover {
+  width: 18px; height: 18px;
+  z-index: 20;
+}
+
+.plot-point.competitor    { background: var(--score-low); }
+.plot-point.adjacent      { background: var(--score-mid); }
+.plot-point.workaround    { background: var(--text-dim); }
+.plot-point.replacement   { background: var(--accent3); }
+
+.plot-point.client {
+  width: 22px; height: 22px;
+  background: var(--accent);
+  border: 3px solid var(--bg2);
+  box-shadow: 0 0 0 2px var(--accent), 0 0 24px rgba(200,184,122,0.4);
+  z-index: 10;
+  animation: clientPulse 2.4s ease-in-out infinite;
+}
+@keyframes clientPulse {
+  0%, 100% { box-shadow: 0 0 0 2px var(--accent), 0 0 24px rgba(200,184,122,0.4); }
+  50%       { box-shadow: 0 0 0 2px var(--accent), 0 0 36px rgba(200,184,122,0.7); }
+}
+
+.plot-label {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 12px));
+  font-family: var(--mono); font-size: 12px;
+  background: var(--bg);
+  padding: 3px 8px; border-radius: 2px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 6;
+}
+.plot-point.client + .plot-label,
+.plot-label.client {
+  font-weight: 600;
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--bg);
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding: 14px 0 4px;
+  border-top: 1px solid var(--border);
+  margin-top: 32px;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 12px;
+  color: var(--text-muted);
+}
+.legend-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+
+/* Insights panel below map */
+.insights {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.insight-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 18px 20px;
+}
+.insight-label {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.14em; color: var(--text-dim);
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.insight-num {
+  font-family: var(--serif); font-size: 36px; font-weight: 600;
+  color: var(--text); line-height: 1; margin-bottom: 6px;
+}
+.insight-text {
+  font-size: 13px; color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* Replacement threat view */
+.replacement-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.threat-col {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 22px 24px;
+}
+.threat-col h3 {
+  font-family: var(--sans); font-size: 16px; font-weight: 600;
+  color: var(--text); margin-bottom: 4px;
+}
+.threat-col-sub {
+  font-size: 12px; color: var(--text-muted);
+  margin-bottom: 18px; line-height: 1.55;
+}
+.threat-list { display: flex; flex-direction: column; gap: 8px; }
+.threat-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border-radius: 2px;
+  border-left: 2px solid var(--border-active);
+}
+.threat-item.high { border-left-color: var(--score-low); }
+.threat-item.med  { border-left-color: var(--score-mid); }
+.threat-item.low  { border-left-color: var(--score-high); }
+.ti-name { font-size: 13px; color: var(--text); font-family: var(--sans); }
+.ti-level {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.05em; padding: 2px 8px; border-radius: 2px;
+}
+.ti-level.high { background: rgba(200,138,122,0.15); color: var(--score-low); }
+.ti-level.med  { background: rgba(200,184,122,0.15); color: var(--score-mid); }
+.ti-level.low  { background: rgba(143,184,154,0.15); color: var(--score-high); }
+.threat-empty {
+  font-size: 12px; color: var(--text-dim); font-style: italic;
+  padding: 20px 0;
+}
+
+/* Sample data button */
+.sample-prompt {
+  background: var(--bg3);
+  padding: 12px 16px;
+  border-radius: 2px;
+  margin-bottom: 18px;
+  font-size: 12px; color: var(--text-muted);
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px;
+}
+.sample-prompt button {
+  font-family: var(--mono); font-size: 12px;
+  padding: 5px 12px; border-radius: 2px;
+  border: 1px solid var(--accent); background: none;
+  color: var(--accent); cursor: pointer;
+  white-space: nowrap;
+}
+
+.view-panel { display: none; }
+.view-panel.active { display: block; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── MOBILE ── */
+.mobile-tab-nav { display: none; grid-column: 1/-1; }
+
+@media (max-width: 980px) {
+  .insights { grid-template-columns: 1fr; }
+  .replacement-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 860px) {
+  .shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: 56px auto 1fr;
+    height: auto; min-height: 100vh; overflow: visible;
+  }
+  .left-panel { display: none; }
+  .main { height: auto; padding: 24px 18px 60px; }
+
+  .mobile-tab-nav {
+    display: flex !important;
+    overflow-x: auto; gap: 6px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border); background: var(--bg);
+    scrollbar-width: none;
+  }
+  .mobile-tab-nav::-webkit-scrollbar { display: none; }
+  .mobile-tab-btn {
+    flex-shrink: 0; font-family: var(--mono); font-size: 13px;
+    padding: 6px 14px; border: 1px solid var(--border);
+    border-radius: 20px; background: none; color: var(--text-muted);
+    cursor: pointer; white-space: nowrap;
+  }
+  .mobile-tab-btn.active { border-color: var(--accent); color: var(--accent); background: var(--bg2); }
+
+  .map-title { font-size: 30px; }
+  .map-wrap { padding: 50px 36px 70px; }
+  .axis-label-x { font-size: 10px; bottom: -36px; }
+  .axis-label-y { font-size: 10px; left: -28px; }
+  .end-x-left, .end-x-right, .end-y-top, .end-y-bottom { font-size: 10px; }
+  .plot-label { font-size: 11px; padding: 2px 6px; }
+
+  .topbar { padding: 0 16px; }
+  .brand .sep, .brand .label { display: none; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <a href="index.html" class="brand" style="text-decoration:none;color:inherit;">
+      <span class="logo">SKIN</span>
+      <span class="sep">/</span>
+      <span class="label">Benchmark · Market Positioning</span>
+    </a>
+    <div class="topbar-actions">
+      <button class="btn-ghost" onclick="resetMap()">Reset</button>
+      <button class="btn-ghost" onclick="loadSample()">Load sample</button>
+      <button class="btn-primary" onclick="exportMap()">Export</button>
+    </div>
+  </header>
+
+  <!-- LEFT: ENTITY MANAGER -->
+  <aside class="left-panel">
+    <div class="view-tabs">
+      <button class="view-tab active" data-view="positioning" onclick="setView('positioning')">Positioning Map</button>
+      <button class="view-tab" data-view="replacement" onclick="setView('replacement')">Replacement Threats</button>
+    </div>
+
+    <div class="section-label">Add entity</div>
+    <div class="entity-form">
+      <div class="field">
+        <label class="field-label">Name</label>
+        <input class="field-input" id="ent-name" placeholder="e.g., Acme Inc." maxlength="32">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Entity type</label>
+        <div class="entity-type" id="type-pills">
+          <button class="type-pill" data-type="client" onclick="setType('client')">★ This client</button>
+          <button class="type-pill selected" data-type="competitor" onclick="setType('competitor')">Direct competitor</button>
+          <button class="type-pill" data-type="adjacent" onclick="setType('adjacent')">Adjacent alt.</button>
+          <button class="type-pill" data-type="workaround" onclick="setType('workaround')">Workaround</button>
+        </div>
+      </div>
+
+      <div class="field" id="position-field">
+        <label class="field-label">Position on map (0–100)</label>
+        <div class="field-row">
+          <input class="field-input" id="ent-x" type="number" min="0" max="100" placeholder="X" value="50">
+          <input class="field-input" id="ent-y" type="number" min="0" max="100" placeholder="Y" value="50">
+        </div>
+      </div>
+
+      <div class="field" id="threat-field" style="display:none">
+        <label class="field-label">Threat level</label>
+        <div class="entity-type">
+          <button class="type-pill" data-threat="high" onclick="setThreat('high')">High</button>
+          <button class="type-pill selected" data-threat="med" onclick="setThreat('med')">Medium</button>
+          <button class="type-pill" data-threat="low" onclick="setThreat('low')">Low</button>
+        </div>
+      </div>
+
+      <button class="btn-add" id="btn-add" onclick="addEntity()">+ Add to map</button>
+    </div>
+
+    <div class="section-label">Entities (<span id="entity-count">0</span>)</div>
+    <div class="entity-list" id="entity-list">
+      <div class="entity-empty">No entities yet. Add the client and 3–8 competitors or alternatives.</div>
+    </div>
+  </aside>
+
+  <!-- MOBILE TAB NAV -->
+  <nav class="mobile-tab-nav">
+    <button class="mobile-tab-btn active" onclick="setView('positioning')">Positioning Map</button>
+    <button class="mobile-tab-btn" onclick="setView('replacement')">Replacement Threats</button>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main scrollbar-thin">
+
+    <!-- POSITIONING MAP VIEW -->
+    <div class="view-panel active" id="view-positioning">
+      <div class="map-header">
+        <div class="map-eyebrow">SKIN Benchmark · Market Positioning</div>
+        <div class="map-title">Where does this<br>company sit?</div>
+        <p class="map-sub">A 2x2 strategic map plotting the SKIN client against competitors, adjacent alternatives, and workarounds. Use this alongside the Pulse Score and Fundable Score to assess whether the company occupies a defensible, fundable position — or sits in a crowded zone with weak moats.</p>
+      </div>
+
+      <div class="sample-prompt">
+        <span>New to this tool? Load a sample dataset (CRM space) to see how it plots a real market.</span>
+        <button onclick="loadSample()">Load sample →</button>
+      </div>
+
+      <div class="map-wrap">
+        <div class="map-canvas" id="map-canvas">
+          <!-- Quadrant labels -->
+          <div class="quadrant q-tl">Vulnerable Incumbent</div>
+          <div class="quadrant q-tr">Established Leader</div>
+          <div class="quadrant q-bl">Crowded Disruptor</div>
+          <div class="quadrant q-br">Category Creator</div>
+
+          <!-- Cross axes -->
+          <div class="axis-h"></div>
+          <div class="axis-v"></div>
+
+          <!-- Axis labels -->
+          <div class="axis-label-x">Differentiation Strength →</div>
+          <div class="axis-label-y">Market Position →</div>
+
+          <div class="end-x-left">Commodity</div>
+          <div class="end-x-right">Defensible</div>
+          <div class="end-y-bottom">Disruptor</div>
+          <div class="end-y-top">Incumbent</div>
+
+          <!-- Plot points injected here -->
+        </div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>★ This client</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--score-low)"></span>Direct competitor</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--score-mid)"></span>Adjacent alternative</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--text-dim)"></span>Manual workaround</div>
+      </div>
+
+      <div class="insights">
+        <div class="insight-card">
+          <div class="insight-label">Quadrant verdict</div>
+          <div class="insight-num" id="quadrant-name">—</div>
+          <div class="insight-text" id="quadrant-text">Add the client to the map to see which strategic quadrant they occupy and what that means.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-label">Density signal</div>
+          <div class="insight-num" id="density-num">—</div>
+          <div class="insight-text" id="density-text">Once you've plotted competitors, this shows how crowded the client's neighborhood is — a key fundability signal.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPLACEMENT THREAT VIEW -->
+    <div class="view-panel" id="view-replacement">
+      <div class="map-header">
+        <div class="map-eyebrow">SKIN Benchmark · Replacement Threats</div>
+        <div class="map-title">What do customers use<br>instead of this?</div>
+        <p class="map-sub">"No market need" is the #1 startup failure cause (Failory: 64+ cases). Often the real competitor isn't another product — it's a manual workaround, a bigger tool repurposed, or doing nothing. This view groups all replacements by threat level so you can see what the company is actually fighting.</p>
+      </div>
+
+      <div class="replacement-grid">
+        <div class="threat-col">
+          <h3>Direct competition</h3>
+          <p class="threat-col-sub">Products built to solve the same problem. The most visible threat — but not always the biggest.</p>
+          <div class="threat-list" id="rep-direct">
+            <div class="threat-empty">No direct competitors added yet.</div>
+          </div>
+        </div>
+
+        <div class="threat-col">
+          <h3>Adjacent alternatives</h3>
+          <p class="threat-col-sub">Tools built for adjacent problems that buyers stretch to cover this need. Often underestimated.</p>
+          <div class="threat-list" id="rep-adjacent">
+            <div class="threat-empty">No adjacent alternatives added yet.</div>
+          </div>
+        </div>
+
+        <div class="threat-col">
+          <h3>Manual workarounds</h3>
+          <p class="threat-col-sub">Spreadsheets, email, internal scripts, "we just do it manually." The biggest hidden competitor.</p>
+          <div class="threat-list" id="rep-workaround">
+            <div class="threat-empty">No workarounds added yet.</div>
+          </div>
+        </div>
+
+        <div class="threat-col">
+          <h3>Do nothing</h3>
+          <p class="threat-col-sub">The buyer simply chooses not to solve the problem. If this is a high threat, you may have a "no market need" situation.</p>
+          <div class="threat-list" id="rep-nothing">
+            <div class="threat-empty">If "do nothing" is a real competitor, add it here as a workaround entity named "Doing nothing / status quo."</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="insights">
+        <div class="insight-card">
+          <div class="insight-label">Replacement density</div>
+          <div class="insight-num" id="rep-total">—</div>
+          <div class="insight-text" id="rep-text">Add at least 5 replacements across the four categories to surface the dominant threat type.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-label">Strategic implication</div>
+          <div class="insight-num" id="strat-headline">—</div>
+          <div class="insight-text" id="strat-text">SKIN analyst guidance based on which replacement category dominates the threat landscape.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+/* ============================================================
+   SKIN Benchmark — Engine
+   ============================================================ */
+
+const QUADRANTS = {
+  tl: {
+    name: 'Established Leader',
+    text: 'High market position, strong differentiation. Defensible, but slow. Vulnerable to disruptors who build distribution before incumbents wake up.'
+  },
+  tr: {
+    name: 'Vulnerable Incumbent',
+    text: 'High market position but low defensibility. The textbook disruption target. If the client is here, they will lose to a faster, cheaper, or sharper challenger.'
+  },
+  bl: {
+    name: 'Category Creator',
+    text: 'Disruptor with real moats. The strongest position for a SKIN client to occupy. Investors fund this quadrant; incumbents acquire it.'
+  },
+  br: {
+    name: 'Crowded Disruptor',
+    text: 'New category, weak moat. The danger zone — many startups die here. Differentiation must emerge fast or distribution will determine the winner.'
+  }
+};
+
+let entities = [];
+let selectedType = 'competitor';
+let selectedThreat = 'med';
+let currentView = 'positioning';
+
+/* ── Type/threat selectors ── */
+function setType(type) {
+  selectedType = type;
+  document.querySelectorAll('#type-pills .type-pill').forEach(p => {
+    p.classList.toggle('selected', p.dataset.type === type);
+  });
+
+  // Show/hide threat field for replacement view
+  const threatField = document.getElementById('threat-field');
+  const positionField = document.getElementById('position-field');
+  if (currentView === 'replacement') {
+    threatField.style.display = type === 'client' ? 'none' : '';
+    positionField.style.display = type === 'client' ? '' : 'none';
+  }
+}
+
+function setThreat(t) {
+  selectedThreat = t;
+  document.querySelectorAll('[data-threat]').forEach(p => {
+    p.classList.toggle('selected', p.dataset.threat === t);
+  });
+}
+
+/* ── View switcher ── */
+function setView(view) {
+  currentView = view;
+  document.querySelectorAll('.view-tab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
+  document.querySelectorAll('.mobile-tab-btn').forEach(t => t.classList.toggle('active', t.textContent.toLowerCase().includes(view === 'positioning' ? 'positioning' : 'replacement')));
+  document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+
+  // Toggle field visibility based on view
+  const threatField = document.getElementById('threat-field');
+  const positionField = document.getElementById('position-field');
+  if (view === 'replacement') {
+    if (selectedType !== 'client') {
+      threatField.style.display = '';
+      positionField.style.display = '';
+    }
+  } else {
+    threatField.style.display = 'none';
+    positionField.style.display = '';
+  }
+
+  render();
+}
+
+/* ── Add / remove entities ── */
+function addEntity() {
+  const name = document.getElementById('ent-name').value.trim();
+  if (!name) {
+    alert('Please enter a name.');
+    return;
+  }
+
+  // If trying to add a client and one already exists, replace it
+  if (selectedType === 'client') {
+    entities = entities.filter(e => e.type !== 'client');
+  }
+
+  const x = parseInt(document.getElementById('ent-x').value) || 50;
+  const y = parseInt(document.getElementById('ent-y').value) || 50;
+
+  entities.push({
+    id: Date.now() + Math.random(),
+    name: name.substring(0, 32),
+    type: selectedType,
+    x: Math.max(0, Math.min(100, x)),
+    y: Math.max(0, Math.min(100, y)),
+    threat: selectedThreat
+  });
+
+  // Clear form
+  document.getElementById('ent-name').value = '';
+  document.getElementById('ent-x').value = 50;
+  document.getElementById('ent-y').value = 50;
+
+  render();
+}
+
+function removeEntity(id) {
+  entities = entities.filter(e => e.id !== id);
+  render();
+}
+
+function resetMap() {
+  if (entities.length === 0) return;
+  if (!confirm('Remove all entities?')) return;
+  entities = [];
+  render();
+}
+
+/* ── Sample loader ── */
+function loadSample() {
+  if (entities.length > 0 && !confirm('Replace current entities with sample data?')) return;
+
+  entities = [
+    { id: 1, name: 'Acme CRM',     type: 'client',      x: 35, y: 25, threat: 'med' },
+    { id: 2, name: 'Salesforce',   type: 'competitor',  x: 90, y: 88, threat: 'high' },
+    { id: 3, name: 'HubSpot',      type: 'competitor',  x: 75, y: 78, threat: 'high' },
+    { id: 4, name: 'Pipedrive',    type: 'competitor',  x: 55, y: 55, threat: 'med' },
+    { id: 5, name: 'Attio',        type: 'competitor',  x: 40, y: 32, threat: 'high' },
+    { id: 6, name: 'Notion DB',    type: 'adjacent',    x: 28, y: 50, threat: 'med' },
+    { id: 7, name: 'Airtable',     type: 'adjacent',    x: 35, y: 60, threat: 'med' },
+    { id: 8, name: 'Spreadsheets', type: 'workaround',  x: 12, y: 40, threat: 'high' },
+    { id: 9, name: 'Email + Calendar', type: 'workaround', x: 18, y: 30, threat: 'med' },
+  ];
+  render();
+}
+
+/* ── Render everything ── */
+function render() {
+  renderEntityList();
+  renderMap();
+  renderInsights();
+  renderReplacement();
+}
+
+function renderEntityList() {
+  const list = document.getElementById('entity-list');
+  document.getElementById('entity-count').textContent = entities.length;
+
+  if (entities.length === 0) {
+    list.innerHTML = '<div class="entity-empty">No entities yet. Add the client and 3–8 competitors or alternatives.</div>';
+    return;
+  }
+
+  // Sort: client first, then by type
+  const sorted = [...entities].sort((a, b) => {
+    if (a.type === 'client') return -1;
+    if (b.type === 'client') return 1;
+    return 0;
+  });
+
+  list.innerHTML = sorted.map(e => `
+    <div class="entity-item ${e.type === 'client' ? 'client' : ''}">
+      <div class="ei-meta">
+        <div class="ei-name">${escapeHtml(e.name)}</div>
+        <div class="ei-type">${typeLabel(e.type)}${e.type !== 'client' && currentView === 'replacement' ? ' · ' + e.threat.toUpperCase() : ''}</div>
+        <div class="ei-coords">x: ${e.x} · y: ${e.y}</div>
+      </div>
+      <button class="ei-remove" onclick="removeEntity(${e.id})">×</button>
+    </div>
+  `).join('');
+}
+
+function renderMap() {
+  const canvas = document.getElementById('map-canvas');
+  // Remove old plot points & labels
+  canvas.querySelectorAll('.plot-point, .plot-label').forEach(el => el.remove());
+
+  entities.forEach(e => {
+    const point = document.createElement('div');
+    point.className = `plot-point ${e.type}`;
+    point.style.left = e.x + '%';
+    point.style.top = (100 - e.y) + '%';  // flip Y so up = high
+    point.title = e.name;
+    canvas.appendChild(point);
+
+    const label = document.createElement('div');
+    label.className = 'plot-label' + (e.type === 'client' ? ' client' : '');
+    label.style.left = e.x + '%';
+    label.style.top = (100 - e.y) + '%';
+    label.textContent = e.name;
+    canvas.appendChild(label);
+  });
+}
+
+function renderInsights() {
+  const client = entities.find(e => e.type === 'client');
+  const qNameEl = document.getElementById('quadrant-name');
+  const qTextEl = document.getElementById('quadrant-text');
+  const dNumEl = document.getElementById('density-num');
+  const dTextEl = document.getElementById('density-text');
+
+  if (!client) {
+    qNameEl.textContent = '—';
+    qTextEl.textContent = 'Add the client to the map to see which strategic quadrant they occupy and what that means.';
+    dNumEl.textContent = '—';
+    dTextEl.textContent = "Once you've plotted competitors, this shows how crowded the client's neighborhood is — a key fundability signal.";
+    return;
+  }
+
+  // Determine quadrant based on client x, y
+  // x: 0–50 = commodity, 50–100 = defensible
+  // y: 0–50 = disruptor, 50–100 = incumbent
+  let qKey;
+  if (client.x >= 50 && client.y >= 50)      qKey = 'leader';      // defensible incumbent
+  else if (client.x < 50 && client.y >= 50)  qKey = 'vulnerable';  // commodity incumbent
+  else if (client.x >= 50 && client.y < 50)  qKey = 'creator';     // defensible disruptor
+  else                                        qKey = 'crowded';     // commodity disruptor
+
+  const QUADRANTS_MAP = {
+    leader:     { name: 'Established Leader',   text: 'High market position, strong differentiation. Defensible — but slow. Vulnerable to disruptors who build distribution before incumbents wake up. SKIN signal: stable, but the upside is capped by incumbency inertia.' },
+    vulnerable: { name: 'Vulnerable Incumbent', text: 'High market position but low defensibility. The textbook disruption target. If the client is here, they will lose to a faster, cheaper, or sharper challenger unless they urgently build a moat.' },
+    creator:    { name: 'Category Creator',     text: 'Disruptor with real moats. The strongest position for a SKIN client to occupy. Investors fund this quadrant; incumbents acquire it. The risk is execution speed, not strategy.' },
+    crowded:    { name: 'Crowded Disruptor',    text: 'New category, weak moat. The danger zone — many startups die here. Differentiation must emerge fast, or distribution alone will determine the winner. Fundability depends on a clear path out of this quadrant.' }
+  };
+
+  const q = QUADRANTS_MAP[qKey];
+  qNameEl.textContent = q.name;
+  qTextEl.textContent = q.text;
+
+  // Density: count competitors within 20 units of client
+  const nearby = entities.filter(e => {
+    if (e.type === 'client') return false;
+    const dx = e.x - client.x, dy = e.y - client.y;
+    return Math.sqrt(dx * dx + dy * dy) <= 20;
+  });
+
+  dNumEl.textContent = nearby.length + ' near';
+
+  if (nearby.length === 0) {
+    dTextEl.textContent = 'No close competitors — either an unclaimed niche or a market that doesn\'t exist. Verify which.';
+  } else if (nearby.length <= 2) {
+    dTextEl.textContent = 'Manageable density. The client has room to differentiate without immediate dogfighting.';
+  } else if (nearby.length <= 4) {
+    dTextEl.textContent = 'Crowded neighborhood. Differentiation needs to be sharp and visible — investors will ask about every named competitor.';
+  } else {
+    dTextEl.textContent = 'Saturated zone. The market is decided by distribution and brand, not product. Verify the client has a structural advantage in either.';
+  }
+}
+
+function renderReplacement() {
+  const direct = entities.filter(e => e.type === 'competitor');
+  const adjacent = entities.filter(e => e.type === 'adjacent');
+  const workaround = entities.filter(e => e.type === 'workaround' && !/nothing|status quo/i.test(e.name));
+  const nothing = entities.filter(e => e.type === 'workaround' && /nothing|status quo/i.test(e.name));
+
+  renderThreatList('rep-direct', direct);
+  renderThreatList('rep-adjacent', adjacent);
+  renderThreatList('rep-workaround', workaround);
+  renderThreatList('rep-nothing', nothing, 'If "do nothing" is a real competitor, add it as a workaround entity named "Doing nothing / status quo."');
+
+  // Insights
+  const total = entities.filter(e => e.type !== 'client').length;
+  document.getElementById('rep-total').textContent = total + ' total';
+
+  let stratHeadline = '—';
+  let stratText = 'SKIN analyst guidance based on which replacement category dominates the threat landscape.';
+
+  if (total === 0) {
+    document.getElementById('rep-text').textContent = 'Add at least 5 replacements across the four categories to surface the dominant threat type.';
+  } else {
+    const max = Math.max(direct.length, adjacent.length, workaround.length + nothing.length);
+    document.getElementById('rep-text').textContent =
+      `${direct.length} direct · ${adjacent.length} adjacent · ${workaround.length + nothing.length} workaround. ${max >= 4 ? 'High concentration in dominant category.' : 'Balanced threat distribution.'}`;
+
+    if (workaround.length + nothing.length >= Math.max(direct.length, adjacent.length)) {
+      stratHeadline = 'Workaround-dominated';
+      stratText = 'The biggest competitor is "how customers do this today without a tool." This is the hardest threat to displace because it\'s already free and already working. Pricing and onboarding friction are the deciding factors — not feature parity.';
+    } else if (direct.length >= adjacent.length && direct.length >= workaround.length + nothing.length) {
+      stratHeadline = 'Competitor-dominated';
+      stratText = 'Crowded direct competition means the market is validated but contested. Position must be sharp — what specific buyer wins by choosing this over the named competitors? If the answer is "lower price" or "better UI," the position isn\'t defensible.';
+    } else {
+      stratHeadline = 'Adjacent-dominated';
+      stratText = 'Adjacent tools are the dominant alternative. Buyers are stretching general-purpose tools to cover this need. Opportunity: become the purpose-built tool. Risk: the adjacent tool adds the missing feature in their next release.';
+    }
+  }
+
+  document.getElementById('strat-headline').textContent = stratHeadline;
+  document.getElementById('strat-text').textContent = stratText;
+}
+
+function renderThreatList(id, items, emptyMsg) {
+  const el = document.getElementById(id);
+  if (items.length === 0) {
+    el.innerHTML = `<div class="threat-empty">${emptyMsg || 'None added yet.'}</div>`;
+    return;
+  }
+  el.innerHTML = items.map(e => `
+    <div class="threat-item ${e.threat}">
+      <span class="ti-name">${escapeHtml(e.name)}</span>
+      <span class="ti-level ${e.threat}">${e.threat.toUpperCase()} threat</span>
+    </div>
+  `).join('');
+}
+
+function typeLabel(t) {
+  return {
+    client: '★ This client',
+    competitor: 'Direct competitor',
+    adjacent: 'Adjacent alternative',
+    workaround: 'Manual workaround'
+  }[t] || t;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+/* ── Export ── */
+function exportMap() {
+  const client = entities.find(e => e.type === 'client');
+  const report = {
+    skin_benchmark_report: {
+      generated_at: new Date().toISOString(),
+      client: client ? { name: client.name, x: client.x, y: client.y } : null,
+      quadrant: client ? document.getElementById('quadrant-name').textContent : null,
+      quadrant_meaning: client ? document.getElementById('quadrant-text').textContent : null,
+      density: client ? document.getElementById('density-num').textContent : null,
+      density_meaning: client ? document.getElementById('density-text').textContent : null,
+      replacement_summary: {
+        total: entities.filter(e => e.type !== 'client').length,
+        dominant_category: document.getElementById('strat-headline').textContent,
+        analyst_guidance: document.getElementById('strat-text').textContent
+      },
+      entities: entities.map(e => ({
+        name: e.name,
+        type: e.type,
+        x: e.x,
+        y: e.y,
+        threat: e.type !== 'client' ? e.threat : null
+      }))
+    }
+  };
+  const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `skin-benchmark-${Date.now()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Allow Enter key to add entity
+document.getElementById('ent-name').addEventListener('keypress', e => {
+  if (e.key === 'Enter') addEntity();
+});
+
+// Init
+render();
+</script>
+<script src="skin-os.js"></script>
+</body>
+</html>
