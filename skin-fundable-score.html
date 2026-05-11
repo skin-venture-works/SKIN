@@ -134,6 +134,102 @@ body {
 .dim-dot.m { background: var(--score-mid); }
 .dim-dot.l { background: var(--score-low); }
 
+/* ── RUBRIC BLOCK (left panel explainer) ── */
+.rubric-block {
+  padding: 0 18px 24px;
+  font-family: var(--mono);
+}
+.rubric-item {
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+.rubric-item:last-child { border-bottom: none; }
+
+.rubric-label {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.12em; color: var(--text-muted);
+  text-transform: uppercase; margin-bottom: 10px;
+  font-weight: 500;
+}
+
+/* Score range tiers */
+.rubric-scale { display: flex; flex-direction: column; gap: 6px; }
+.rs-tier {
+  display: grid;
+  grid-template-columns: 12px 50px 1fr;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+.rs-dot { width: 8px; height: 8px; border-radius: 50%; }
+.rs-dot.l   { background: var(--score-low); }
+.rs-dot.m   { background: rgba(200,184,122,0.5); }
+.rs-dot.mid { background: var(--score-mid); }
+.rs-dot.h   { background: var(--score-high); }
+.rs-range { color: var(--text); font-weight: 500; }
+.rs-desc  { color: var(--text-muted); font-family: var(--sans); }
+
+/* Verdict thresholds */
+.rubric-verdicts { display: flex; flex-direction: column; gap: 6px; }
+.rv-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px;
+}
+.rv-badge {
+  font-family: var(--sans); font-size: 10px; font-weight: 700;
+  padding: 3px 8px; border-radius: 2px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.rv-badge.fundable   { background: rgba(143,184,154,0.15); color: var(--score-high); }
+.rv-badge.borderline { background: rgba(200,184,122,0.15); color: var(--score-mid); }
+.rv-badge.notyet     { background: rgba(200,138,122,0.15); color: var(--score-low); }
+.rv-badge.killer     { background: rgba(200,138,122,0.25); color: var(--score-low); }
+.rv-cond { font-size: 11px; color: var(--text-muted); }
+
+/* Signal tiers */
+.rubric-tiers { display: flex; flex-direction: column; gap: 12px; }
+.rt-tier {}
+.rt-name {
+  font-family: var(--sans); font-size: 12px;
+  color: var(--text); margin-bottom: 4px;
+  font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+}
+.rt-flag {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px;
+}
+.rt-flag.killer { color: var(--score-low); }
+.rt-flag.diff   { color: var(--accent); }
+.rt-flag.mover  { color: var(--text-muted); }
+.rt-desc {
+  font-size: 11px; color: var(--text-muted);
+  line-height: 1.55;
+  font-family: var(--sans);
+  padding-left: 18px;
+}
+
+/* How to score */
+.rubric-howto { display: flex; flex-direction: column; gap: 8px; }
+.rh-step {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 11px; color: var(--text-muted);
+  font-family: var(--sans);
+  line-height: 1.55;
+}
+.rh-num {
+  flex-shrink: 0;
+  width: 18px; height: 18px;
+  background: var(--bg3);
+  color: var(--text);
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 10px;
+  font-weight: 600;
+}
+
 /* ── CENTER — scoring form ── */
 .scorer {
   overflow-y: auto;
@@ -473,6 +569,60 @@ body {
         <span class="dim-label">Narrative Quality</span>
         <span class="dim-mini" id="mini-5">—<span class="dim-dot" id="dot-5"></span></span>
       </div>
+    </div>
+
+    <div class="nav-divider"></div>
+    <div class="nav-section-label">How scoring works</div>
+    <div class="rubric-block">
+
+      <div class="rubric-item">
+        <div class="rubric-label">Score range</div>
+        <div class="rubric-scale">
+          <div class="rs-tier"><span class="rs-dot l"></span><span class="rs-range">0–29</span><span class="rs-desc">Weak / absent</span></div>
+          <div class="rs-tier"><span class="rs-dot m"></span><span class="rs-range">30–59</span><span class="rs-desc">Developing</span></div>
+          <div class="rs-tier"><span class="rs-dot mid"></span><span class="rs-range">60–74</span><span class="rs-desc">Solid</span></div>
+          <div class="rs-tier"><span class="rs-dot h"></span><span class="rs-range">75–100</span><span class="rs-desc">Investor-ready</span></div>
+        </div>
+      </div>
+
+      <div class="rubric-item">
+        <div class="rubric-label">Verdict thresholds</div>
+        <div class="rubric-verdicts">
+          <div class="rv-row"><span class="rv-badge fundable">FUNDABLE</span><span class="rv-cond">≥ 75 total</span></div>
+          <div class="rv-row"><span class="rv-badge borderline">BORDERLINE</span><span class="rv-cond">60–74</span></div>
+          <div class="rv-row"><span class="rv-badge notyet">NOT YET</span><span class="rv-cond">&lt; 60</span></div>
+          <div class="rv-row"><span class="rv-badge killer">DEAL-KILLER</span><span class="rv-cond">Any Tier-1 &lt; 30</span></div>
+        </div>
+      </div>
+
+      <div class="rubric-item">
+        <div class="rubric-label">Signal tiers</div>
+        <div class="rubric-tiers">
+          <div class="rt-tier">
+            <div class="rt-name"><span class="rt-flag killer">⚑</span> Tier 1 — Deal-killers</div>
+            <div class="rt-desc">Investors stop reading if any of these score below 30. No amount of strength elsewhere compensates.</div>
+          </div>
+          <div class="rt-tier">
+            <div class="rt-name"><span class="rt-flag diff">◆</span> Tier 2 — Differentiators</div>
+            <div class="rt-desc">Separate fundable from not. Strong scores here move the verdict from BORDERLINE to FUNDABLE.</div>
+          </div>
+          <div class="rt-tier">
+            <div class="rt-name"><span class="rt-flag mover">○</span> Tier 3 — Valuation movers</div>
+            <div class="rt-desc">Don't determine fundability — but move pricing, term sheet velocity, and competitive demand.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rubric-item">
+        <div class="rubric-label">How to score</div>
+        <div class="rubric-howto">
+          <div class="rh-step"><span class="rh-num">1</span>Pick investor type (top of this panel) — weights shift by stage.</div>
+          <div class="rh-step"><span class="rh-num">2</span>Score each signal 0–100 based on evidence from the deck, data room, and conversations.</div>
+          <div class="rh-step"><span class="rh-num">3</span>Total score, verdict, and top blockers update live on the right.</div>
+          <div class="rh-step"><span class="rh-num">4</span>Export the JSON report for the Pulse deliverable.</div>
+        </div>
+      </div>
+
     </div>
   </nav>
 
