@@ -485,87 +485,96 @@ body {
 .intel-caveat strong { color: var(--accent3); font-weight: 600; }
 
 .intel-grid {
-  display: grid;
-  gap: 14px;
-}
-.intel-card {
-  background: var(--bg2);
+  overflow-x: auto;
   border: 1px solid var(--border);
   border-radius: 4px;
-  padding: 18px 22px;
-  transition: border-color 0.15s;
-}
-.intel-card:hover { border-color: var(--border-h); }
-.intel-card.client {
-  border-color: var(--accent);
-  background: linear-gradient(90deg, rgba(200,184,122,0.05) 0%, transparent 100%);
+  background: var(--bg2);
 }
 
-.ic-head {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
+.intel-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
 }
-.ic-name {
-  font-family: var(--sans); font-size: 17px; font-weight: 600;
+
+.intel-table thead {
+  background: var(--bg3);
+}
+.intel-table th {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: left; font-weight: 500;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.intel-table th.center { text-align: center; }
+.intel-table th.numeric { text-align: right; }
+
+.intel-table tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+}
+.intel-table tbody tr:last-child { border-bottom: none; }
+.intel-table tbody tr:hover { background: var(--bg3); }
+.intel-table tbody tr.client {
+  background: linear-gradient(90deg, rgba(200,184,122,0.06) 0%, transparent 60%);
+  border-left: 2px solid var(--accent);
+}
+.intel-table tbody tr.client:hover { background: linear-gradient(90deg, rgba(200,184,122,0.1) 0%, var(--bg3) 60%); }
+
+.intel-table td {
+  padding: 14px 14px;
+  vertical-align: top;
   color: var(--text);
 }
-.ic-name.client::before { content: '★ '; color: var(--accent); }
-.ic-type {
-  font-family: var(--mono); font-size: 11px;
-  padding: 3px 8px; border-radius: 2px;
+
+.it-name {
+  font-family: var(--sans); font-size: 14px; font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+.it-name.client::before { content: '★ '; color: var(--accent); }
+.it-name.client { color: var(--accent); }
+
+.it-type-pill {
+  display: inline-block;
+  font-family: var(--mono); font-size: 10px;
+  padding: 2px 7px; border-radius: 2px;
   letter-spacing: 0.05em;
   background: var(--bg3); color: var(--text-muted);
+  margin-top: 4px;
 }
-.ic-type.competitor { background: rgba(200,138,122,0.12); color: var(--score-low); }
-.ic-type.adjacent   { background: rgba(200,184,122,0.12); color: var(--score-mid); }
-.ic-type.workaround { background: rgba(160,143,200,0.12); color: var(--accent3); }
-.ic-type.client     { background: rgba(200,184,122,0.18); color: var(--accent); }
+.it-type-pill.competitor { background: rgba(200,138,122,0.12); color: var(--score-low); }
+.it-type-pill.adjacent   { background: rgba(200,184,122,0.12); color: var(--score-mid); }
+.it-type-pill.workaround { background: rgba(160,143,200,0.12); color: var(--accent3); }
+.it-type-pill.client     { background: rgba(200,184,122,0.18); color: var(--accent); }
 
-.ic-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  padding: 12px 0;
-  margin-bottom: 12px;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+.it-val {
+  font-family: var(--mono); font-size: 13px;
+  color: var(--text);
+  display: flex; align-items: center; gap: 6px;
+  white-space: nowrap;
 }
-.ic-stat {}
-.ic-stat-label {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--text-dim); margin-bottom: 4px;
+.it-val.numeric { justify-content: flex-end; }
+.it-val.muted { color: var(--text-muted); }
+
+.it-sw {
+  font-size: 12px; color: var(--text-muted);
+  line-height: 1.5;
+  min-width: 200px; max-width: 280px;
 }
-.ic-stat-val {
-  font-family: var(--sans); font-size: 14px;
-  color: var(--text); font-weight: 500;
-  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-}
+
 .confidence-pill {
   font-family: var(--mono); font-size: 9px;
   padding: 2px 6px; border-radius: 2px;
   letter-spacing: 0.06em;
+  flex-shrink: 0;
 }
 .confidence-pill.high { background: rgba(143,184,154,0.18); color: var(--score-high); }
 .confidence-pill.med  { background: rgba(200,184,122,0.18); color: var(--score-mid); }
 .confidence-pill.low  { background: rgba(200,138,122,0.18); color: var(--score-low); }
-
-.ic-sw {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-.ic-sw-block {}
-.ic-sw-label {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--text-dim); margin-bottom: 6px;
-}
-.ic-sw-label.strengths { color: var(--score-high); }
-.ic-sw-label.weak      { color: var(--score-low); }
-.ic-sw-text {
-  font-size: 13px; color: var(--text-muted); line-height: 1.5;
-}
 
 /* ── MODAL ── */
 .modal-overlay {
@@ -638,15 +647,14 @@ body {
 @media (max-width: 980px) {
   .insights { grid-template-columns: 1fr; }
   .replacement-grid { grid-template-columns: 1fr; }
-  .ic-stats { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 860px) {
-  .ic-sw { grid-template-columns: 1fr; }
-  .ic-stats { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .intel-title { font-size: 24px; }
   .modal { padding: 22px 20px 18px; }
   .modal-title { font-size: 22px; }
+  .intel-table th, .intel-table td { padding: 10px 10px; font-size: 12px; }
+  .it-sw { min-width: 180px; }
 }
 
 @media (max-width: 860px) {
@@ -1500,46 +1508,56 @@ function renderIntel() {
   const order = { client: 0, competitor: 1, adjacent: 2, workaround: 3 };
   const sorted = [...withIntel].sort((a, b) => (order[a.type] || 99) - (order[b.type] || 99));
 
-  grid.innerHTML = sorted.map(e => {
+  const rows = sorted.map(e => {
     const i = e.intel;
     const yearsLabel = e.type === 'workaround' ? 'N/A' : (i.years ? `${i.years} yrs` : '—');
     return `
-      <div class="intel-card ${e.type === 'client' ? 'client' : ''}">
-        <div class="ic-head">
-          <div class="ic-name ${e.type === 'client' ? 'client' : ''}">${escapeHtml(e.name)}</div>
-          <div class="ic-type ${e.type}">${typeLabel(e.type)}</div>
-        </div>
-        <div class="ic-stats">
-          <div class="ic-stat">
-            <div class="ic-stat-label">Years</div>
-            <div class="ic-stat-val">${yearsLabel}</div>
+      <tr class="${e.type === 'client' ? 'client' : ''}">
+        <td>
+          <div class="it-name ${e.type === 'client' ? 'client' : ''}">${escapeHtml(e.name)}</div>
+          <div class="it-type-pill ${e.type}">${typeLabel(e.type)}</div>
+        </td>
+        <td><div class="it-val numeric ${yearsLabel === 'N/A' ? 'muted' : ''}">${yearsLabel}</div></td>
+        <td>
+          <div class="it-val">
+            <span>${escapeHtml(i.raised)}</span>
+            ${i.raised !== 'N/A' ? `<span class="confidence-pill ${i.confidence}">${i.confidence.toUpperCase()}</span>` : ''}
           </div>
-          <div class="ic-stat">
-            <div class="ic-stat-label">Total raised</div>
-            <div class="ic-stat-val">${escapeHtml(i.raised)}<span class="confidence-pill ${i.confidence}">${i.confidence.toUpperCase()}</span></div>
+        </td>
+        <td>
+          <div class="it-val">
+            <span>${escapeHtml(i.market_share)}</span>
+            ${i.market_share !== 'N/A' ? `<span class="confidence-pill ${i.confidence}">${i.confidence.toUpperCase()}</span>` : ''}
           </div>
-          <div class="ic-stat">
-            <div class="ic-stat-label">Market share</div>
-            <div class="ic-stat-val">${escapeHtml(i.market_share)}<span class="confidence-pill ${i.confidence}">${i.confidence.toUpperCase()}</span></div>
+        </td>
+        <td>
+          <div class="it-val">
+            <span>${escapeHtml(i.revenue)}</span>
+            ${i.revenue !== 'N/A' ? `<span class="confidence-pill ${i.confidence}">${i.confidence.toUpperCase()}</span>` : ''}
           </div>
-          <div class="ic-stat">
-            <div class="ic-stat-label">Revenue</div>
-            <div class="ic-stat-val">${escapeHtml(i.revenue)}<span class="confidence-pill ${i.confidence}">${i.confidence.toUpperCase()}</span></div>
-          </div>
-        </div>
-        <div class="ic-sw">
-          <div class="ic-sw-block">
-            <div class="ic-sw-label strengths">+ Strengths</div>
-            <div class="ic-sw-text">${escapeHtml(i.strengths)}</div>
-          </div>
-          <div class="ic-sw-block">
-            <div class="ic-sw-label weak">− Weaknesses</div>
-            <div class="ic-sw-text">${escapeHtml(i.weaknesses)}</div>
-          </div>
-        </div>
-      </div>
+        </td>
+        <td><div class="it-sw">${escapeHtml(i.strengths)}</div></td>
+        <td><div class="it-sw">${escapeHtml(i.weaknesses)}</div></td>
+      </tr>
     `;
   }).join('');
+
+  grid.innerHTML = `
+    <table class="intel-table">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th class="numeric">Years</th>
+          <th>Total Raised</th>
+          <th>Market Share</th>
+          <th>Revenue</th>
+          <th>Strengths</th>
+          <th>Weaknesses</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
 }
 
 // Hook into render
