@@ -786,74 +786,46 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
       </div>
     </div>
 
-    <!-- ─── DIMENSION 6: FINANCIALS (was 07, absorbs IR universal signals) ─── -->
+    <!-- ─── DIMENSION 6: FINANCIALS ─── -->
     <div class="dim-panel" id="p6">
       <div class="panel-head" data-num="06">
         <div class="panel-crumb">Score Engine / <span>Dimension 06</span></div>
         <div class="panel-title">Financials</div>
-        <p class="panel-sub">The founding team's relationship with capital. Burn awareness, unit economics, milestone discipline, and cap table health.</p>
+        <p class="panel-sub">The founding team's relationship with capital. Burn awareness, unit economics, revenue clarity, and discipline around how every dollar is deployed.</p>
         <div class="weight-badge">Weight: 16% of SKIN Score</div>
       </div>
       <div class="signals-form">
         <div class="signal-group">
           <div class="group-label">Core signals</div>
           <div class="signal-row">
-            <div class="signal-name">Burn awareness & control<em>Knows monthly burn by line item, not just total</em></div>
+            <div class="signal-name">Burn & runway discipline<em>Knows burn by line item, runway from realistic assumptions, spend matched to evidence</em></div>
             <div class="slider-wrap"><input type="range" min="0" max="100" value="50" class="dim-slider" data-dim="6" oninput="onSlide(this)"></div>
             <div class="slider-val" id="sv-6-0">50</div>
           </div>
           <div class="signal-row">
-            <div class="signal-name">Runway clarity<em>Calculated from realistic assumptions with buffer</em></div>
+            <div class="signal-name">Unit economics clarity<em>Knows which customer segments are profitable, with cohort-level visibility</em></div>
             <div class="slider-wrap"><input type="range" min="0" max="100" value="50" class="dim-slider" data-dim="6" oninput="onSlide(this)"></div>
             <div class="slider-val" id="sv-6-1">50</div>
           </div>
           <div class="signal-row">
-            <div class="signal-name">Unit economics understanding<em>Knows which segments are profitable vs not</em></div>
+            <div class="signal-name">Revenue model & path to sustainability<em>Pricing accepted by real customers; knows the operational path to breakeven</em></div>
             <div class="slider-wrap"><input type="range" min="0" max="100" value="50" class="dim-slider" data-dim="6" oninput="onSlide(this)"></div>
             <div class="slider-val" id="sv-6-2">50</div>
           </div>
           <div class="signal-row">
-            <div class="signal-name">Capital efficiency discipline<em>Spend and team matched to actual stage evidence</em></div>
+            <div class="signal-name">Milestone & capital allocation discipline<em>Every dollar tied to a proof point or outcome, not "team and growth"</em></div>
             <div class="slider-wrap"><input type="range" min="0" max="100" value="50" class="dim-slider" data-dim="6" oninput="onSlide(this)"></div>
             <div class="slider-val" id="sv-6-3">50</div>
           </div>
           <div class="signal-row">
-            <div class="signal-name">Revenue model validation<em>Pricing accepted by real customers at full price</em></div>
+            <div class="signal-name">Equity & ownership discipline<em>Clean cap table, documented founder splits, no undocumented promises</em></div>
             <div class="slider-wrap"><input type="range" min="0" max="100" value="50" class="dim-slider" data-dim="6" oninput="onSlide(this)"></div>
             <div class="slider-val" id="sv-6-4">50</div>
           </div>
           <div class="signal-row">
-            <div class="signal-name">Breakeven path clarity<em>Knows the operational levers, not just "when we raise"</em></div>
+            <div class="signal-name">Financial transparency<em>Honest accounting, knows the numbers cold, no hidden surprises</em></div>
             <div class="slider-wrap"><input type="range" min="0" max="100" value="50" class="dim-slider" data-dim="6" oninput="onSlide(this)"></div>
             <div class="slider-val" id="sv-6-5">50</div>
-          </div>
-          <div class="signal-row">
-            <div class="signal-name">Milestone discipline<em>Capital tied to specific proof points, not "team and growth"</em></div>
-            <div class="slider-wrap"><input type="range" min="0" max="100" value="50" class="dim-slider" data-dim="6" oninput="onSlide(this)"></div>
-            <div class="slider-val" id="sv-6-6">50</div>
-          </div>
-          <div class="signal-row">
-            <div class="signal-name">Cap table cleanliness<em>Clean ownership records, no undocumented promises</em></div>
-            <div class="slider-wrap"><input type="range" min="0" max="100" value="50" class="dim-slider" data-dim="6" oninput="onSlide(this)"></div>
-            <div class="slider-val" id="sv-6-7">50</div>
-          </div>
-          <div class="signal-row">
-            <div class="signal-name">Use-of-funds specificity<em>Every dollar has a job tied to an outcome</em></div>
-            <div class="slider-wrap"><input type="range" min="0" max="100" value="50" class="dim-slider" data-dim="6" oninput="onSlide(this)"></div>
-            <div class="slider-val" id="sv-6-8">50</div>
-          </div>
-        </div>
-        <div class="signal-group">
-          <div class="group-label">Risk flags</div>
-          <div class="signal-row">
-            <div class="signal-name">Hockey-stick projections without driver<em>Aspiration masquerading as analysis</em></div>
-            <div class="slider-wrap"><input type="range" min="0" max="100" value="50" class="dim-slider" data-dim="6" oninput="onSlide(this)"></div>
-            <div class="slider-val" id="sv-6-9">50</div>
-          </div>
-          <div class="signal-row">
-            <div class="signal-name">Premature scaling<em>Headcount ahead of repeatable sales motion</em></div>
-            <div class="slider-wrap"><input type="range" min="0" max="100" value="50" class="dim-slider" data-dim="6" oninput="onSlide(this)"></div>
-            <div class="slider-val" id="sv-6-10">50</div>
           </div>
         </div>
       </div>
@@ -942,40 +914,47 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
 
     <!-- Mode guide -->
     <div class="mode-guide">
-      <div class="mode-guide-title">SKIN Modes</div>
-      <div class="mode-card" id="mc-probe" data-min="0" data-max="39">
-        <span class="mode-range">0–39</span>
+      <div class="mode-guide-title">Outcome Modes (v4.0)</div>
+      <div class="mode-card" id="mc-shutdown" data-min="0" data-max="49">
+        <span class="mode-range">&lt;50</span>
         <div class="mode-info">
-          <div class="mode-name">PROBE</div>
-          <div class="mode-detail">Pre-validation. Core assumptions untested. Significant rework required before capital or scale.</div>
+          <div class="mode-name">SHUTDOWN</div>
+          <div class="mode-detail">Fundamentals not in place. Continuing as-is destroys capital. Stop, diagnose, restart only with material changes.</div>
         </div>
       </div>
-      <div class="mode-card" id="mc-build" data-min="40" data-max="59">
-        <span class="mode-range">40–59</span>
+      <div class="mode-card" id="mc-hardreset" data-min="50" data-max="59">
+        <span class="mode-range">50–59</span>
         <div class="mode-info">
-          <div class="mode-name">BUILD</div>
-          <div class="mode-detail">Fundamentals forming. Key signals present but execution gaps remain. Focus before scale.</div>
+          <div class="mode-name">HARD RESET</div>
+          <div class="mode-detail">Structural rework required. Multiple dimensions below threshold. Reset positioning, team, or model before further investment.</div>
         </div>
       </div>
-      <div class="mode-card" id="mc-liftoff" data-min="60" data-max="74">
-        <span class="mode-range">60–74</span>
+      <div class="mode-card" id="mc-recalibrate" data-min="60" data-max="69">
+        <span class="mode-range">60–69</span>
+        <div class="mode-info">
+          <div class="mode-name">RECALIBRATE</div>
+          <div class="mode-detail">Foundation forming but uneven. Targeted fixes in 1–2 dimensions unlock the next stage.</div>
+        </div>
+      </div>
+      <div class="mode-card" id="mc-glidepath" data-min="70" data-max="74">
+        <span class="mode-range">70–74</span>
+        <div class="mode-info">
+          <div class="mode-name">GLIDE PATH</div>
+          <div class="mode-detail">Solid trajectory. Execution credible across dimensions. Sharpen one or two areas before pushing for scale.</div>
+        </div>
+      </div>
+      <div class="mode-card" id="mc-liftoff" data-min="75" data-max="84">
+        <span class="mode-range">75–84</span>
         <div class="mode-info">
           <div class="mode-name">LIFT-OFF</div>
-          <div class="mode-detail">Directionally correct and positioned to scale. Repeatability must now be formalized.</div>
+          <div class="mode-detail">Strong execution fundamentals. Engine is built. Acceleration is the priority — without breaking what works.</div>
         </div>
       </div>
-      <div class="mode-card" id="mc-scale" data-min="75" data-max="89">
-        <span class="mode-range">75–89</span>
+      <div class="mode-card" id="mc-orbit" data-min="85" data-max="100">
+        <span class="mode-range">85–100</span>
         <div class="mode-info">
-          <div class="mode-name">SCALE</div>
-          <div class="mode-detail">Strong execution fundamentals. Engine is built. The task now is acceleration without breaking it.</div>
-        </div>
-      </div>
-      <div class="mode-card" id="mc-outlier" data-min="90" data-max="100">
-        <span class="mode-range">90–100</span>
-        <div class="mode-info">
-          <div class="mode-name">OUTLIER</div>
-          <div class="mode-detail">Rare execution clarity across all dimensions. High-conviction opportunity.</div>
+          <div class="mode-name">ORBIT</div>
+          <div class="mode-detail">Rare execution clarity across all six dimensions. High-conviction opportunity. Compound the lead.</div>
         </div>
       </div>
     </div>
@@ -1120,11 +1099,12 @@ function scoreColor(s) {
 }
 
 function getMode(s) {
-  if (s >= 90) return { name: 'OUTLIER',  desc: 'Rare execution clarity across all dimensions. High-conviction opportunity.' };
-  if (s >= 75) return { name: 'SCALE',    desc: 'Strong fundamentals. The engine is built — now accelerate without breaking it.' };
-  if (s >= 60) return { name: 'LIFT-OFF', desc: 'Directionally correct and positioned to scale. Repeatability must now be formalized.' };
-  if (s >= 40) return { name: 'BUILD',    desc: 'Fundamentals forming. Execution gaps remain. Focus before scale.' };
-  return              { name: 'PROBE',    desc: 'Pre-validation. Core assumptions untested. Rework required before capital or scale.' };
+  if (s >= 85) return { name: 'ORBIT',       desc: 'Rare execution clarity across all six dimensions. High-conviction opportunity. Compound the lead.' };
+  if (s >= 75) return { name: 'LIFT-OFF',    desc: 'Strong execution fundamentals. Engine is built. Acceleration is the priority — without breaking what works.' };
+  if (s >= 70) return { name: 'GLIDE PATH',  desc: 'Solid trajectory. Execution credible across dimensions. Sharpen one or two areas before pushing for scale.' };
+  if (s >= 60) return { name: 'RECALIBRATE', desc: 'Foundation forming but uneven. Targeted fixes in 1–2 dimensions unlock the next stage.' };
+  if (s >= 50) return { name: 'HARD RESET',  desc: 'Structural rework required. Multiple dimensions below threshold. Reset positioning, team, or model before further investment.' };
+  return              { name: 'SHUTDOWN',    desc: 'Fundamentals not in place. Continuing as-is destroys capital. Stop, diagnose, restart only with material changes.' };
 }
 
 // ── DOT COMPLETION ──

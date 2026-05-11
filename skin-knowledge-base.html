@@ -180,6 +180,65 @@
 
   .sidebar-aux-item:hover { color: var(--text-muted); }
 
+  /* SIDEBAR RUBRIC — "How scoring works" block */
+  .kb-rubric { padding: 4px 18px 14px; }
+  .kbr-item { margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .kbr-item:last-child { border-bottom: none; margin-bottom: 0; }
+  .kbr-label {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.12em; color: var(--text-muted);
+    text-transform: uppercase; margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  /* Anchors scale */
+  .kbr-scale { display: flex; flex-direction: column; gap: 5px; }
+  .kbrs { display: grid; grid-template-columns: 10px 50px 1fr; align-items: center; gap: 8px; font-size: 11px; }
+  .kbrs-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .kbrs-dot.l { background: var(--score-low); }
+  .kbrs-dot.m { background: rgba(200,184,122,0.5); }
+  .kbrs-dot.mid { background: var(--score-mid); }
+  .kbrs-dot.h { background: var(--score-high); }
+  .kbrs-range { font-family: var(--mono); color: var(--text); font-weight: 500; }
+  .kbrs-desc { color: var(--text-muted); font-family: var(--sans); font-size: 11px; }
+
+  /* Outcome modes */
+  .kbr-modes { display: flex; flex-direction: column; gap: 5px; }
+  .kbrm { display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
+  .kbrm-name {
+    font-family: var(--sans); font-weight: 700; letter-spacing: 0.05em;
+    padding: 2px 7px; border-radius: 2px; font-size: 10px;
+  }
+  .kbrm-name.shutdown { background: rgba(200,138,122,0.25); color: var(--score-low); }
+  .kbrm-name.reset    { background: rgba(200,138,122,0.15); color: var(--score-low); }
+  .kbrm-name.recal    { background: rgba(200,184,122,0.15); color: var(--score-mid); }
+  .kbrm-name.glide    { background: rgba(200,184,122,0.18); color: var(--score-mid); }
+  .kbrm-name.liftoff  { background: rgba(143,184,154,0.18); color: var(--score-high); }
+  .kbrm-name.orbit    { background: rgba(143,184,154,0.25); color: var(--score-high); }
+  .kbrm-range { font-family: var(--mono); color: var(--text-muted); font-size: 11px; }
+
+  /* Weights */
+  .kbr-weights { display: flex; flex-direction: column; gap: 4px; }
+  .kbrw { display: flex; justify-content: space-between; font-size: 12px; }
+  .kbrw-name { color: var(--text-muted); font-family: var(--sans); }
+  .kbrw-pct { color: var(--accent); font-family: var(--mono); font-weight: 500; }
+
+  /* Rules */
+  .kbr-rules { display: flex; flex-direction: column; gap: 8px; }
+  .kbrr {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 11px; color: var(--text-muted);
+    font-family: var(--sans); line-height: 1.5;
+  }
+  .kbrr-num {
+    flex-shrink: 0;
+    width: 16px; height: 16px;
+    background: var(--bg3); color: var(--text);
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+  }
+
   /* MAIN CONTENT */
   .main {
     overflow-y: auto;
@@ -698,6 +757,57 @@
 
     <div class="sidebar-divider"></div>
 
+    <div class="sidebar-section-label">How scoring works</div>
+    <div class="kb-rubric">
+      <div class="kbr-item">
+        <div class="kbr-label">Universal anchors (0–100)</div>
+        <div class="kbr-scale">
+          <div class="kbrs"><span class="kbrs-dot l"></span><span class="kbrs-range">0–19</span><span class="kbrs-desc">Fundamentally broken</span></div>
+          <div class="kbrs"><span class="kbrs-dot l"></span><span class="kbrs-range">20–39</span><span class="kbrs-desc">Structurally weak</span></div>
+          <div class="kbrs"><span class="kbrs-dot m"></span><span class="kbrs-range">40–59</span><span class="kbrs-desc">Emerging / unproven</span></div>
+          <div class="kbrs"><span class="kbrs-dot mid"></span><span class="kbrs-range">60–74</span><span class="kbrs-desc">Solid foundation</span></div>
+          <div class="kbrs"><span class="kbrs-dot h"></span><span class="kbrs-range">75–84</span><span class="kbrs-desc">Strong / credible</span></div>
+          <div class="kbrs"><span class="kbrs-dot h"></span><span class="kbrs-range">85–100</span><span class="kbrs-desc">Exceptional</span></div>
+        </div>
+      </div>
+
+      <div class="kbr-item">
+        <div class="kbr-label">Outcome modes</div>
+        <div class="kbr-modes">
+          <div class="kbrm"><span class="kbrm-name shutdown">SHUTDOWN</span><span class="kbrm-range">&lt;50</span></div>
+          <div class="kbrm"><span class="kbrm-name reset">HARD RESET</span><span class="kbrm-range">50–59</span></div>
+          <div class="kbrm"><span class="kbrm-name recal">RECALIBRATE</span><span class="kbrm-range">60–69</span></div>
+          <div class="kbrm"><span class="kbrm-name glide">GLIDE PATH</span><span class="kbrm-range">70–74</span></div>
+          <div class="kbrm"><span class="kbrm-name liftoff">LIFT-OFF</span><span class="kbrm-range">75–84</span></div>
+          <div class="kbrm"><span class="kbrm-name orbit">ORBIT</span><span class="kbrm-range">85+</span></div>
+        </div>
+      </div>
+
+      <div class="kbr-item">
+        <div class="kbr-label">Dimension weights</div>
+        <div class="kbr-weights">
+          <div class="kbrw"><span class="kbrw-name">Team</span><span class="kbrw-pct">20%</span></div>
+          <div class="kbrw"><span class="kbrw-name">Product</span><span class="kbrw-pct">18%</span></div>
+          <div class="kbrw"><span class="kbrw-name">Market</span><span class="kbrw-pct">18%</span></div>
+          <div class="kbrw"><span class="kbrw-name">GTM</span><span class="kbrw-pct">18%</span></div>
+          <div class="kbrw"><span class="kbrw-name">Financials</span><span class="kbrw-pct">16%</span></div>
+          <div class="kbrw"><span class="kbrw-name">Brand</span><span class="kbrw-pct">10%</span></div>
+        </div>
+      </div>
+
+      <div class="kbr-item">
+        <div class="kbr-label">Scoring rules</div>
+        <div class="kbr-rules">
+          <div class="kbrr"><span class="kbrr-num">1</span>Select band first, then assign score within band based on evidence quality</div>
+          <div class="kbrr"><span class="kbrr-num">2</span>Missing core evidence caps the dimension at 55</div>
+          <div class="kbrr"><span class="kbrr-num">3</span>Human reviewer can adjust ±10 per dimension max, with cited evidence</div>
+          <div class="kbrr"><span class="kbrr-num">4</span>Composite is mechanically derived — no manual override</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
     <div class="sidebar-section-label">Sources</div>
     <div class="sidebar-aux-item" data-target="sources">
       <span>↳</span> Signal sources
@@ -745,7 +855,7 @@
         <p class="overview-desc">A proprietary diagnostic framework that evaluates early-stage startups against the fundamentals that determine execution, decision-making, and long-term survival. Each dimension captures a distinct vector of company health — together they produce the SKIN Score.</p>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
           <div class="meta-chip"><div class="dot" style="background:var(--accent2)"></div>Framework v1.1</div>
-          <div class="meta-chip"><div class="dot" style="background:var(--accent)"></div>6 dimensions · 46 signals</div>
+          <div class="meta-chip"><div class="dot" style="background:var(--accent)"></div>6 dimensions · 43 signals</div>
           <div class="meta-chip"><div class="dot" style="background:var(--accent3)"></div>6 external sources</div>
         </div>
       </div>
@@ -800,7 +910,7 @@
           <div class="doc-title">Financials</div>
           <div class="doc-desc">Burn awareness, unit economics, runway clarity, capital efficiency, milestone definition, and cap table discipline.</div>
           <div class="doc-meta">
-            <span class="doc-count">9 signals · 5 failure modes</span>
+            <span class="doc-count">6 signals · 5 failure modes</span>
             <span class="dim-score-badge score-l">LOW</span>
           </div>
         </div>
@@ -1302,10 +1412,10 @@
       <div class="panel-header" data-index="06">
         <div class="breadcrumb">SKIN OS / Knowledge Base / <span>Dimension 06</span></div>
         <div class="panel-title">Financials</div>
-        <p class="panel-tagline">Not about accounting — about whether the founding team has a disciplined, honest relationship with capital. Burn awareness, unit economics, runway clarity, milestone definition, and cap table discipline as signals of execution quality.</p>
+        <p class="panel-tagline">Not about accounting — about whether the founding team has a disciplined, honest relationship with capital. Burn awareness, unit economics, revenue clarity, and disciplined deployment of every dollar.</p>
         <div class="panel-meta-row">
           <div class="meta-chip"><div class="dot" style="background:var(--score-low)"></div>Low score — high priority</div>
-          <div class="meta-chip">9 signals</div>
+          <div class="meta-chip">6 signals</div>
           <div class="meta-chip">Weight: 16% of SKIN Score</div>
         </div>
       </div>
@@ -1317,15 +1427,12 @@
           </div>
           <div class="card-body">
             <ul class="signal-list">
-              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Founder knows burn rate to the dollar and can explain what drives it — not just revenue minus expenses</span><span class="signal-tag tag-green">BURN</span></li>
-              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Runway is calculated from realistic revenue assumptions, not best-case — and includes a contingency buffer</span><span class="signal-tag tag-green">RUNWAY</span></li>
-              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Unit economics are understood at the cohort level — knows which customer segments are profitable and which are not</span><span class="signal-tag tag-green">UNIT ECON</span></li>
-              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Capital has been deployed with visible discipline — team, spend, and scope are matched to actual stage and evidence</span><span class="signal-tag tag-green">EFFICIENCY</span></li>
-              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Founder can describe the path to breakeven — not just "when we raise" but what operational changes produce it</span><span class="signal-tag tag-green">BREAKEVEN</span></li>
-              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Revenue model is simple, clear, and already tested — pricing isn't hypothetical, it's been accepted by real customers</span><span class="signal-tag tag-green">REVENUE MODEL</span></li>
-              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Capital allocation is tied to specific milestones — every line of spend ladders up to a proof point that changes the company's trajectory</span><span class="signal-tag tag-green">MILESTONE DISCIPLINE</span></li>
-              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Cap table is clean and current — founders, employees, advisors, and prior investors all documented with no ambiguity on ownership</span><span class="signal-tag tag-green">CAP TABLE</span></li>
-              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Use-of-funds reasoning is specific and outcome-tied — every dollar has a job, not "team and growth"</span><span class="signal-tag tag-green">USE OF FUNDS</span></li>
+              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Founder knows burn rate to the dollar, calculates runway from realistic assumptions with a buffer, and matches spend to actual evidence — not aspirational stage</span><span class="signal-tag tag-green">BURN & RUNWAY</span></li>
+              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Unit economics are understood at the cohort level — knows which customer segments are profitable and which are not, with the data to prove it</span><span class="signal-tag tag-green">UNIT ECONOMICS</span></li>
+              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Revenue model is simple, tested with paying customers, and the operational path to sustainability is clear — not "when we raise"</span><span class="signal-tag tag-green">REVENUE & PATH</span></li>
+              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Every dollar is tied to a specific proof point, outcome, or milestone — not "team and growth." Capital allocation has visible logic</span><span class="signal-tag tag-green">CAPITAL DISCIPLINE</span></li>
+              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Equity ownership is clean and documented — founder splits resolved, employee grants formalized, no undocumented promises or verbal advisor deals</span><span class="signal-tag tag-green">EQUITY DISCIPLINE</span></li>
+              <li class="signal-item"><span class="signal-glyph">+</span><span class="signal-text">Founder knows their numbers cold, surfaces problems early, and has no hidden surprises — full transparency on financial health</span><span class="signal-tag tag-green">TRANSPARENCY</span></li>
             </ul>
           </div>
         </div>
@@ -1336,12 +1443,11 @@
           </div>
           <div class="card-body">
             <ul class="signal-list">
-              <li class="signal-item"><span class="signal-glyph">–</span><span class="signal-text">Founder cannot state monthly burn without checking a spreadsheet — basic financial illiteracy at the leadership level</span><span class="signal-tag tag-red">AWARENESS</span></li>
-              <li class="signal-item"><span class="signal-glyph">–</span><span class="signal-text">Financial projections are hockey-stick shaped with no identified driver for the inflection — aspiration masquerading as analysis</span><span class="signal-tag tag-red">HOCKEY STICK</span></li>
-              <li class="signal-item"><span class="signal-glyph">–</span><span class="signal-text">Revenue model has never been tested with a paying customer — pricing is hypothetical until someone pays full price without being asked</span><span class="signal-tag tag-red">UNTESTED</span></li>
-              <li class="signal-item"><span class="signal-glyph">–</span><span class="signal-text">Team size and spend are ahead of evidence — hired for scale before achieving the repeatability that justifies it</span><span class="signal-tag tag-red">AHEAD OF EVIDENCE</span></li>
-              <li class="signal-item"><span class="signal-glyph">–</span><span class="signal-text">Capital is being spent without a milestone framework — "we needed to grow" instead of "we needed to prove X"</span><span class="signal-tag tag-red">NO MILESTONE</span></li>
-              <li class="signal-item"><span class="signal-glyph">–</span><span class="signal-text">Cap table has unresolved equity — advisors with verbal grants, contractor work paid in promises, or unclear founder splits</span><span class="signal-tag tag-red">CAP TABLE MESS</span></li>
+              <li class="signal-item"><span class="signal-glyph">–</span><span class="signal-text">Founder cannot state monthly burn without checking a spreadsheet — financial illiteracy at the leadership level</span><span class="signal-tag tag-red">AWARENESS</span></li>
+              <li class="signal-item"><span class="signal-glyph">–</span><span class="signal-text">Unit economics unknown or estimated, not measured — growth without knowing if customers are profitable</span><span class="signal-tag tag-red">UNIT BLINDNESS</span></li>
+              <li class="signal-item"><span class="signal-glyph">–</span><span class="signal-text">Revenue model has never been tested with a paying customer — pricing is hypothetical until someone pays full price unprompted</span><span class="signal-tag tag-red">UNTESTED MODEL</span></li>
+              <li class="signal-item"><span class="signal-glyph">–</span><span class="signal-text">Capital deployed without milestone framework — "we needed to grow" instead of "we needed to prove X by Y date"</span><span class="signal-tag tag-red">NO MILESTONE</span></li>
+              <li class="signal-item"><span class="signal-glyph">–</span><span class="signal-text">Equity is messy — undocumented founder splits, verbal advisor grants, contractor work paid in promises</span><span class="signal-tag tag-red">EQUITY MESS</span></li>
             </ul>
           </div>
         </div>
@@ -1355,10 +1461,9 @@
               <li class="question-item"><span class="q-num">Q1</span>What is your current monthly burn? What is the single largest line item driving it?</li>
               <li class="question-item"><span class="q-num">Q2</span>How many months of runway do you have at current burn — and what revenue assumption is that based on?</li>
               <li class="question-item"><span class="q-num">Q3</span>Walk me through the unit economics of your best customer. What did it cost to acquire them, and what do they generate annually?</li>
-              <li class="question-item"><span class="q-num">Q4</span>What would you cut first if revenue came in 40% below plan for the next two months?</li>
-              <li class="question-item"><span class="q-num">Q5</span>What's the path to breakeven that doesn't require another raise — and at what revenue level does that happen?</li>
-              <li class="question-item"><span class="q-num">Q6</span>If you had $500K to deploy in the next 6 months, what specific milestone would you spend it to hit?</li>
-              <li class="question-item"><span class="q-num">Q7</span>Walk me through your cap table — including any unissued equity, vesting status, and outstanding promises.</li>
+              <li class="question-item"><span class="q-num">Q4</span>What's the path to sustainability that doesn't require another raise — and at what revenue level does that happen?</li>
+              <li class="question-item"><span class="q-num">Q5</span>If you had $500K to deploy in the next 6 months, what specific milestone would you spend it to hit?</li>
+              <li class="question-item"><span class="q-num">Q6</span>Walk me through your cap table — including any unissued equity, vesting status, and outstanding promises.</li>
             </ul>
           </div>
         </div>
@@ -1373,20 +1478,20 @@
                 <div class="failure-desc">Financial model built on best-case assumptions with no downside scenario. First time the founder runs a realistic model is when an investor forces them to — by then it's too late to adapt.</div>
               </div>
               <div class="failure-item">
-                <div class="failure-title">Premature scaling</div>
-                <div class="failure-desc">Headcount and infrastructure expanded before the sales motion is repeatable. Cash consumed proving a hypothesis that hasn't been validated — most common cause of startup death at Series A.</div>
+                <div class="failure-title">CAC blindness</div>
+                <div class="failure-desc">Company is growing but doesn't know if customers are profitable. LTV/CAC ratio is either unknown or calculated on assumptions rather than cohort data. Growth without unit economics is just burning capital faster.</div>
               </div>
               <div class="failure-item">
                 <div class="failure-title">Revenue recognition confusion</div>
                 <div class="failure-desc">Founder conflates bookings, revenue, and cash. Reports a "record month" in bookings while cash is declining. Creates a false sense of momentum that delays necessary corrective action.</div>
               </div>
               <div class="failure-item">
-                <div class="failure-title">CAC blindness</div>
-                <div class="failure-desc">Company is growing but doesn't know if customers are profitable. LTV/CAC ratio is either unknown or calculated on assumptions rather than cohort data. Growth without unit economics is just burning capital faster.</div>
-              </div>
-              <div class="failure-item">
                 <div class="failure-title">Milestone-free spending</div>
                 <div class="failure-desc">Capital deployed without proof-point structure. Cash goes to "team and growth" rather than to a specific outcome. Even profitable companies suffer from this — money spent is money that didn't build optionality.</div>
+              </div>
+              <div class="failure-item">
+                <div class="failure-title">Equity time-bombs</div>
+                <div class="failure-desc">Undocumented founder splits, verbal advisor grants, or contractor work paid in promised equity. Surfaces at the worst possible moment — fundraise, hire, or acquisition — and destroys deal value.</div>
               </div>
             </div>
           </div>
@@ -1397,15 +1502,12 @@
           </div>
           <div class="card-body">
             <div class="score-breakdown">
-              <div class="score-row"><span class="score-label">Burn awareness & control</span><div class="score-bar-wrap"><div class="score-bar" style="width:40%;background:var(--score-low)"></div></div><span class="score-val">40</span></div>
-              <div class="score-row"><span class="score-label">Runway clarity</span><div class="score-bar-wrap"><div class="score-bar" style="width:48%;background:var(--score-low)"></div></div><span class="score-val">48</span></div>
-              <div class="score-row"><span class="score-label">Unit economics understanding</span><div class="score-bar-wrap"><div class="score-bar" style="width:35%;background:var(--score-low)"></div></div><span class="score-val">35</span></div>
-              <div class="score-row"><span class="score-label">Capital efficiency discipline</span><div class="score-bar-wrap"><div class="score-bar" style="width:52%;background:var(--score-low)"></div></div><span class="score-val">52</span></div>
-              <div class="score-row"><span class="score-label">Revenue model validation</span><div class="score-bar-wrap"><div class="score-bar" style="width:58%;background:var(--score-mid)"></div></div><span class="score-val">58</span></div>
-              <div class="score-row"><span class="score-label">Breakeven path clarity</span><div class="score-bar-wrap"><div class="score-bar" style="width:30%;background:var(--score-low)"></div></div><span class="score-val">30</span></div>
-              <div class="score-row"><span class="score-label">Milestone discipline</span><div class="score-bar-wrap"><div class="score-bar" style="width:55%;background:var(--score-mid)"></div></div><span class="score-val">55</span></div>
-              <div class="score-row"><span class="score-label">Cap table cleanliness</span><div class="score-bar-wrap"><div class="score-bar" style="width:62%;background:var(--score-mid)"></div></div><span class="score-val">62</span></div>
-              <div class="score-row"><span class="score-label">Use-of-funds clarity</span><div class="score-bar-wrap"><div class="score-bar" style="width:50%;background:var(--score-mid)"></div></div><span class="score-val">50</span></div>
+              <div class="score-row"><span class="score-label">Burn & runway discipline</span><div class="score-bar-wrap"><div class="score-bar" style="width:45%;background:var(--score-low)"></div></div><span class="score-val">45</span></div>
+              <div class="score-row"><span class="score-label">Unit economics clarity</span><div class="score-bar-wrap"><div class="score-bar" style="width:38%;background:var(--score-low)"></div></div><span class="score-val">38</span></div>
+              <div class="score-row"><span class="score-label">Revenue model & path</span><div class="score-bar-wrap"><div class="score-bar" style="width:55%;background:var(--score-mid)"></div></div><span class="score-val">55</span></div>
+              <div class="score-row"><span class="score-label">Capital allocation discipline</span><div class="score-bar-wrap"><div class="score-bar" style="width:50%;background:var(--score-mid)"></div></div><span class="score-val">50</span></div>
+              <div class="score-row"><span class="score-label">Equity & ownership discipline</span><div class="score-bar-wrap"><div class="score-bar" style="width:60%;background:var(--score-mid)"></div></div><span class="score-val">60</span></div>
+              <div class="score-row"><span class="score-label">Financial transparency</span><div class="score-bar-wrap"><div class="score-bar" style="width:52%;background:var(--score-mid)"></div></div><span class="score-val">52</span></div>
             </div>
           </div>
         </div>
