@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SKIN — Founder Match</title>
+<title>SKIN — Founder Archetypes</title>
 <!-- ── Neue Haas Grotesk ──────────────────────────────────────────────
      NHG is a licensed typeface (not free / not on Google Fonts). This page
      renders with the closest free fallback automatically: Helvetica Neue on
@@ -14,7 +14,8 @@
            "Neue Haas Grotesk Display" + "Neue Haas Grotesk Text", then
            uncomment the line below and paste your kit URL.
        (B) Self-host licensed .woff2 files (from Commercial Type / Linotype):
-           uncomment the @font-face block in the <style> and add your files.
+           uncomment the @font-face block in the
+<style> and add your files.
      No other edits are needed — the font stack already lists both names. -->
 <!-- <link rel="stylesheet" href="https://use.typekit.net/YOUR_KIT_ID.css"> -->
 <style>
@@ -211,14 +212,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--mono);min-height:1
 .arch-blurb{font-family:var(--mono);font-size:12.5px;line-height:1.62;color:var(--text-muted);margin-top:auto}
 .arch-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:42px}
 @media(max-width:560px){.arch-grid{grid-template-columns:1fr}}
+
+/* archetypes page: anchors styled as buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.wrap{padding-top:46px}
 </style>
 </head>
 <body>
 
 <header class="topbar">
-  <div class="brand"><span class="topbar-mark" data-skinmark="22"></span><span class="logo">SKIN</span><span class="sep">—</span><span class="label">Founder Match</span></div>
+  <div class="brand"><span class="topbar-mark" data-skinmark="22"></span><span class="logo">SKIN</span><span class="sep">—</span><span class="label">Archetypes</span></div>
   <div class="topbar-meta">
-    <span class="meta-tag">v3.2</span>
+    <span class="meta-tag">v1.0</span>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle day/night mode" onclick="toggleTheme()">
       <span class="icon-sun" aria-hidden="true">☀</span>
       <span class="icon-moon" aria-hidden="true">☾</span>
@@ -228,43 +233,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--mono);min-height:1
 
 <main class="wrap">
   <div class="inner">
-
-    <!-- ===== COVER ===== -->
-    <section class="screen active" id="cover">
-      <div class="cover-mark" data-skinmark="52"></div>
-      <div class="eyebrow">SKIN · <span>Founder Match</span></div>
-      <div class="krule"></div>
-      <div class="hero-faces" id="heroFaces"></div>
-      <h1 class="hero-title">Which founder<br><strong>lives in you?</strong></h1>
-      <p class="hero-sub">Steve Jobs or Elon Musk? Answer <b>nine honest questions</b> and we'll match your instincts against eight of history's most renowned company builders — <b>dead or alive</b>.</p>
-      <button class="btn primary" onclick="start()">Begin the Assessment</button>
-      <div class="cover-meta">9 questions · ~2 minutes · <button class="link-inline" onclick="showArchetypes()">8 archetypes</button></div>
-    </section>
-
-    <!-- ===== QUIZ ===== -->
-    <section class="screen" id="quiz">
-      <div class="prog">
-        <div class="prog-num">Q<b id="pNum">1</b> / <span id="pTot">9</span></div>
-        <div class="prog-track"><div class="prog-fill" id="pFill"></div></div>
-      </div>
-      <div id="qHost"></div>
-    </section>
-
-    <!-- ===== RESULT ===== -->
-    <section class="screen" id="result"></section>
-
+    <section class="screen active" id="archetypes"></section>
   </div>
 </main>
 
 <footer class="bottom-bar">
   <div class="foot-brand"><span class="foot-mark" data-skinmark="26"></span><span class="foot-div"></span><span class="foot-tagline">Less AI-tool energy. More timeless founder operating brand.</span></div>
-  <div class="foot-right"><a href="index.html">All SKIN modules →</a><span class="version">Founder Match v3.2</span></div>
+  <div class="foot-right"><a href="skin-founder-match.html">← Founder Match</a><span class="version">Archetypes v1.0</span></div>
 </footer>
 
-<div class="toast" id="toast">Result copied to clipboard</div>
-
 <script>
-/* ============ SKIN SYMBOL MARK ============ */
 let _mid=0;
 function skinMark(px){
   const id='sk'+(++_mid);
@@ -332,75 +310,7 @@ const FOUNDERS = {
     face:{hair:'sidepart',hairColor:'#5f4d3a',collar:'vneck',glasses:'thinrect',mustache:false,mouth:'smile',back:null}}
 };
 
-const QUESTIONS = [
-  {q:"What truly gets you out of bed?",opts:[
-    {t:"Making something beautiful and insanely great",w:{jobs:3,branson:1}},
-    {t:"Solving problems that decide humanity's future",w:{musk:3,gates:1}},
-    {t:"Building something durable that outlasts me",w:{bezos:2,buffett:2,branson:1}},
-    {t:"Proving I can make it on my own terms",w:{blakely:3,oprah:1}},
-    {t:"Lifting people up and connecting with them",w:{oprah:3,branson:1}}]},
-  {q:"How do you make your biggest decisions?",opts:[
-    {t:"Gut, taste, and a clear inner picture",w:{jobs:3,oprah:1}},
-    {t:"First principles — reason it up from physics",w:{musk:3,gates:1}},
-    {t:"Data, probabilities, and long-term math",w:{bezos:2,gates:2,buffett:1}},
-    {t:"Patience — wait for the undeniable bet",w:{buffett:3,bezos:1}},
-    {t:"Whatever excites me most right now",w:{branson:2,blakely:2}}]},
-  {q:"Pick your sharpest superpower.",opts:[
-    {t:"Design and product taste",w:{jobs:3,branson:1}},
-    {t:"Engineering and systems thinking",w:{gates:3,musk:2}},
-    {t:"Operational discipline and execution",w:{bezos:3,buffett:1}},
-    {t:"Storytelling and charisma",w:{oprah:3,branson:2,jobs:1}},
-    {t:"Hustle and pure resourcefulness",w:{blakely:3,musk:1}}]},
-  {q:"What's your relationship with risk?",opts:[
-    {t:"Bet the farm on a bold vision",w:{musk:3,jobs:1}},
-    {t:"Calculated, reversible experiments",w:{bezos:3,gates:1}},
-    {t:"Only when the odds are clearly mine",w:{buffett:3}},
-    {t:"Take the leap, figure it out on the way down",w:{blakely:3,oprah:1,branson:1}},
-    {t:"Control every variable I possibly can",w:{jobs:2,gates:2}}]},
-  {q:"Money is, to you, mostly…",opts:[
-    {t:"Fuel for the mission — reinvest all of it",w:{musk:2,bezos:2,branson:1}},
-    {t:"Something to compound patiently for decades",w:{buffett:3,bezos:1}},
-    {t:"Precious — every dollar stays scrappy",w:{blakely:3,buffett:1}},
-    {t:"For quality and craft, never to be compromised",w:{jobs:3}},
-    {t:"A way to lift others and give back",w:{oprah:3,gates:2}}]},
-  {q:"How do you lead a team?",opts:[
-    {t:"Impossibly high bar — push people past their limits",w:{jobs:3,musk:2}},
-    {t:"Hire brilliant people and get out of their way",w:{buffett:2,bezos:2,gates:1}},
-    {t:"Rally everyone around one shared dream",w:{branson:3,oprah:2,jobs:1}},
-    {t:"Lead from the trenches, by example",w:{blakely:3,musk:1}},
-    {t:"Listen deeply and draw out people's best",w:{oprah:3,branson:1}}]},
-  {q:"Something you built just failed. Now what?",opts:[
-    {t:"It wasn't good enough — tear it down, do it right",w:{jobs:3,musk:1}},
-    {t:"Fail fast, iterate — it was always part of the plan",w:{musk:3,bezos:1}},
-    {t:"Stay calm and stick to the long-term plan",w:{buffett:3,bezos:2}},
-    {t:"Dust off, laugh, and start the next thing",w:{blakely:2,branson:2,oprah:1}},
-    {t:"Dissect exactly what broke and fix the system",w:{gates:3,bezos:1}}]},
-  {q:"Your natural working rhythm?",opts:[
-    {t:"Obsessive focus on a very few things",w:{jobs:3,buffett:1}},
-    {t:"Juggling several huge ventures at once",w:{musk:3,branson:1}},
-    {t:"Methodical, deep, long hours of focus",w:{gates:3,bezos:2}},
-    {t:"High-energy, people-powered, in the room",w:{oprah:3,blakely:1}},
-    {t:"Chasing the next bold adventure",w:{branson:3,musk:1}}]},
-  {q:"The legacy you actually want?",opts:[
-    {t:"Products people love and never forget",w:{jobs:3,branson:1}},
-    {t:"I pushed humanity toward a better future",w:{musk:3,gates:2}},
-    {t:"An institution that runs long after I'm gone",w:{bezos:3,buffett:2}},
-    {t:"I built something real out of nothing",w:{blakely:3,oprah:1}},
-    {t:"I changed lives and gave most of it back",w:{oprah:2,gates:2,buffett:1}}]}
-];
-
-/* ============ THEME ============ */
-function currentTheme(){return document.documentElement.classList.contains('day')?'day':'dark';}
-function setTheme(theme){
-  const root=document.documentElement;
-  root.classList.remove('day','dark');root.classList.add(theme);
-  renderCoverFaces();
-  if(document.getElementById('result').classList.contains('active')&&lastResult) renderResult(lastResult);
-}
-let _userToggled=false;
-function toggleTheme(){_userToggled=true;setTheme(currentTheme()==='day'?'dark':'day');}
-
-/* ============ PORTRAIT BUILDER (theme-aware SVG) ============ */
+/* ============ PORTRAITS ============ */
 const PORTRAIT_PAL={
   dark:{sk:'#e8e6df',face:'#1d1d16',neck:'#191912',cloth:'#23231b',shirt:'#15150f',grin:'#2a2a20'},
   day :{sk:'#2c2922',face:'#ffffff',neck:'#efebe1',cloth:'#e7e3d7',shirt:'#f7f5ef',grin:'#dcd6c8'}
@@ -504,177 +414,36 @@ function founderArt(key,px,theme){
   return portraitSVG(key,px,theme);
 }
 
-function renderCoverFaces(){
-  const host=document.getElementById('heroFaces');if(!host)return;
+/* ============ THEME ============ */
+function currentTheme(){return document.documentElement.classList.contains('day')?'day':'dark';}
+function setTheme(theme){const root=document.documentElement;root.classList.remove('day','dark');root.classList.add(theme);renderGrid();}
+let _userToggled=false;
+function toggleTheme(){_userToggled=true;setTheme(currentTheme()==='day'?'dark':'day');}
+
+/* ============ GRID ============ */
+function renderGrid(){
   const t=currentTheme();
-  host.innerHTML=`<figure class="hf"><div class="hf-port">${founderArt('jobs',180,t)}</div><figcaption>Steve Jobs</figcaption></figure>`+
-    `<div class="vs-badge">VS</div>`+
-    `<figure class="hf"><div class="hf-port">${founderArt('musk',180,t)}</div><figcaption>Elon Musk</figcaption></figure>`;
-}
-
-function showArchetypes(){location.href='skin-founder-archetypes.html';}
-
-/* ============ STATE ============ */
-let qi=0, lastResult=null;
-const answers=new Array(QUESTIONS.length).fill(null);
-const $=id=>document.getElementById(id);
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
-function start(){qi=0;answers.fill(null);$('pTot').textContent=QUESTIONS.length;show('quiz');renderQ();}
-
-function renderQ(){
-  const item=QUESTIONS[qi],L=['A','B','C','D','E','F'];
-  $('pNum').textContent=qi+1;$('pFill').style.width=(qi/QUESTIONS.length)*100+'%';
-  let h=`<div class="qblock"><div class="q-tag">Question ${String(qi+1).padStart(2,'0')}</div><h2 class="q-text">${item.q}</h2><div class="options">`;
-  item.opts.forEach((o,i)=>{h+=`<button class="opt${answers[qi]===i?' chosen':''}" onclick="choose(${i})"><span class="ltr">${L[i]}</span><span>${o.t}</span></button>`;});
-  h+=`</div><div class="q-nav"><button class="backlink" onclick="goBack()" ${qi===0?'disabled':''}>← Back</button></div></div>`;
-  $('qHost').innerHTML=h;
-}
-function choose(i){
-  answers[qi]=i;
-  document.querySelectorAll('.opt').forEach((el,idx)=>el.classList.toggle('chosen',idx===i));
-  setTimeout(()=>{if(qi<QUESTIONS.length-1){qi++;renderQ();}else{$('pFill').style.width='100%';finish();}},220);
-}
-function goBack(){if(qi>0){qi--;renderQ();}}
-
-/* ============ SCORING ============ */
-function score(){
-  const t={};Object.keys(FOUNDERS).forEach(k=>t[k]=0);
-  answers.forEach((ai,qx)=>{if(ai===null)return;const w=QUESTIONS[qx].opts[ai].w;for(const k in w)t[k]+=w[k];});
-  const max=Math.max(...Object.values(t));
-  let ranked=Object.keys(t).sort((a,b)=>t[b]-t[a]);
-  const tied=ranked.filter(k=>t[k]===max);
-  const winner=tied[Math.floor(Math.random()*tied.length)];
-  const sum=Object.values(t).reduce((a,b)=>a+b,0)||1;
-  const pct={};for(const k in t)pct[k]=Math.round((t[k]/sum)*100);
-  ranked.sort((a,b)=>(b===winner?1:0)-(a===winner?1:0)||t[b]-t[a]);
-  return {winner,totals:t,pct,ranked};
-}
-function barColors(){return currentTheme()==='day'?['#A65A2A','#4A5568','#C77D5A','#C9BCA6']:['#D6844A','#697386','#B36845','#CFC6B6'];}
-
-function finish(){const r=score();lastResult=r;renderResult(r);show('result');}
-
-function renderResult(r){
-  const f=FOUNDERS[r.winner],t=currentTheme(),cols=barColors();
-  const top=r.ranked.slice(0,4);
-  const bars=top.map((k,idx)=>`<div class="bar-row" data-pct="${r.pct[k]}" data-color="${cols[idx]}"><div class="bar-name">${FOUNDERS[k].first} ${FOUNDERS[k].last}</div><div class="bar-track"><div class="bar-fill"></div></div><div class="bar-pct">${r.pct[k]}%</div></div>`).join('');
-  const second=FOUNDERS[r.ranked[1]];
-  $('result').innerHTML=`
-    <div class="eyebrow res-eyebrow">SKIN · <span>The Verdict</span></div>
-    <div class="krule" style="margin:0 auto 26px"></div>
-    <div class="portrait">${founderArt(r.winner,260,t)}</div>
-    <div class="res-match">${r.pct[r.winner]}% alignment</div>
-    <h1 class="res-name">${f.first} <em>${f.last}</em></h1>
-    <div class="res-arche">${f.arche}</div>
-    <div class="res-companies">${f.companies}</div>
-    <div class="rule"></div>
-    <div class="res-body">
-      <div>
-        <p class="res-blurb">${f.blurb}</p>
-        <div class="res-motto">${f.motto}</div>
-        <div class="res-motto-cap">— the ${f.first} ${f.last} school of thought</div>
-      </div>
-      <aside class="sidecard">
-        <div class="side-h">Signature Traits</div>
-        <div class="traits">${f.traits.map(x=>`<span class="chip">${x}</span>`).join('')}</div>
-        <div class="side-h">Watch Your Step</div>
-        <div class="watch">${f.watch}</div>
-      </aside>
-    </div>
-    <div class="breakdown">
-      <div class="bd-h"><span>The Full Spread</span><span>Runner-up · ${second.first} ${second.last}</span></div>
-      ${bars}
-    </div>
-    <div class="res-cta">
-      <button class="btn primary" onclick="downloadCard()">Download Share Card (PNG)</button>
-      <button class="btn" onclick="copyResult()">Copy Result</button>
-      <button class="btn" onclick="start()">Retake</button>
-      <button class="btn" onclick="showArchetypes()">All Archetypes</button>
-      <button class="btn" onclick="show('cover')">← Back to Start</button>
-      <div class="cta-note">1080 × 1080 square image · matches your theme</div>
+  const cards=Object.keys(FOUNDERS).map(k=>{
+    const f=FOUNDERS[k];
+    return `<article class="arch-card">
+      <div class="arch-port">${founderArt(k,120,t)}</div>
+      <div class="arch-name">${f.name}</div>
+      <div class="arch-arche">${f.arche}</div>
+      <div class="arch-co">${f.companies}</div>
+      <div class="arch-traits">${f.traits.map(x=>`<span class="chip">${x}</span>`).join('')}</div>
+      <p class="arch-blurb">${f.blurb}</p>
+    </article>`;
+  }).join('');
+  document.getElementById('archetypes').innerHTML=`
+    <div class="eyebrow res-eyebrow">SKIN · <span>The Lineup</span></div>
+    <div class="krule" style="margin:0 auto 22px"></div>
+    <h1 class="arch-title">Eight founders.<br>Eight operating instincts.</h1>
+    <p class="arch-sub">The eight archetypes your answers are matched against — each a distinct way of building a company. Dead or alive, every one of them played the game on their own terms.</p>
+    <div class="arch-grid">${cards}</div>
+    <div class="arch-cta">
+      <a class="btn primary" href="skin-founder-match.html">Take the Assessment →</a>
+      <a class="btn" href="index.html">All SKIN modules</a>
     </div>`;
-  requestAnimationFrame(()=>setTimeout(()=>{
-    document.querySelectorAll('.bar-row').forEach(row=>{const fl=row.querySelector('.bar-fill');fl.style.background=row.dataset.color;fl.style.width=row.dataset.pct+'%';});
-  },120));
-}
-
-/* ============ COPY ============ */
-function copyResult(){
-  const f=FOUNDERS[lastResult.winner];
-  const txt=`I'm a ${f.name} — ${f.arche} (${lastResult.pct[lastResult.winner]}% match). Which founder are you? · SKIN Founder Match`;
-  const done=()=>{const t=$('toast');t.textContent='Result copied to clipboard';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1900);};
-  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(done);}
-  else{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);done();}
-}
-
-/* ============ PNG EXPORT (theme-aware 1:1) ============ */
-const CARD_PAL={
-  dark:{bg:'#0A0B0E',frame:'rgba(214,132,74,0.5)',gold:'#D6844A',text:'#E6E6E0',muted:'#8B8884',dim:'#4C4A45',track:'#23252C',glow:'rgba(214,132,74,0.07)'},
-  day :{bg:'#F6F4EF',frame:'rgba(166,90,42,0.5)', gold:'#A65A2A',text:'#0B0B0D',muted:'#726C62',dim:'#B3ABA0',track:'#E7DFD2',glow:'rgba(166,90,42,0.08)'}
-};
-const CARD_FD='"neue-haas-grotesk-display","Neue Haas Grotesk Display Pro","Helvetica Neue",Helvetica,Arial,sans-serif';
-const CARD_FT='"neue-haas-grotesk-text","Neue Haas Grotesk Text Pro","Helvetica Neue",Helvetica,Arial,sans-serif';
-function svgToImage(svg){return new Promise((res,rej)=>{const img=new Image();img.onload=()=>res(img);img.onerror=rej;img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);});}
-async function ensureFonts(){
-  try{await Promise.all([
-    document.fonts.load('600 96px "neue-haas-grotesk-display"'),
-    document.fonts.load('500 30px "neue-haas-grotesk-display"'),
-    document.fonts.load('400 34px "neue-haas-grotesk-text"'),
-    document.fonts.load('500 24px "neue-haas-grotesk-text"'),
-    document.fonts.load('400 22px "neue-haas-grotesk-text"')
-  ]);await document.fonts.ready;}catch(e){}
-}
-function fitFont(ctx,text,style,maxPx,maxW){let px=maxPx;do{ctx.font=style.replace('__',px+'px');if(ctx.measureText(text).width<=maxW)break;px-=2;}while(px>30);return px;}
-function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
-async function downloadCard(){
-  if(!lastResult)return;
-  const r=lastResult,f=FOUNDERS[r.winner],t=currentTheme(),C=CARD_PAL[t],cols=barColors();
-  await ensureFonts();
-  const S=1080,dpr=2,cv=document.createElement('canvas');
-  cv.width=S*dpr;cv.height=S*dpr;const ctx=cv.getContext('2d');ctx.scale(dpr,dpr);
-  const hasLS=('letterSpacing' in ctx);
-  ctx.fillStyle=C.bg;ctx.fillRect(0,0,S,S);
-  const g=ctx.createRadialGradient(S/2,420,80,S/2,420,640);g.addColorStop(0,C.glow);g.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=g;ctx.fillRect(0,0,S,S);
-  ctx.strokeStyle=C.frame;ctx.lineWidth=2;ctx.strokeRect(46,46,S-92,S-92);
-  ctx.textAlign='center';
-  ctx.fillStyle=C.gold;if(hasLS)ctx.letterSpacing='6px';
-  ctx.font='500 22px '+CARD_FT;ctx.fillText('SKIN  ·  FOUNDER MATCH',S/2,110);if(hasLS)ctx.letterSpacing='0px';
-  const pSize=330,px=(S-pSize)/2,py=150;
-  const customSrc=(t==='day'?(f.imgLight||f.img):(f.imgDark||f.img));
-  let usedCustom=false;
-  if(customSrc){
-    try{
-      const cim=await new Promise((res,rej)=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>res(im);im.onerror=rej;im.src=customSrc;});
-      ctx.save();ctx.beginPath();ctx.arc(S/2,py+pSize/2,pSize/2,0,Math.PI*2);ctx.clip();
-      const iw=cim.naturalWidth||pSize,ih=cim.naturalHeight||pSize,sc=Math.max(pSize/iw,pSize/ih),dw=iw*sc,dh=ih*sc;
-      ctx.drawImage(cim,S/2-dw/2,py+pSize/2-dh/2,dw,dh);ctx.restore();usedCustom=true;
-    }catch(e){usedCustom=false;}
-  }
-  if(!usedCustom){const img=await svgToImage(portraitSVG(r.winner,pSize*dpr,t));ctx.drawImage(img,px,py,pSize,pSize);}
-  ctx.fillStyle=C.gold;if(hasLS)ctx.letterSpacing='4px';
-  ctx.font='500 24px '+CARD_FT;ctx.fillText(r.pct[r.winner]+'% ALIGNMENT',S/2,530);if(hasLS)ctx.letterSpacing='0px';
-  ctx.fillStyle=C.text;
-  const npx=fitFont(ctx,f.name,'700 __ '+CARD_FD,98,S-200);
-  ctx.font='700 '+npx+'px '+CARD_FD;ctx.fillText(f.name,S/2,622);
-  ctx.fillStyle=C.muted;ctx.font='500 32px '+CARD_FT;ctx.fillText(f.arche,S/2,672);
-  const bx=180,bw=720,top3=r.ranked.slice(0,3);let y=760;
-  top3.forEach((k,i)=>{
-    const pc=r.pct[k],nm=FOUNDERS[k].first+' '+FOUNDERS[k].last;
-    ctx.textAlign='left';ctx.fillStyle=C.text;ctx.font='500 30px '+CARD_FD;ctx.fillText(nm,bx,y-12);
-    ctx.textAlign='right';ctx.fillStyle=C.muted;ctx.font='400 24px '+CARD_FT;ctx.fillText(pc+'%',bx+bw,y-12);
-    ctx.fillStyle=C.track;roundRect(ctx,bx,y,bw,14,7);ctx.fill();
-    ctx.fillStyle=cols[i];roundRect(ctx,bx,y,Math.max(14,bw*pc/100),14,7);ctx.fill();
-    y+=78;
-  });
-  ctx.textAlign='center';ctx.fillStyle=C.dim;if(hasLS)ctx.letterSpacing='3px';
-  ctx.font='400 18px '+CARD_FT;ctx.fillText('WHICH FOUNDER ARE YOU?  ·  SKIN',S/2,S-78);if(hasLS)ctx.letterSpacing='0px';
-  cv.toBlob(blob=>{
-    const url=URL.createObjectURL(blob),a=document.createElement('a');
-    a.href=url;a.download='SKIN-Founder-Match-'+f.last+'.png';
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
-    setTimeout(()=>URL.revokeObjectURL(url),1000);
-    const tt=$('toast');tt.textContent=(customSrc&&!usedCustom)?'Downloaded · custom image not loaded, used built-in':'Share card downloaded';tt.classList.add('show');setTimeout(()=>tt.classList.remove('show'),2200);
-  },'image/png');
 }
 
 /* ============ INIT ============ */
