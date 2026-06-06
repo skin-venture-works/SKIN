@@ -4,17 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SKIN — Founder Archetypes</title>
-<!-- ── Neue Haas Grotesk ──────────────────────────────────────────────
-     NHG is a licensed typeface (not free / not on Google Fonts). This page
-     renders with the closest free fallback automatically: Helvetica Neue on
-     Mac/iOS, Arial on Windows (the same Arial fallback ASU/MIT use officially).
-
-     To load the REAL Neue Haas Grotesk on your live site, pick ONE:
-       (A) Adobe Fonts (any Creative Cloud plan): make a Web Project with
-           "Neue Haas Grotesk Display" + "Neue Haas Grotesk Text", then
-           uncomment the line below and paste your kit URL.
-       (B) Self-host licensed .woff2 files (from Commercial Type / Linotype):
-           uncomment the @font-face block in the
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style> and add your files.
      No other edits are needed — the font stack already lists both names. -->
 <!-- <link rel="stylesheet" href="https://use.typekit.net/YOUR_KIT_ID.css"> -->
@@ -27,8 +19,8 @@
   --obsidian:#0A0B0E; --bone:#E6E6E0; --sand:#CFC6B6; --clay:#B36845; --copper:#D6844A; --slate:#697386;
   --accent:var(--copper);
   --glow:rgba(214,132,74,0.06); --shadow:rgba(0,0,0,0.55);
-  --nhg-display:'neue-haas-grotesk-display','Neue Haas Grotesk Display Pro','NeueHaasDisplay','Helvetica Neue',Helvetica,Arial,sans-serif;
-  --nhg-text:'neue-haas-grotesk-text','Neue Haas Grotesk Text Pro','NeueHaasText','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --nhg-display:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --nhg-text:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;
   --mono:var(--nhg-text); --serif:var(--nhg-display); --sans:var(--nhg-display);
   --radius-sm:2px; --radius-md:6px; --radius-lg:10px; --topbar-h:60px;
 }
@@ -213,35 +205,23 @@ body{background:var(--bg);color:var(--text);font-family:var(--mono);min-height:1
 .arch-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:42px}
 @media(max-width:560px){.arch-grid{grid-template-columns:1fr}}
 
-/* archetypes page: anchors styled as buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
 .wrap{padding-top:46px}
 </style>
 </head>
 <body>
-
 <header class="topbar">
   <div class="brand"><span class="topbar-mark" data-skinmark="22"></span><span class="logo">SKIN</span><span class="sep">—</span><span class="label">Archetypes</span></div>
   <div class="topbar-meta">
-    <span class="meta-tag">v1.0</span>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle day/night mode" onclick="toggleTheme()">
-      <span class="icon-sun" aria-hidden="true">☀</span>
-      <span class="icon-moon" aria-hidden="true">☾</span>
-    </button>
+    <span class="meta-tag">v2.1</span>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle day/night mode" onclick="toggleTheme()"><span class="icon-sun" aria-hidden="true">☀</span><span class="icon-moon" aria-hidden="true">☾</span></button>
   </div>
 </header>
-
-<main class="wrap">
-  <div class="inner">
-    <section class="screen active" id="archetypes"></section>
-  </div>
-</main>
-
+<main class="wrap"><div class="inner"><section class="screen active" id="archetypes"></section></div></main>
 <footer class="bottom-bar">
   <div class="foot-brand"><span class="foot-mark" data-skinmark="26"></span><span class="foot-div"></span><span class="foot-tagline">Less AI-tool energy. More timeless founder operating brand.</span></div>
-  <div class="foot-right"><a href="skin-founder-match.html">← Founder Match</a><span class="version">Archetypes v1.0</span></div>
+  <div class="foot-right"><a href="skin-founder-match.html">← Founder Match</a><span class="version">Archetypes v2.1</span></div>
 </footer>
-
 <script>
 let _mid=0;
 function skinMark(px){
@@ -249,23 +229,50 @@ function skinMark(px){
   return `<svg viewBox="0 0 100 100" width="${px}" height="${px}" fill="currentColor" aria-hidden="true"><defs><mask id="${id}"><rect width="100" height="100" fill="#fff"/><path d="M50 25 L73 51 L61 51 L61 77 L39 77 L39 51 L27 51 Z" fill="#000"/><rect x="47" y="31" width="6" height="46" rx="3" fill="#fff"/></mask></defs><circle cx="50" cy="50" r="47" mask="url(#${id})"/></svg>`;
 }
 function fillMarks(){document.querySelectorAll('[data-skinmark]').forEach(el=>{el.innerHTML=skinMark(parseInt(el.dataset.skinmark,10)||24);});}
-
 /* ============ DATA ============ */
 const FOUNDERS = {
-  jobs:{name:"Steve Jobs",first:"Steve",last:"Jobs",arche:"The Visionary Perfectionist",color:"#B36845",
+  jobs:{name:"Steve Jobs",first:"Steve",last:"Jobs",arche:"The Visionary Perfectionist",color:"#C16A3A",
     companies:"Apple · Pixar · NeXT",
     motto:"Stay hungry. Stay foolish.",
     blurb:"You don't read the market — you sense what people will want before they can name it. Taste is your unfair advantage, and you would sooner ship one perfect thing than ten that are merely fine. That obsession with craft makes you maddening to work for and impossible to ignore.",
     traits:["Product taste","Reality-bending vision","Perfectionism","Showmanship"],
     watch:"Blind spot: confusing \u201cmy standard\u201d with \u201cthe only standard.\u201d The intensity that inspires people can quietly burn out the ones who believe in you most.",
     face:{hair:'recede',hairColor:'#39362e',collar:'turtle',glasses:'round',mustache:false,mouth:'smile',back:null}},
-  musk:{name:"Elon Musk",first:"Elon",last:"Musk",arche:"The Audacious Moonshooter",color:"#697386",
+  ma:{name:"Jack Ma",first:"Jack",last:"Ma",arche:"The Underdog Evangelist",color:"#6B7486",
+    companies:"Alibaba · Ant Group",
+    motto:"Most people quit the night before it turns beautiful.",
+    blurb:"You were rejected from everything and bet on yourself anyway. You do not out-engineer the room — you out-believe it, rallying people around a mission to give the little guy a shot. Charisma and sheer persistence are your real capital, and you turn every doubt into fuel.",
+    traits:["Charisma & belief","Relentless persistence","Underdog mission","Marketplace vision"],
+    watch:"Blind spot: belief can outrun the business, and a cult of personality is fragile. The vision still needs the unglamorous plumbing underneath it — and the humility to admit what you do not know.",
+    face:{hair:'sidepart',hairColor:'#2c2620',collar:'suit',glasses:'none',mustache:false,mouth:'smile',back:null}},
+  blakely:{name:"Sara Blakely",first:"Sara",last:"Blakely",arche:"The Scrappy Bootstrapper",color:"#C77D5A",
+    companies:"Spanx",
+    motto:"Don't fear failure — fear not trying.",
+    blurb:"You built something real out of almost nothing but nerve, resourcefulness, and a refusal to wait for permission. You sell, you solve, and you find a door where everyone swore there wasn't one. You'd rather own all of a great idea than chase someone else's cheque.",
+    traits:["Resourcefulness","Grit","Sales instinct","Fierce independence"],
+    watch:"Blind spot: doing everything yourself is a superpower right up until it becomes a ceiling. At some point the scrappy founder has to learn to let go and scale.",
+    face:{hair:'longwave',hairColor:'#b89a5a',collar:'blouse',glasses:'none',mustache:false,mouth:'warm',back:'long'}},
+  musk:{name:"Elon Musk",first:"Elon",last:"Musk",arche:"The Audacious Moonshooter",color:"#A8987A",
     companies:"Tesla · SpaceX · Neuralink",
     motto:"When it matters enough, you act even against the odds.",
     blurb:"You think in decades and reason from first principles, treating \u201cimpossible\u201d as an opening offer. You'll bet everything — repeatedly — on problems most people file under science fiction. The fearlessness that lets you build the future can also turn timelines and teammates into collateral.",
     traits:["First-principles thinking","Extreme risk appetite","Multi-front ambition","Relentless pace"],
     watch:"Blind spot: betting the company becomes a reflex, and \u201csoon\u201d can mean years. Velocity is a gift until it outruns the humans around you.",
     face:{hair:'quiff',hairColor:'#3f342a',collar:'crew',glasses:'none',mustache:false,mouth:'smile',back:null}},
+  zuckerberg:{name:"Mark Zuckerberg",first:"Mark",last:"Zuckerberg",arche:"The Network Scaler",color:"#6B7486",
+    companies:"Meta · Facebook · Instagram",
+    motto:"Move fast, then learn even faster.",
+    blurb:"You think in graphs and growth loops, judging every move by whether it compounds. You will ship fast, measure everything, and let the data — not your ego — pick the winner. Network effects are your moat, and you play to own the whole board.",
+    traits:["Network effects","Data over ego","Move-fast iteration","Platform scale"],
+    watch:"Blind spot: optimizing for engagement is not the same as optimizing for good. Moving fast can ship harm fast too — what scales is not always what should.",
+    face:{hair:'quiff',hairColor:'#4a3a2a',collar:'crew',glasses:'none',mustache:false,mouth:'smile',back:null}},
+  huang:{name:"Jensen Huang",first:"Jensen",last:"Huang",arche:"The Platform Bettor",color:"#C16A3A",
+    companies:"Nvidia",
+    motto:"Conviction is betting the company before the world agrees.",
+    blurb:"You make one enormous bet on where the world is heading, then wait a decade for everyone else to catch up. You would rather sell the picks and shovels than chase the gold, building the platform the whole industry has to stand on. Patient on the horizon, fearless on the bet.",
+    traits:["Technical conviction","Decade-long patience","Platform thinking","Bet-the-company nerve"],
+    watch:"Blind spot: a bet that big is invisible until it is not, and you can be early for years. Conviction and stubbornness look identical right up until the verdict lands.",
+    face:{hair:'recede',hairColor:'#8f8a80',collar:'jacket',glasses:'round',mustache:false,mouth:'smile',back:null}},
   bezos:{name:"Jeff Bezos",first:"Jeff",last:"Bezos",arche:"The Long-Game Operator",color:"#C77D5A",
     companies:"Amazon · Blue Origin",
     motto:"It's always Day 1.",
@@ -273,43 +280,42 @@ const FOUNDERS = {
     traits:["Long-term thinking","Customer obsession","Operational rigor","Calculated bets"],
     watch:"Blind spot: a long enough game can justify almost anything in the short term, and \u201crelentless\u201d can tip from problems onto people.",
     face:{hair:'bald',hairColor:'#000',collar:'suit',glasses:'none',mustache:false,mouth:'grin',back:null}},
-  blakely:{name:"Sara Blakely",first:"Sara",last:"Blakely",arche:"The Scrappy Bootstrapper",color:"#A65A2A",
-    companies:"Spanx",
-    motto:"Don't fear failure — fear not trying.",
-    blurb:"You built something real out of almost nothing but nerve, resourcefulness, and a refusal to wait for permission. You sell, you solve, and you find a door where everyone swore there wasn't one. You'd rather own all of a great idea than chase someone else's cheque.",
-    traits:["Resourcefulness","Grit","Sales instinct","Fierce independence"],
-    watch:"Blind spot: doing everything yourself is a superpower right up until it becomes a ceiling. At some point the scrappy founder has to learn to let go and scale.",
-    face:{hair:'longwave',hairColor:'#b89a5a',collar:'blouse',glasses:'none',mustache:false,mouth:'warm',back:'long'}},
-  oprah:{name:"Oprah Winfrey",first:"Oprah",last:"Winfrey",arche:"The Empathetic Mogul",color:"#4A5568",
+  kroc:{name:"Ray Kroc",first:"Ray",last:"Kroc",arche:"The System Replicator",color:"#A8987A",
+    companies:"McDonald's",
+    motto:"Quality and consistency — every time, everywhere.",
+    blurb:"You did not invent the product — you saw a machine worth copying ten thousand times. Your genius is the system: standardize it, franchise it, and make the experience identical whether it is Tokyo or Tulsa. You win by removing variation, not by chasing novelty.",
+    traits:["Systematizing","Franchising at scale","Relentless consistency","Spotting the replicable"],
+    watch:"Blind spot: standardization is a strength until the world shifts and the system cannot. The replicator can mistake works everywhere for works forever.",
+    face:{hair:'sidepart',hairColor:'#b4b0a4',collar:'suittie',glasses:'thinrect',mustache:false,mouth:'smile',back:null}},
+  kamprad:{name:"Ingvar Kamprad",first:"Ingvar",last:"Kamprad",arche:"The Frugal Democratizer",color:"#6B7486",
+    companies:"IKEA",
+    motto:"Good design for the many, never the few.",
+    blurb:"You are allergic to waste — of money, material, or motion — and you turn that obsession into a superpower: beautiful things ordinary people can actually afford. You would fly economy and reuse the teabag, then hand every saved coin to the customer. Frugality is not stinginess to you; it is the entire strategy.",
+    traits:["Radical frugality","Cost obsession","Design for the many","Systems thinking"],
+    watch:"Blind spot: penny-wise can curdle into miserly, and squeezing everyone — suppliers, staff, yourself — has real limits. Not every corner is safe to cut.",
+    face:{hair:'recede',hairColor:'#a8a39a',collar:'vneck',glasses:'bigsquare',mustache:false,mouth:'smile',back:null}},
+  oprah:{name:"Oprah Winfrey",first:"Oprah",last:"Winfrey",arche:"The Empathetic Mogul",color:"#C16A3A",
     companies:"Harpo · OWN · O Magazine",
     motto:"Turn your wounds into wisdom.",
     blurb:"Your real product is connection. You read people, move audiences, and build trust at a scale most brands only dream about. You turned authenticity into an empire because you understand that influence compounds faster than capital — people follow you because you make them feel seen.",
     traits:["Emotional intelligence","Brand & influence","Authenticity","Audience-building"],
     watch:"Blind spot: an empire built on you alone is fragile if it stays only you. Empathy at scale still needs the unglamorous machinery of a business underneath it.",
     face:{hair:'afro',hairColor:'#2c241d',collar:'blouse',glasses:'none',mustache:false,mouth:'warm',back:'afro'}},
-  buffett:{name:"Warren Buffett",first:"Warren",last:"Buffett",arche:"The Patient Compounder",color:"#D6844A",
-    companies:"Berkshire Hathaway",
-    motto:"Be greedy when others are fearful.",
-    blurb:"You'd rather be roughly right for thirty years than precisely wrong for one. You wait — sometimes years — for the undeniable bet, then move without flinching. Frugal, rational, and almost allergic to hype, you let compounding do the dramatic work quietly in the background.",
-    traits:["Patience","Value discipline","Cold rationality","Frugality"],
-    watch:"Blind spot: waiting for the perfect pitch means letting a lot of merely-great ones sail by. Now and then the world rewards the bold faster than the patient.",
-    face:{hair:'sidecomb',hairColor:'#d6d2c6',collar:'suit',glasses:'bigsquare',mustache:false,mouth:'smile',back:null}},
-  branson:{name:"Richard Branson",first:"Richard",last:"Branson",arche:"The Maverick Showman",color:"#9C8A6A",
-    companies:"Virgin Group · Atlantic · Galactic",
-    motto:"Screw it — let's just do it.",
-    blurb:"You don't wait for permission or a perfect plan — you leap, grinning, with the camera rolling. You build brands people feel something about, turning bold bets and good fun into businesses across wildly different industries. Adventure is your brand, and your appetite for the next idea never quits.",
-    traits:["Brand instinct","Adventurous risk","Showmanship","Boundless curiosity"],
-    watch:"Blind spot: charm and spontaneity can launch a hundred ventures, but not all of them deserve to exist. The maverick has to learn which bold bets to walk away from.",
-    face:{hair:'sidecomb',hairColor:'#B89A5E',collar:'crew',glasses:'none',mustache:false,beard:true,mouth:'smile',back:null}},
-  gates:{name:"Bill Gates",first:"Bill",last:"Gates",arche:"The Analytical Architect",color:"#6B7486",
-    companies:"Microsoft · Gates Foundation",
-    motto:"We overestimate one year and underestimate ten.",
-    blurb:"You see the system behind the problem and the leverage point hiding inside the system. Ferociously analytical and competitive, you out-think and out-prepare the room, then build the platform everyone else is forced to stand on. Lately you've aimed that same engine at the world's hardest problems.",
-    traits:["Analytical depth","Strategic leverage","Technical mastery","Competitiveness"],
-    watch:"Blind spot: pure logic can miss the human and the brand. Winning the platform war is one thing; being loved is another entirely.",
-    face:{hair:'sidepart',hairColor:'#5f4d3a',collar:'vneck',glasses:'thinrect',mustache:false,mouth:'smile',back:null}}
+  chanel:{name:"Coco Chanel",first:"Coco",last:"Chanel",arche:"The Taste-Maker",color:"#C77D5A",
+    companies:"Chanel",
+    motto:"Elegance is what is left once you remove the excess.",
+    blurb:"You do not follow taste — you set it, then make everyone else feel overdressed. You built an empire by stripping away the fussy and selling a feeling: effortless, modern, unmistakably yours. Reinvention is your craft, and you would rather define an era than chase one.",
+    traits:["Aesthetic authority","Reinvention","Brand as identity","Fierce independence"],
+    watch:"Blind spot: a brand built on one person's taste struggles to outlive them, and the line between visionary and tyrant of taste is thin.",
+    face:{hair:'sidepart',hairColor:'#241f1a',collar:'blouse',glasses:'none',mustache:false,mouth:'warm',back:'bob'}},
+  lauder:{name:"Estée Lauder",first:"Estée",last:"Lauder",arche:"The Relationship Seller",color:"#A8987A",
+    companies:"Estée Lauder Companies",
+    motto:"Sell to one person at a time, and never stop.",
+    blurb:"You sell by touching people — literally: a sample pressed into a hand, a face remembered, a relationship kept for decades. You out-hustle bigger rivals with warmth, persistence, and the belief that every customer is the most important one. Your brand is built one loyal person at a time.",
+    traits:["Relationship selling","Brand-building","Tireless persistence","Personal touch"],
+    watch:"Blind spot: high-touch is hard to scale, and charm can paper over weak systems. What wins the counter does not always win the category.",
+    face:{hair:'updo',hairColor:'#c2a86a',collar:'blouse',glasses:'none',mustache:false,mouth:'warm',back:null}},
 };
-
 /* ============ PORTRAITS ============ */
 const PORTRAIT_PAL={
   dark:{sk:'#e8e6df',face:'#1d1d16',neck:'#191912',cloth:'#23231b',shirt:'#15150f',grin:'#2a2a20'},
@@ -326,7 +332,8 @@ function portraitSVG(key,px,theme){
   s+=`<circle cx="100" cy="100" r="92" fill="${acc}" fill-opacity="0.12"/>`;
   s+=`<g clip-path="url(#${cid})">`;
   // back hair
-  if(c.back==='afro'){s+=`<ellipse cx="100" cy="82" rx="58" ry="55" fill="${HAIR}" stroke="${SK}" stroke-width="2"/>`;}
+  if(c.back==='bob'){s+=`<path d="M58 80 Q54 120 70 136 L84 136 Q70 110 76 84 Z" fill="${HAIR}" stroke="${SK}" stroke-width="2"/>`;s+=`<path d="M142 80 Q146 120 130 136 L116 136 Q130 110 124 84 Z" fill="${HAIR}" stroke="${SK}" stroke-width="2"/>`;}
+  else if(c.back==='afro'){s+=`<ellipse cx="100" cy="82" rx="58" ry="55" fill="${HAIR}" stroke="${SK}" stroke-width="2"/>`;}
   else if(c.back==='long'){
     s+=`<path d="M56 78 Q50 150 72 182 L86 182 Q72 132 78 86 Z" fill="${HAIR}" stroke="${SK}" stroke-width="2"/>`;
     s+=`<path d="M144 78 Q150 150 128 182 L114 182 Q128 132 122 86 Z" fill="${HAIR}" stroke="${SK}" stroke-width="2"/>`;
@@ -346,6 +353,11 @@ function portraitSVG(key,px,theme){
   }else if(c.collar==='vneck'){
     s+=`<path d="M62 158 L54 196 L146 196 L138 158 Q100 149 62 158 Z" fill="${CLOTH}" stroke="${SK}" stroke-width="2"/>`;
     s+=`<path d="M86 153 L100 180 L114 153" fill="${SHIRT}" stroke="${SK}" stroke-width="2"/>`;
+  }else if(c.collar==='jacket'){
+    s+=`<path d="M68 156 L60 196 L140 196 L132 156 Q100 150 68 156 Z" fill="${CLOTH}" stroke="${SK}" stroke-width="2"/>`;
+    s+=`<path d="M100 154 L100 196" fill="none" stroke="${SK}" stroke-width="1.5"/>`;
+    s+=`<path d="M86 154 L100 168 L84 176" fill="none" stroke="${SK}" stroke-width="1.5"/>`;
+    s+=`<path d="M114 154 L100 168 L116 176" fill="none" stroke="${SK}" stroke-width="1.5"/>`;
   }else if(c.collar==='suit'||c.collar==='suittie'){
     s+=`<path d="M58 160 L50 196 L150 196 L142 160 Q100 150 58 160 Z" fill="${CLOTH}" stroke="${SK}" stroke-width="2"/>`;
     s+=`<path d="M86 152 L100 178 L114 152" fill="${SHIRT}" stroke="${SK}" stroke-width="2"/>`;
@@ -361,7 +373,8 @@ function portraitSVG(key,px,theme){
   s+=`<ellipse cx="137" cy="103" rx="6" ry="9" fill="${FACE}" stroke="${SK}" stroke-width="2"/>`;
   s+=`<ellipse cx="100" cy="100" rx="37" ry="45" fill="${FACE}" stroke="${SK}" stroke-width="2.5"/>`;
   // front / top hair
-  if(c.hair==='recede'){s+=`<path d="M63 86 Q66 60 100 59 Q134 60 137 86 Q128 73 100 73 Q72 73 63 86 Z" fill="${HAIR}" stroke="${SK}" stroke-width="2"/>`;}
+  if(c.hair==='updo'){s+=`<path d="M64 82 Q66 56 100 54 Q134 56 136 82 Q126 64 100 64 Q74 64 64 82 Z" fill="${HAIR}" stroke="${SK}" stroke-width="2"/>`;s+=`<ellipse cx="100" cy="46" rx="17" ry="13" fill="${HAIR}" stroke="${SK}" stroke-width="2"/>`;s+=`<path d="M74 72 Q100 62 126 72" fill="none" stroke="${SK}" stroke-width="1" stroke-opacity="0.5"/>`;}
+  else if(c.hair==='recede'){s+=`<path d="M63 86 Q66 60 100 59 Q134 60 137 86 Q128 73 100 73 Q72 73 63 86 Z" fill="${HAIR}" stroke="${SK}" stroke-width="2"/>`;}
   else if(c.hair==='quiff'){s+=`<path d="M62 82 Q63 53 100 51 Q137 53 138 82 Q132 64 110 63 Q105 55 96 62 Q74 64 62 82 Z" fill="${HAIR}" stroke="${SK}" stroke-width="2"/>`;}
   else if(c.hair==='bald'){
     s+=`<path d="M64 104 Q60 90 68 80" fill="none" stroke="${SK}" stroke-width="1.6"/>`;
@@ -413,40 +426,26 @@ function founderArt(key,px,theme){
   if(src) return `<img class="founder-img" src="${src}" alt="${f.name}" width="${px}" height="${px}" style="width:${px}px;height:${px}px;border-radius:50%;object-fit:cover;display:block">`;
   return portraitSVG(key,px,theme);
 }
-
 /* ============ THEME ============ */
 function currentTheme(){return document.documentElement.classList.contains('day')?'day':'dark';}
 function setTheme(theme){const root=document.documentElement;root.classList.remove('day','dark');root.classList.add(theme);renderGrid();}
 let _userToggled=false;
 function toggleTheme(){_userToggled=true;setTheme(currentTheme()==='day'?'dark':'day');}
-
 /* ============ GRID ============ */
 function renderGrid(){
   const t=currentTheme();
   const cards=Object.keys(FOUNDERS).map(k=>{
     const f=FOUNDERS[k];
-    return `<article class="arch-card">
-      <div class="arch-port">${founderArt(k,120,t)}</div>
-      <div class="arch-name">${f.name}</div>
-      <div class="arch-arche">${f.arche}</div>
-      <div class="arch-co">${f.companies}</div>
-      <div class="arch-traits">${f.traits.map(x=>`<span class="chip">${x}</span>`).join('')}</div>
-      <p class="arch-blurb">${f.blurb}</p>
-    </article>`;
+    return `<article class="arch-card"><div class="arch-port">${founderArt(k,120,t)}</div><div class="arch-name">${f.name}</div><div class="arch-arche">${f.arche}</div><div class="arch-co">${f.companies}</div><div class="arch-traits">${f.traits.map(x=>`<span class="chip">${x}</span>`).join('')}</div><p class="arch-blurb">${f.blurb}</p></article>`;
   }).join('');
   document.getElementById('archetypes').innerHTML=`
     <div class="eyebrow res-eyebrow">SKIN · <span>The Lineup</span></div>
     <div class="krule" style="margin:0 auto 22px"></div>
-    <h1 class="arch-title">Eight founders.<br>Eight operating instincts.</h1>
-    <p class="arch-sub">The eight archetypes your answers are matched against — each a distinct way of building a company. Dead or alive, every one of them played the game on their own terms.</p>
+    <h1 class="arch-title">Twelve founders.<br>Twelve operating instincts.</h1>
+    <p class="arch-sub">The twelve archetypes your answers are matched against — each a distinct way of building a company, across eras, industries, and continents. Dead or alive, every one of them played the game on their own terms.</p>
     <div class="arch-grid">${cards}</div>
-    <div class="arch-cta">
-      <a class="btn primary" href="skin-founder-match.html">Take the Assessment →</a>
-      <a class="btn" href="index.html">All SKIN modules</a>
-    </div>`;
+    <div class="arch-cta"><a class="btn primary" href="skin-founder-match.html">Take the Assessment →</a><a class="btn" href="index.html">All SKIN modules</a></div>`;
 }
-
-/* ============ INIT ============ */
 (function init(){
   fillMarks();
   const sys=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'day':'dark';
