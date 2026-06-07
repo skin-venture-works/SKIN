@@ -241,7 +241,7 @@ a.brand:hover{opacity:.72}
 <header class="topbar">
   <a href="index.html" class="brand"><span class="topbar-mark" data-skinmark="22"></span><span class="logo">SKIN</span><span class="sep">·</span><span class="label">Founder Match</span></a>
   <div class="topbar-meta">
-    <span class="meta-tag">v4.6</span>
+    <span class="meta-tag">v4.7</span>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle day/night mode" onclick="toggleTheme()">
       <span class="icon-sun" aria-hidden="true">☀</span>
       <span class="icon-moon" aria-hidden="true">☾</span>
@@ -281,7 +281,7 @@ a.brand:hover{opacity:.72}
 
 <footer class="bottom-bar">
   <div class="foot-left"><span class="foot-mark" data-skinmark="18"></span><a href="index.html">All SKIN modules →</a></div>
-  <span class="version">Founder Match v4.6</span>
+  <span class="version">Founder Match v4.7</span>
 </footer>
 
 <div class="toast" id="toast">Result copied to clipboard</div>
@@ -701,12 +701,12 @@ function renderResult(r){
     </div>
     <div class="leaderboard" id="leaderboard"></div>
     <div class="res-cta">
-      <button class="btn primary" onclick="downloadCard()">Download Share Card (PNG)</button>
-      <button class="btn" onclick="shareLinkedIn()">Share on LinkedIn</button>
+      <button class="btn primary" onclick="shareLinkedIn()">Share on LinkedIn</button>
+      <button class="btn" onclick="downloadCard()">Download Share Card (PNG)</button>
       <button class="btn" onclick="start()">Retake</button>
       <button class="btn" onclick="showArchetypes()">All Archetypes</button>
       <button class="btn" onclick="show('cover')">← Back to Start</button>
-      <div class="cta-note">Tip: download your card, then attach it to your LinkedIn post.</div>
+      <div class="cta-note">Your post text copies automatically. Add the downloaded card for the image.</div>
     </div>`;
   requestAnimationFrame(()=>setTimeout(()=>{
     document.querySelectorAll('.bar-row').forEach(row=>{const fl=row.querySelector('.bar-fill');fl.style.background=row.dataset.color;fl.style.width=row.dataset.pct+'%';});
@@ -721,11 +721,21 @@ function copyResult(){
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(done);}
   else{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);done();}
 }
+function shareText(){
+  const r=lastResult, f=FOUNDERS[r.winner], p=r.pct[r.winner];
+  const s1=(f.strengths&&f.strengths[0])?f.strengths[0]:'', s2=(f.strengths&&f.strengths[1])?f.strengths[1].toLowerCase():'';
+  return `I'm ${p}% ${f.name}. \uD83D\uDE80\n\n${f.arche}. My founder superpowers: ${s1.charAt(0).toLowerCase()+s1.slice(1)} and ${s2}.\n\nWhich legendary founder do YOU build like? Find your match in 2 minutes \uD83D\uDC47\n\n#FounderType #Startups #Entrepreneurship`;
+}
 function shareLinkedIn(){
-  try{ downloadCard(); }catch(e){}
   const url=encodeURIComponent((location.href||'').split('#')[0]);
+  // open the composer inside the click gesture so it is not blocked
   window.open('https://www.linkedin.com/sharing/share-offsite/?url='+url,'_blank','noopener,noreferrer');
-  const t=$('toast'); if(t){ t.textContent='Card downloaded. Attach it to your LinkedIn post.'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
+  const txt=shareText();
+  const done=()=>{ const t=$('toast'); if(t){ t.textContent='Your post text is copied. Paste it into LinkedIn (Ctrl/Cmd+V).'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3400); } };
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done).catch(done); }
+    else{ const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); done(); }
+  }catch(e){ done(); }
 }
 
 /* ============ PNG EXPORT (theme-aware 1:1) ============ */
