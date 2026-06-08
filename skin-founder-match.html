@@ -127,10 +127,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--mono);min-height:1
 .opt .ltr{font-family:var(--serif);font-weight:700;font-size:18px;font-style:normal;color:var(--accent);width:24px;flex-shrink:0;text-align:center}
 .opt:hover{border-color:var(--border-h);background:var(--bg3);transform:translateX(4px)}
 .opt.chosen{border-color:var(--accent);background:var(--bg3)}
-.q-nav{margin-top:28px}
+.q-nav{margin-top:28px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .backlink{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);background:none;border:none;cursor:pointer;padding:6px 2px;transition:color .18s}
 .backlink:hover{color:var(--accent)}
 .backlink:disabled{opacity:.3;cursor:default}
+.kbd-hint{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--text-dim)}
+@media(max-width:640px){.kbd-hint{display:none}}
 
 /* ── RESULT ── */
 #result{text-align:center}
@@ -241,7 +243,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--mono);min-height:1
 a.brand{text-decoration:none;color:inherit;cursor:pointer}
 a.brand:hover{opacity:.72}
 
-/* ── v6.5: email capture ── */
+/* ── v6.6: email capture ── */
 .capture{max-width:560px;margin:6px auto 0;padding:26px 26px 22px;border:1px solid var(--border);border-radius:14px;background:var(--bg2);text-align:center}
 .cap-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
 .cap-title{font-size:21px;font-weight:600;color:var(--text);margin-bottom:6px}
@@ -255,7 +257,7 @@ a.brand:hover{opacity:.72}
 .cap-sink{display:none}
 @media(max-width:520px){.cap-form{flex-direction:column}.cap-btn{width:100%}}
 
-/* ── v6.5: result CTA hierarchy ── */
+/* ── v6.6: result CTA hierarchy ── */
 .cta-primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700;font-size:15px;padding:18px 46px}
 .cta-primary:hover{opacity:.9;border-color:var(--accent);color:#fff;transform:translateY(-1px)}
 .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;width:100%;margin-top:6px}
@@ -263,7 +265,7 @@ a.brand:hover{opacity:.72}
 .cta-mini{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;width:100%;margin-top:12px}
 .cta-mini .link-inline{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--text-dim)}
 .cta-mini .link-inline:hover{color:var(--text);opacity:1}
-/* ── v6.5: diagnose survey ── */
+/* ── v6.6: diagnose survey ── */
 #survey{max-width:680px;margin:0 auto}
 .sv-prog{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);text-align:center;margin-bottom:10px}
 .sv-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;text-align:center}
@@ -305,7 +307,7 @@ a.brand:hover{opacity:.72}
 <header class="topbar">
   <a href="index.html" class="brand"><span class="topbar-mark" data-skinmark="22"></span><span class="logo">SKIN</span><span class="sep">·</span><span class="label">Founder Match</span></a>
   <div class="topbar-meta">
-    <span class="meta-tag">v6.5</span>
+    <span class="meta-tag">v6.6</span>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle day/night mode" onclick="toggleTheme()">
       <span class="icon-sun" aria-hidden="true">☀</span>
       <span class="icon-moon" aria-hidden="true">☾</span>
@@ -348,7 +350,7 @@ a.brand:hover{opacity:.72}
 
 <footer class="bottom-bar">
   <div class="foot-left"><span class="foot-mark" data-skinmark="18"></span><a href="index.html">All SKIN modules →</a></div>
-  <span class="version">Founder Match v6.5</span>
+  <span class="version">Founder Match v6.6</span>
 </footer>
 
 <div class="toast" id="toast">Result copied to clipboard</div>
@@ -706,15 +708,32 @@ function renderQ(){
   $('pNum').textContent=qi+1;$('pFill').style.width=(qi/QUESTIONS.length)*100+'%';
   let h=`<div class="qblock"><div class="q-tag">Question ${String(qi+1).padStart(2,'0')}</div><h2 class="q-text">${item.q}</h2><div class="options">`;
   item.opts.forEach((o,i)=>{h+=`<button class="opt${answers[qi]===i?' chosen':''}" onclick="choose(${i})"><span class="ltr">${L[i]}</span><span>${o.t}</span></button>`;});
-  h+=`</div><div class="q-nav"><button class="backlink" onclick="goBack()" ${qi===0?'disabled':''}>← Back</button></div></div>`;
+  h+=`</div><div class="q-nav"><button class="backlink" onclick="goBack()" ${qi===0?'disabled':''}>← Back</button><span class="kbd-hint">Tip: press A to E</span></div></div>`;
   $('qHost').innerHTML=h;
 }
+let choosing=false;
 function choose(i){
+  if(choosing) return;
+  choosing=true;
   answers[qi]=i;
   document.querySelectorAll('.opt').forEach((el,idx)=>el.classList.toggle('chosen',idx===i));
-  setTimeout(()=>{if(qi<QUESTIONS.length-1){qi++;renderQ();}else{$('pFill').style.width='100%';finish();}},220);
+  setTimeout(()=>{if(qi<QUESTIONS.length-1){qi++;renderQ();}else{$('pFill').style.width='100%';finish();}choosing=false;},220);
 }
 function goBack(){if(qi>0){qi--;renderQ();}}
+document.addEventListener('keydown',function(e){
+  if(e.metaKey||e.ctrlKey||e.altKey) return;
+  var ae=document.activeElement;
+  if(ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA'||ae.tagName==='SELECT'||ae.isContentEditable)) return;
+  var q=document.getElementById('quiz');
+  if(!q||!q.classList.contains('active')) return;
+  var k=e.key;
+  if(k==='ArrowLeft'||k==='Backspace'){ e.preventDefault(); goBack(); return; }
+  var n=(QUESTIONS[qi]&&QUESTIONS[qi].opts)?QUESTIONS[qi].opts.length:0;
+  var idx=-1;
+  if(/^[a-zA-Z]$/.test(k)) idx=k.toUpperCase().charCodeAt(0)-65;
+  else if(/^[1-9]$/.test(k)) idx=parseInt(k,10)-1;
+  if(idx>=0&&idx<n){ e.preventDefault(); choose(idx); }
+});
 
 /* ============ SCORING ============ */
 function score(){
@@ -788,7 +807,7 @@ function renderResult(r){
   },120));
 }
 
-/* ============ DIAGNOSE SURVEY (v6.5) ============ */
+/* ============ DIAGNOSE SURVEY (v6.6) ============ */
 const SURVEY={timing:null,stage:null,need:null,company:'',oneliner:''};
 let svStep=0;
 const SVQ=[
