@@ -241,7 +241,7 @@ a.brand:hover{opacity:.72}
 <header class="topbar">
   <a href="index.html" class="brand"><span class="topbar-mark" data-skinmark="22"></span><span class="logo">SKIN</span><span class="sep">·</span><span class="label">Founder Match</span></a>
   <div class="topbar-meta">
-    <span class="meta-tag">v4.7</span>
+    <span class="meta-tag">v4.9</span>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle day/night mode" onclick="toggleTheme()">
       <span class="icon-sun" aria-hidden="true">☀</span>
       <span class="icon-moon" aria-hidden="true">☾</span>
@@ -281,7 +281,7 @@ a.brand:hover{opacity:.72}
 
 <footer class="bottom-bar">
   <div class="foot-left"><span class="foot-mark" data-skinmark="18"></span><a href="index.html">All SKIN modules →</a></div>
-  <span class="version">Founder Match v4.7</span>
+  <span class="version">Founder Match v4.9</span>
 </footer>
 
 <div class="toast" id="toast">Result copied to clipboard</div>
@@ -613,7 +613,7 @@ function portraitSVG(key,px,theme){
 function founderArt(key,px,theme){
   const f=FOUNDERS[key];
   const src=(theme==='day'?(f.imgLight||f.img):(f.imgDark||f.img));
-  if(src) return `<img class="founder-img" src="${src}" alt="${f.name}" width="${px}" height="${px}" style="width:${px}px;height:${px}px;border-radius:50%;object-fit:cover;display:block">`;
+  if(src) return `<img class="founder-img" src="${src}" alt="${f.name}" width="${px}" height="${px}" style="width:100%;height:auto;aspect-ratio:1/1;border-radius:50%;object-fit:cover;display:block">`;
   return portraitSVG(key,px,theme);
 }
 
@@ -658,7 +658,9 @@ function score(){
   const tied=ranked.filter(k=>t[k]===max);
   const winner=tied[Math.floor(Math.random()*tied.length)];
   const sum=Object.values(t).reduce((a,b)=>a+b,0)||1;
-  const pct={};for(const k in t)pct[k]=Math.round((t[k]/sum)*100);
+  const P=2.3,adj={};let denom=0;
+  for(const k in t){adj[k]=Math.pow(Math.max(0,t[k]),P);denom+=adj[k];}
+  const pct={};for(const k in t)pct[k]=denom>0?Math.round((adj[k]/denom)*100):Math.round(100/Object.keys(t).length);
   ranked.sort((a,b)=>(b===winner?1:0)-(a===winner?1:0)||t[b]-t[a]);
   return {winner,totals:t,pct,ranked};
 }
