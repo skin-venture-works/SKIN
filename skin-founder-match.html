@@ -234,6 +234,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--mono);min-height:1
 .version{font-family:var(--mono);font-size:12px;color:var(--text-dim);letter-spacing:.06em}
 a.brand{text-decoration:none;color:inherit;cursor:pointer}
 a.brand:hover{opacity:.72}
+
+/* ── v5.0: email capture ── */
+.capture{max-width:560px;margin:6px auto 0;padding:26px 26px 22px;border:1px solid var(--border);border-radius:14px;background:var(--bg2);text-align:center}
+.cap-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.cap-title{font-size:21px;font-weight:600;color:var(--text);margin-bottom:6px}
+.cap-sub{font-family:var(--mono);font-size:13px;line-height:1.7;color:var(--text-muted);max-width:430px;margin:0 auto 18px}
+.cap-form{display:flex;gap:10px;max-width:440px;margin:0 auto}
+.cap-input{flex:1 1 auto;min-width:0;padding:13px 15px;border:1px solid var(--border);border-radius:9px;background:var(--bg);color:var(--text);font-size:15px;font-family:var(--sans);outline:none;transition:border-color .2s}
+.cap-input:focus{border-color:var(--accent)}
+.cap-btn{flex:0 0 auto;padding:13px 24px;border:0;border-radius:9px;background:var(--text);color:var(--bg);font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:opacity .2s}
+.cap-btn:hover{opacity:.85}
+.cap-done{font-family:var(--mono);font-size:14px;color:var(--accent);padding:8px 0 2px}
+.cap-sink{display:none}
+@media(max-width:520px){.cap-form{flex-direction:column}.cap-btn{width:100%}}
 </style>
 </head>
 <body>
@@ -241,7 +255,7 @@ a.brand:hover{opacity:.72}
 <header class="topbar">
   <a href="index.html" class="brand"><span class="topbar-mark" data-skinmark="22"></span><span class="logo">SKIN</span><span class="sep">·</span><span class="label">Founder Match</span></a>
   <div class="topbar-meta">
-    <span class="meta-tag">v4.9</span>
+    <span class="meta-tag">v5.0</span>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle day/night mode" onclick="toggleTheme()">
       <span class="icon-sun" aria-hidden="true">☀</span>
       <span class="icon-moon" aria-hidden="true">☾</span>
@@ -258,7 +272,7 @@ a.brand:hover{opacity:.72}
       <div class="krule"></div>
       <div class="hero-faces" id="heroFaces"></div>
       <h1 class="hero-title">What founder type<br><strong>are you?</strong></h1>
-      <p class="hero-sub">Steve Jobs or Elon Musk? Answer <b>ten honest questions</b> and we'll match your instincts against twelve of history's most renowned company builders, <b>dead or alive</b>.</p>
+      <p class="hero-sub"><b>Ten honest questions</b> between you and the truth. We match your instincts to twelve legends, <b>dead or alive</b>. No notes, just the verdict.</p>
       <button class="btn primary" onclick="start()">Begin the Assessment</button>
       <div class="cover-meta">10 questions · ~2 minutes · <button class="link-inline" onclick="showArchetypes()">12 archetypes</button></div>
       <div class="tally" id="tally"></div>
@@ -281,7 +295,7 @@ a.brand:hover{opacity:.72}
 
 <footer class="bottom-bar">
   <div class="foot-left"><span class="foot-mark" data-skinmark="18"></span><a href="index.html">All SKIN modules →</a></div>
-  <span class="version">Founder Match v4.9</span>
+  <span class="version">Founder Match v5.0</span>
 </footer>
 
 <div class="toast" id="toast">Result copied to clipboard</div>
@@ -709,12 +723,31 @@ function renderResult(r){
       <button class="btn" onclick="showArchetypes()">All Archetypes</button>
       <button class="btn" onclick="show('cover')">← Back to Start</button>
       <div class="cta-note">Your post text copies automatically. Add the downloaded card for the image.</div>
+    </div>
+    <div class="capture">
+      <div class="cap-eyebrow">SKIN · The List</div>
+      <div class="cap-title">Get the next founder tool first</div>
+      <p class="cap-sub">New SKIN modules and founder teardowns, now and then. No spam, unsubscribe anytime.</p>
+      <form class="cap-form" id="capForm" action="https://app.kit.com/forms/9538966/subscriptions" method="post" target="skin_kit_sink" onsubmit="return capSubmit()">
+        <input class="cap-input" type="email" name="email_address" placeholder="you@company.com" required aria-label="Email address">
+        <button class="cap-btn" type="submit">Subscribe</button>
+      </form>
+      <div class="cap-done" id="capDone" hidden>Check your inbox to confirm your spot.</div>
+      <iframe name="skin_kit_sink" class="cap-sink" tabindex="-1" aria-hidden="true"></iframe>
     </div>`;
   requestAnimationFrame(()=>setTimeout(()=>{
     document.querySelectorAll('.bar-row').forEach(row=>{const fl=row.querySelector('.bar-fill');fl.style.background=row.dataset.color;fl.style.width=row.dataset.pct+'%';});
   },120));
 }
 
+function capSubmit(){
+  setTimeout(function(){
+    var c=document.getElementById('capForm'), d=document.getElementById('capDone');
+    if(c) c.style.display='none';
+    if(d) d.hidden=false;
+  },150);
+  return true;
+}
 /* ============ COPY ============ */
 function copyResult(){
   const f=FOUNDERS[lastResult.winner];
