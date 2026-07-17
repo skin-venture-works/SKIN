@@ -2,13 +2,13 @@
 
 Conversational front door for SKIN. A founder talks to Atlas for about three minutes. Atlas listens, forms a read, and ends with a First Read draft. Human review before anything official is sent.
 
-Current version: **v1.1** (`atlas-v1.1.html`)
+Current version: **v1.2** (`atlas-v1.2.html`)
 
 ## How to run
 
-Open `atlas-v1.1.html` inside a Claude.ai artifact (paste the file contents into a chat and ask Claude to render it, or open via the Claude environment it was built in). The model calls are proxied by Anthropic in that environment, so it works with zero setup.
+Production: deploy the repo to Vercel per `DEPLOY.md`. The OS hub lives at the root URL with Atlas as module 00, and the `/api/atlas` proxy makes the conversation live. Every push to `main` auto-deploys.
 
-It will NOT work opened as a plain local file or hosted on our own domain yet. Browser-side calls to the Anthropic API need a key, and a key cannot ship in client code. Production needs a small backend proxy (Vercel or Cloudflare function, ~50 lines) that holds the key. Roughly half a day. Cost per conversation: about $0.01 to $0.03.
+Without deploying: `atlas-v1.2.html` also works when rendered inside a Claude.ai artifact, where the model calls are proxied automatically. It does NOT work opened as a plain local file or on GitHub Pages, because those serve static files only and the brain has no endpoint to call.
 
 ## Mechanism
 
@@ -31,6 +31,8 @@ It will NOT work opened as a plain local file or hosted on our own domain yet. B
 - Email capture at the end is theater. Nothing is sent.
 
 ## Changelog
+
+- **v1.2** — Production-ready. Same-origin proxy support (`api/atlas.js` on Vercel) with automatic fallback to the Claude environment. Atlas added to the SKIN OS hub as module 00. See `DEPLOY.md`.
 
 - **v1.1** — Removed all mid-conversation quick-reply chips. Rewrote the persona from a scripted six-phase flow into an open-ended listening brief: follows the founder's thread, names observations, answers direct questions instead of deflecting.
 - **v1.0** — First working build. Live model brain, LLM-app interface, Signal panel, First Read draft generation.
