@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Atlas</title>
+<!-- SKIN · Atlas · v1.1 -->
+<style>
+:root {
+  --bg:#F7F5F0;
+  --ink:#0B0B0D;
+  --ink-60:rgba(11,11,13,.6);
+  --ink-40:rgba(11,11,13,.4);
+  --ink-08:rgba(11,11,13,.08);
+  --copper:#C4602F;
+  --user-bg:#ECE9E1;
+}
+* { box-sizing:border-box; }
+html,body { height:100%; }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+button,textarea,input { font:inherit; color:inherit; }
+button { cursor:pointer; background:none; border:none; padding:0; }
+
+.app { display:flex; height:100svh; }
+
+/* ---------- left: conversation ---------- */
+.stage { flex:1; display:flex; flex-direction:column; min-width:0; position:relative; }
+
+.top {
+  flex:none;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 22px;
+}
+.wordmark { display:flex; align-items:baseline; gap:8px; font-weight:800; letter-spacing:-.03em; font-size:15px; }
+.wordmark em { font-style:normal; font-weight:500; font-size:11.5px; color:var(--ink-40); letter-spacing:0; }
+.top-actions { display:flex; gap:4px; }
+.tbtn {
+  font-size:12.5px; font-weight:600; letter-spacing:-.01em;
+  color:var(--ink-60);
+  padding:7px 11px; border-radius:8px;
+  transition:background .15s ease, color .15s ease;
+}
+.tbtn:hover { background:var(--ink-08); color:var(--ink); }
+.tbtn.on { background:var(--ink); color:var(--bg); }
+
+/* scroll area */
+.scroll { flex:1; overflow-y:auto; }
+.col { max-width:660px; margin:0 auto; padding:0 22px; }
+
+/* start state: Atlas's question is the hero */
+.start {
+  min-height:calc(100svh - 210px);
+  display:flex; flex-direction:column; justify-content:center;
+}
+.start .sig-dot { width:9px; height:9px; border-radius:50%; background:var(--copper); margin-bottom:26px; }
+.start h1 {
+  margin:0;
+  font-size:clamp(28px, 4.6vw, 40px);
+  line-height:1.12;
+  letter-spacing:-.035em;
+  font-weight:600;
+  max-width:560px;
+}
+.start p {
+  margin:14px 0 0;
+  font-size:15px; line-height:1.5; letter-spacing:-.01em;
+  color:var(--ink-60);
+  max-width:460px;
+}
+.start .chips { margin-top:30px; }
+
+/* conversation state */
+.thread { padding-top:10px; padding-bottom:24px; display:none; }
+.app.talking .start { display:none; }
+.app.talking .thread { display:block; }
+
+.msg { margin:26px 0; animation:rise .3s ease; }
+@keyframes rise { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:none;} }
+.msg.atlas { font-size:15.5px; line-height:1.65; letter-spacing:-.008em; white-space:pre-wrap; }
+.msg.user {
+  display:flex; justify-content:flex-end;
+}
+.msg.user span {
+  background:var(--user-bg);
+  border-radius:16px;
+  padding:10px 15px;
+  max-width:80%;
+  line-height:1.5; letter-spacing:-.008em;
+  white-space:pre-wrap;
+}
+.thinking { display:inline-block; width:9px; height:9px; border-radius:50%; background:var(--copper); animation:pulse 1s ease infinite; margin:4px 0; }
+@keyframes pulse { 0%,100% { opacity:.25; transform:scale(.85);} 50% { opacity:1; transform:scale(1);} }
+
+/* chips */
+.chips { display:flex; flex-wrap:wrap; gap:8px; animation:rise .3s ease; }
+.chip {
+  border:1px solid rgba(11,11,13,.14);
+  border-radius:999px;
+  padding:8px 14px;
+  font-size:13.5px; font-weight:500; letter-spacing:-.01em;
+  color:var(--ink);
+  background:transparent;
+  transition:background .15s ease, border-color .15s ease;
+}
+.chip:hover { background:#fff; border-color:rgba(11,11,13,.3); }
+.thread .chips { margin-top:-8px; margin-bottom:26px; }
+
+/* first read */
+.fr {
+  margin:30px 0;
+  border-top:1px solid var(--ink-08);
+  padding-top:26px;
+  animation:rise .4s ease;
+}
+.fr .k {
+  font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--copper);
+}
+.fr h2 { margin:10px 0 0; font-size:24px; letter-spacing:-.03em; line-height:1.15; font-weight:650; }
+.fr-sec { margin-top:22px; }
+.fr-sec small {
+  display:block;
+  font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--ink-40);
+  margin-bottom:6px;
+}
+.fr-sec p, .fr-sec li { margin:0; font-size:15px; line-height:1.6; letter-spacing:-.008em; }
+.fr-sec ul { margin:0; padding-left:18px; }
+.fr-sec li { margin:4px 0; }
+.fr-path {
+  margin-top:24px;
+  border-left:2px solid var(--copper);
+  padding:2px 0 2px 16px;
+}
+.fr-path b { display:block; font-size:13px; letter-spacing:-.01em; }
+.fr-path p { margin:4px 0 0; font-size:14.5px; line-height:1.55; color:var(--ink-60); }
+.fr-note { margin-top:24px; font-size:12.5px; line-height:1.5; color:var(--ink-40); }
+
+/* ---------- composer ---------- */
+.composer { flex:none; padding:8px 22px calc(18px + env(safe-area-inset-bottom)); }
+.box {
+  max-width:660px; margin:0 auto;
+  display:flex; align-items:flex-end; gap:8px;
+  background:#fff;
+  border:1px solid rgba(11,11,13,.12);
+  border-radius:22px;
+  padding:10px 10px 10px 18px;
+  transition:border-color .15s ease, box-shadow .15s ease;
+}
+.box:focus-within { border-color:rgba(11,11,13,.32); box-shadow:0 2px 16px rgba(11,11,13,.05); }
+.box textarea {
+  flex:1; border:none; outline:none; background:transparent; resize:none;
+  line-height:1.45; letter-spacing:-.008em;
+  max-height:130px; padding:6px 0;
+}
+.box textarea::placeholder { color:var(--ink-40); }
+.up {
+  flex:none; width:36px; height:36px; border-radius:12px;
+  background:var(--ink); color:var(--bg);
+  display:flex; align-items:center; justify-content:center;
+  transition:opacity .15s ease, transform .12s ease;
+}
+.up:hover { transform:translateY(-1px); }
+.up:disabled { opacity:.25; cursor:default; transform:none; }
+.up svg { width:15px; height:15px; }
+.legal {
+  max-width:660px; margin:9px auto 0;
+  text-align:center;
+  font-size:11.5px; color:var(--ink-40); letter-spacing:-.005em;
+}
+
+/* ---------- right: signal ---------- */
+.panel {
+  flex:none; width:300px;
+  border-left:1px solid var(--ink-08);
+  display:none; flex-direction:column;
+  overflow-y:auto;
+  padding:20px 22px;
+}
+.app.signal .panel { display:flex; }
+.panel .ph {
+  font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--ink-40);
+  margin-bottom:18px;
+}
+.field { margin-bottom:18px; animation:rise .3s ease; }
+.field small {
+  display:block;
+  font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-40);
+  margin-bottom:4px;
+}
+.field div { font-size:13.5px; line-height:1.5; letter-spacing:-.008em; }
+.field div.empty { color:var(--ink-40); }
+.field div.empty::before { content:"—"; }
+
+@media (max-width: 920px) {
+  .panel { position:fixed; right:0; top:0; bottom:0; z-index:30; background:var(--bg); box-shadow:-16px 0 48px rgba(11,11,13,.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation:none !important; transition:none !important; }
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="stage">
+    <header class="top">
+      <div class="wordmark">Atlas <em>by SKIN · v1.1</em></div>
+      <nav class="top-actions">
+        <button class="tbtn" id="signalBtn" type="button">Signal</button>
+        <button class="tbtn" id="newBtn" type="button">New</button>
+      </nav>
+    </header>
+
+    <div class="scroll" id="scroll">
+      <div class="col">
+        <section class="start" id="startView">
+          <div class="sig-dot"></div>
+          <h1>What are you trying to make happen right now?</h1>
+          <p>SKIN is here to help you succeed with your business. No deck required. Bring the messy version.</p>
+          <div class="chips" id="startChips"></div>
+        </section>
+        <section class="thread" id="thread"></section>
+      </div>
+    </div>
+
+    <div class="composer">
+      <div class="box">
+        <textarea id="input" rows="1" placeholder="Say what feels hard…" aria-label="Message Atlas"></textarea>
+        <button class="up" id="sendBtn" type="button" aria-label="Send">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+        </button>
+      </div>
+      <div class="legal">Atlas gives an early read. SKIN reviews every First Read before it is sent.</div>
+    </div>
+  </div>
+
+  <aside class="panel" aria-label="Intake signal">
+    <div class="ph" id="phase">Intake · Goal</div>
+    <div class="field"><small>Goal</small><div id="sig-goal" class="empty"></div></div>
+    <div class="field"><small>Challenge</small><div id="sig-challenge" class="empty"></div></div>
+    <div class="field"><small>Audience</small><div id="sig-audience" class="empty"></div></div>
+    <div class="field"><small>Proof</small><div id="sig-proof" class="empty"></div></div>
+    <div class="field"><small>Timeline</small><div id="sig-timeline" class="empty"></div></div>
+    <div class="field"><small>Stage read</small><div id="sig-stage" class="empty"></div></div>
+    <div class="field"><small>Blocker hypothesis</small><div id="sig-blocker" class="empty"></div></div>
+  </aside>
+</div>
+
+<script>
+/* SKIN · Atlas · v1.1 */
+const VERSION = "1.1";
+
+const SYSTEM_PROMPT = `You are Atlas, the founder guide for SKIN Studios. You are a sharp, experienced operator having a real conversation with a founder about their business. You are not a chatbot, an intake form, or an assessment tool. Never describe yourself as an AI. Never run a script.
+
+WHAT YOU ARE DOING:
+Over a few minutes of honest conversation, come to understand five things about this founder's situation:
+- what they are trying to make happen right now
+- what feels hardest or most unclear
+- who has to believe it for the next move to work
+- what verified evidence actually exists
+- what pressure or deadline they are under
+Learn these by following the founder's thread, not by marching through a checklist. If one answer gives you three of them, do not ask about those again. Pull on the most interesting or most load-bearing thing they just said. The best next question is usually hiding in their last sentence.
+
+HOW TO TALK:
+- Open-ended questions only. Never offer multiple-choice options. Never present a menu.
+- Use their words back to them. Be specific to what they said, never generic.
+- When you notice something worth naming, name it. A gap between their framing and their evidence. A number that sounds like a hope, not a fact. Time going into polishing documents instead of generating proof. One sharp observation, stated plainly, then a question. This is what makes the conversation feel worth three minutes.
+- If the founder asks you a direct question, answer it honestly and briefly. Do not deflect. Then bring it back to them.
+- Warm, direct, human. Short sentences. No hype, no flattery, no reassurance padding. Never use em dashes.
+- 1 to 4 sentences per reply. One question at most per reply, and some replies can simply be an observation that invites a response.
+
+WHEN TO CLOSE:
+Once you genuinely understand the five things, usually after 5 to 8 founder turns, reflect back what you heard in 2 or 3 tight sentences and ask if you got it right. Do not close before you have something real. Do not drag past roughly 10 turns. When the founder confirms your reflection, tell them SKIN can turn this into a First Read: the goal, the likely blocker, the missing proof, and the next useful move. Set ready_for_first_read to true on that message.
+
+SKIN JUDGMENT PRINCIPLES (apply silently while forming your read):
+- Evidence over belief. What is verified, not what the deck claims.
+- Founders systematically mis-stage themselves upward. Form a quiet stage read from traction evidence, not their label.
+- "Do nothing" is often the strongest competitor.
+- Compliments are not conviction. Pilots are not customers. A term sheet is not money.
+- Packaging is not proof. If the founder is polishing documents instead of generating evidence, that is likely the blocker.
+
+OUTPUT FORMAT. Respond ONLY with valid JSON, no markdown fences, no other text:
+{
+  "reply": "your message to the founder",
+  "phase": "goal|challenge|audience|proof|summary|wrap",
+  "ready_for_first_read": false,
+  "signal": {
+    "goal": null or "short phrase",
+    "challenge": null or "short phrase",
+    "audience": null or "short phrase",
+    "proof": null or "short phrase",
+    "timeline": null or "short phrase",
+    "stage_read": null or "engine's honest stage read, e.g. 'Pre-seed evidence, Seed framing'",
+    "blocker_hypothesis": null or "one sharp sentence"
+  }
+}
+The phase field is a passive label of where the conversation naturally is, not a script to follow. Update signal fields cumulatively as you learn. Keep them terse. Never mention the signal or the JSON to the founder.`;
+
+const FIRST_READ_PROMPT = `You are the SKIN Studios engine drafting a First Read from an Atlas intake conversation. Follow SKIN doctrine: evidence over belief, name the primary constraint first, every verdict ends with a liftable path. Short sentences. No em dashes. No hype. Direct but never cruel. Harsh internal labels are translated, not hidden.
+
+Given the conversation and captured signal, respond ONLY with valid JSON, no fences:
+{
+  "headline": "4-7 word plain-language title of the situation",
+  "heard": "2-3 sentences. What SKIN heard: the goal and the pressure, in the founder's own terms.",
+  "blocker": "2-3 sentences. The likely primary constraint. One thing. Name it plainly.",
+  "missing_proof": ["2-4 short items, the specific evidence that does not exist yet"],
+  "next_move": "2-3 sentences. The single next useful move in the next 14-30 days, with the proof point it unlocks.",
+  "path_name": "Fundable|SKIN OS|Pulse|Talk it through live",
+  "path_why": "1-2 sentences on why this SKIN path fits, in plain terms."
+}
+Choose Fundable only if actively raising. Pulse if the question is company health or drift. SKIN OS if the blocker is a missing asset. Live if the situation is nuanced, sensitive, or unclear.`;
+
+const OPENER = {
+  reply: "What are you trying to make happen right now?",
+  chips: ["Raise money", "Find customers", "Launch", "Enter a new market", "Fix traction", "I'm not sure"],
+  phase: "goal",
+  ready_for_first_read: false,
+  signal: {}
+};
+
+/* ---------- state ---------- */
+let history = [];
+let busy = false;
+let ended = false;
+
+const app = document.getElementById('app');
+const scrollEl = document.getElementById('scroll');
+const thread = document.getElementById('thread');
+const inputEl = document.getElementById('input');
+const sendBtn = document.getElementById('sendBtn');
+const phaseEl = document.getElementById('phase');
+
+/* ---------- ui ---------- */
+function down() { scrollEl.scrollTop = scrollEl.scrollHeight; }
+
+function addAtlas(text) {
+  const el = document.createElement('div');
+  el.className = 'msg atlas';
+  el.textContent = text;
+  thread.appendChild(el);
+  down();
+}
+function addUser(text) {
+  const el = document.createElement('div');
+  el.className = 'msg user';
+  const s = document.createElement('span');
+  s.textContent = text;
+  el.appendChild(s);
+  thread.appendChild(el);
+  down();
+}
+function showThinking() {
+  const el = document.createElement('div');
+  el.className = 'msg';
+  el.id = 'thinking';
+  el.innerHTML = '<span class="thinking"></span>';
+  thread.appendChild(el);
+  down();
+}
+function hideThinking() { const t = document.getElementById('thinking'); if (t) t.remove(); }
+
+function clearChips() { document.querySelectorAll('.chips').forEach(c => { if (c.id !== 'startChips') c.remove(); }); }
+
+function showChips(list, handler) {
+  if (!list || !list.length) return;
+  const wrap = document.createElement('div');
+  wrap.className = 'chips';
+  list.forEach(label => {
+    const b = document.createElement('button');
+    b.className = 'chip';
+    b.type = 'button';
+    b.textContent = label;
+    b.addEventListener('click', () => handler(label));
+    wrap.appendChild(b);
+  });
+  thread.appendChild(wrap);
+  down();
+}
+
+const PHASE_LABEL = { goal:'Goal', challenge:'Challenge', audience:'Audience', proof:'Proof', summary:'Summary', wrap:'First Read' };
+function updateSignal(sig, phase) {
+  if (phase) phaseEl.textContent = 'Intake · ' + (PHASE_LABEL[phase] || phase);
+  if (!sig) return;
+  const map = { goal:'sig-goal', challenge:'sig-challenge', audience:'sig-audience', proof:'sig-proof', timeline:'sig-timeline', stage_read:'sig-stage', blocker_hypothesis:'sig-blocker' };
+  for (const k in map) {
+    const el = document.getElementById(map[k]);
+    if (sig[k]) { el.textContent = sig[k]; el.classList.remove('empty'); }
+  }
+}
+
+/* ---------- api ---------- */
+function parseJSON(text) {
+  const clean = text.replace(/```json|```/g, '').trim();
+  return JSON.parse(clean.slice(clean.indexOf('{'), clean.lastIndexOf('}') + 1));
+}
+
+async function api(system, messages) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, system, messages })
+  });
+  const data = await res.json();
+  return parseJSON(data.content.filter(b => b.type === 'text').map(b => b.text).join('\n'));
+}
+
+/* ---------- flow ---------- */
+async function send(text) {
+  if (busy || ended) return;
+  const val = (text || '').trim();
+  if (!val) return;
+  busy = true;
+  sendBtn.disabled = true;
+  app.classList.add('talking');
+  clearChips();
+  addUser(val);
+  inputEl.value = '';
+  autosize();
+  history.push({ role:'user', content:val });
+  showThinking();
+
+  try {
+    const out = await api(SYSTEM_PROMPT, history);
+    hideThinking();
+    history.push({ role:'assistant', content: JSON.stringify(out) });
+    addAtlas(out.reply);
+    updateSignal(out.signal, out.phase);
+    if (out.ready_for_first_read) {
+      await renderFirstRead();
+    }
+  } catch (err) {
+    hideThinking();
+    console.error('Atlas error:', err);
+    addAtlas('Something broke on my side. Say that again and I will pick it back up.');
+    history.pop();
+  }
+  busy = false;
+  sendBtn.disabled = false;
+  inputEl.focus();
+}
+
+async function renderFirstRead() {
+  showThinking();
+  try {
+    const transcript = history.map(m => (m.role === 'user' ? 'Founder: ' : 'Atlas: ') + m.content).join('\n');
+    const fr = await api(FIRST_READ_PROMPT, [{ role:'user', content:'Conversation transcript:\n\n' + transcript + '\n\nDraft the First Read JSON now.' }]);
+    hideThinking();
+
+    const card = document.createElement('div');
+    card.className = 'fr';
+    card.innerHTML = `
+      <span class="k">First Read · Draft</span>
+      <h2></h2>
+      <div class="fr-sec"><small>What we heard</small><p data-k="heard"></p></div>
+      <div class="fr-sec"><small>The likely blocker</small><p data-k="blocker"></p></div>
+      <div class="fr-sec"><small>Missing proof</small><ul data-k="missing"></ul></div>
+      <div class="fr-sec"><small>Next useful move</small><p data-k="next"></p></div>
+      <div class="fr-path"><b data-k="path"></b><p data-k="pathwhy"></p></div>
+      <div class="fr-note">This is Atlas's early read. A SKIN operator reviews every First Read before the official version is sent.</div>
+    `;
+    card.querySelector('h2').textContent = fr.headline;
+    card.querySelector('[data-k="heard"]').textContent = fr.heard;
+    card.querySelector('[data-k="blocker"]').textContent = fr.blocker;
+    const ul = card.querySelector('[data-k="missing"]');
+    (fr.missing_proof || []).forEach(item => { const li = document.createElement('li'); li.textContent = item; ul.appendChild(li); });
+    card.querySelector('[data-k="next"]').textContent = fr.next_move;
+    card.querySelector('[data-k="path"]').textContent = fr.path_name;
+    card.querySelector('[data-k="pathwhy"]').textContent = fr.path_why;
+    thread.appendChild(card);
+    down();
+
+    setTimeout(() => {
+      addAtlas('Where should SKIN send the reviewed version?');
+      showChips(['Send my First Read', 'Talk it through live'], endAction);
+    }, 450);
+  } catch (err) {
+    hideThinking();
+    console.error('First Read error:', err);
+    addAtlas('I have what I need, but the draft hit a snag. Try once more.');
+  }
+}
+
+function endAction(label) {
+  clearChips();
+  addUser(label);
+  ended = true;
+  setTimeout(() => {
+    if (label === 'Send my First Read') {
+      addAtlas('Done. A SKIN operator will review it and send the official version. You said the messy thing. That was the hard part.');
+    } else {
+      addAtlas('Good call. SKIN will set up a live conversation. Some things are easier out loud.');
+    }
+  }, 350);
+}
+
+function reset() {
+  history = [];
+  busy = false;
+  ended = false;
+  thread.innerHTML = '';
+  app.classList.remove('talking');
+  document.querySelectorAll('.field div').forEach(el => { el.textContent = ''; el.classList.add('empty'); });
+  phaseEl.textContent = 'Intake · Goal';
+  seed();
+  inputEl.focus();
+}
+
+function seed() {
+  history.push({ role:'user', content:'(The founder just opened the page. Begin.)' });
+  history.push({ role:'assistant', content: JSON.stringify(OPENER) });
+}
+
+/* ---------- wiring ---------- */
+function autosize() {
+  inputEl.style.height = 'auto';
+  inputEl.style.height = Math.min(inputEl.scrollHeight, 130) + 'px';
+}
+inputEl.addEventListener('input', autosize);
+inputEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(inputEl.value); }
+});
+sendBtn.addEventListener('click', () => send(inputEl.value));
+document.getElementById('signalBtn').addEventListener('click', function () {
+  app.classList.toggle('signal');
+  this.classList.toggle('on');
+});
+document.getElementById('newBtn').addEventListener('click', reset);
+
+/* start chips live in the hero */
+const startChips = document.getElementById('startChips');
+OPENER.chips.forEach(label => {
+  const b = document.createElement('button');
+  b.className = 'chip';
+  b.type = 'button';
+  b.textContent = label;
+  b.addEventListener('click', () => send(label));
+  startChips.appendChild(b);
+});
+
+seed();
+inputEl.focus();
+</script>
+</body>
+</html>
