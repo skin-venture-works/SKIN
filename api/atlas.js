@@ -4,7 +4,7 @@
 // The key never appears in client code or in this repo.
 
 const MODEL = 'claude-sonnet-4-6'; // pinned server-side; client value is ignored
-const MAX_TOKENS = 1024;
+const MAX_TOKENS = 2048;
 const MAX_MESSAGES = 40;           // an Atlas session is ~20 turns; hard cap against abuse
 const MAX_CHARS = 60000;           // total payload guard
 

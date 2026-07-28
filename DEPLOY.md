@@ -1,59 +1,32 @@
-# Atlas — Deploy Guide (v1.2)
+# Deploy guide (site v2.0)
 
-Goal: one live URL where the whole SKIN OS is served and Atlas actually works.
-Time: about 20 minutes. Cost: free tier on everything except API usage (~$0.01-0.03 per conversation).
+Nothing about the Vercel setup changes. Push to `main`, Vercel redeploys in about a minute.
 
-Why Vercel instead of GitHub Pages: Pages serves static files only, so Atlas's brain
-would be dead there. Vercel serves the same static site AND runs the `/api/atlas`
-proxy that holds the Anthropic key. Same repo, one deploy.
+## Upload these files to the repo root
 
-## Steps
+- `index.html`  (REPLACES the existing one, which was the OS hub)
+- `os.html`  (NEW, this is the old homepage)
+- `atlas.html`  (NEW)
+- `skin-logo.png`  (NEW)
+- `api/atlas.js`  (replaces, token ceiling raised)
+- `README.md`, `DEPLOY.md`
 
-**1. Get an Anthropic API key**
-- console.anthropic.com → API Keys → Create key.
-- Copy it once. Never commit it, never paste it into chat or the repo.
+Leave `atlas-v1.2.html` and every `skin-*.html` file where they are. `os.html` links to them.
 
-**2. Push these files to the repo (root)**
-- `atlas-v1.2.html`
-- `api/atlas.js`  (new folder `api` at repo root)
-- `index.html`  (replaces the current one; adds the Atlas module, bumps OS to v1.6)
-- `DEPLOY.md`  (this file)
+## After deploy, check these five things
 
-**3. Import the repo to Vercel**
-- vercel.com → Add New → Project → Import `skin-venture-works/SKIN` from GitHub.
-- Framework preset: **Other**. No build command. Output directory: leave default.
+1. `/` loads and the SKIN wordmark appears in the top left.
+2. `/atlas.html` opens and Atlas asks the first question without being prompted.
+3. Send a message. Atlas replies, and an item on the left rail turns copper.
+4. Run a conversation to the end. The report appears with the score circle and signal bars.
+5. `/os.html` loads and every module card still opens.
 
-**4. Add the key**
-- Project → Settings → Environment Variables:
-  - Name: `ANTHROPIC_API_KEY`
-  - Value: the key from step 1
-  - Environment: Production (and Preview if you want branch previews to work).
-- Redeploy after saving (Deployments → ⋯ → Redeploy).
+If Atlas replies with "Something broke on my side", the proxy is not reachable. Check that
+`ANTHROPIC_API_KEY` is still set in Vercel and that `api/atlas.js` uploaded into an `api` folder,
+not the root.
 
-**5. Verify**
-- Open `https://<your-project>.vercel.app/atlas-v1.2.html`
-- Send a message. If Atlas replies, the proxy is live.
-- The OS hub is at `https://<your-project>.vercel.app/` with Atlas as module 00.
+## Reminder for after the demos
 
-**6. Optional: custom domain**
-- Project → Settings → Domains → add e.g. `os.skin.global` or `atlas.skin.global`.
-- Follow the DNS instructions Vercel shows.
-
-## How the endpoint logic works
-
-`atlas-v1.2.html` tries the same-origin proxy (`/api/atlas`) first. On Vercel that
-succeeds and the key stays server-side. Inside a Claude.ai artifact the proxy does
-not exist, so it falls back to the direct Anthropic endpoint, which that environment
-proxies automatically. One file works in both places.
-
-## Safety rails in the proxy
-
-- Model and max_tokens are pinned server-side; client values are ignored.
-- Conversation length and payload size are capped.
-- Consider adding Vercel's rate limiting or a simple IP throttle before sharing
-  the URL widely. For a VC demo week, the caps above are enough.
-
-## Auto-deploys
-
-Once imported, every push to `main` redeploys automatically. Ship v1.3 by
-committing it; the URL updates in about a minute.
+Every page here is public, including Atlas, and every Atlas conversation costs tokens against the
+SKIN key. Do not post the URL publicly. Dom's interim direction document requires server side
+authentication, an approved email allowlist, usage logging, and a kill switch before public launch.
