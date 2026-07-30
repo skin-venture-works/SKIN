@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ATLAS Idea Lab | Strada HBCU Initiative</title>
+<meta name="description" content="A guided idea stress test for HBCU students, powered by SKIN ATLAS." />
+<link rel="icon" href="strada-favicon.svg" />
+<link rel="stylesheet" href="strada.css" />
+<!-- SKIN · Strada Atlas · v1.0 -->
+</head>
+<body>
+
+<!-- ============ WELCOME ============ -->
+<main class="welcome-page screen is-on" id="screen-welcome">
+  <header class="site-header">
+    <div class="brand-lockup" aria-label="Strada HBCU Initiative">
+      <img class="strada-logo" src="strada-logo.svg" alt="Strada" width="122" height="30" />
+      <span class="brand-divider" aria-hidden="true"></span>
+      <span class="initiative-name">HBCU Initiative</span>
+    </div>
+    <div class="powered-by"><span class="powered-dot" aria-hidden="true"></span> Powered by <strong>SKIN ATLAS</strong></div>
+  </header>
+
+  <section class="welcome-shell">
+    <div class="welcome-copy">
+      <div class="eyebrow">
+        <span>Strada HBCU Initiative</span>
+        <span aria-hidden="true">×</span>
+        <span>SKIN</span>
+      </div>
+
+      <h1>Your idea deserves a real stress test.</h1>
+      <p class="welcome-lede">Talk it through with ATLAS. In about five minutes, you will see what is strong, what is missing, and the smartest experiment to run next.</p>
+
+      <div class="welcome-actions">
+        <button class="primary-button" type="button" id="startBtn">Stress test my idea <span aria-hidden="true">↗</span></button>
+        <button class="text-button" type="button" id="sampleBtn">View a completed example <span aria-hidden="true">→</span></button>
+      </div>
+
+      <div class="welcome-details" aria-label="Experience details">
+        <span><i aria-hidden="true">01</i> About 5 minutes</span>
+        <span><i aria-hidden="true">02</i> No pitch deck needed</span>
+        <span><i aria-hidden="true">03</i> 14 day action plan</span>
+      </div>
+    </div>
+
+    <div class="welcome-visual">
+      <div class="photo-frame">
+        <img src="strada-students.avif" alt="Two HBCU students walking together on campus" />
+        <div class="photo-tint" aria-hidden="true"></div>
+      </div>
+
+      <div class="visual-card">
+        <div class="visual-card-top">
+          <span class="atlas-avatar" aria-label="ATLAS"><span>A</span></span>
+          <span>ATLAS idea lab</span>
+        </div>
+        <p>From an early thought to a clearer, testable next step.</p>
+        <div class="visual-path" aria-hidden="true">
+          <span class="is-active">Idea</span><i></i><span>Evidence</span><i></i><span>Action</span>
+        </div>
+      </div>
+
+      <div class="opportunity-tag">
+        <span class="tag-mark" aria-hidden="true">↗</span>
+        <span>Built to move ideas <strong>toward opportunity.</strong></span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="welcome-footer">
+    <span>Designed for HBCU students with ideas worth exploring.</span>
+    <span>Demo experience · Responses stay in this browser</span>
+  </footer>
+</main>
+
+<!-- ============ CHAT ============ -->
+<main class="chat-page screen" id="screen-chat">
+  <header class="site-header is-compact">
+    <div class="brand-lockup" aria-label="Strada HBCU Initiative">
+      <img class="strada-logo" src="strada-logo.svg" alt="Strada" width="122" height="30" />
+      <span class="brand-divider" aria-hidden="true"></span>
+      <span class="initiative-name">HBCU Initiative</span>
+    </div>
+    <div class="powered-by"><span class="powered-dot" aria-hidden="true"></span> Powered by <strong>SKIN ATLAS</strong></div>
+  </header>
+
+  <section class="chat-shell">
+    <aside class="progress-panel">
+      <button class="back-button" type="button" id="backBtn"><span aria-hidden="true">←</span> Back</button>
+
+      <div class="progress-intro">
+        <span class="section-kicker">Idea stress test</span>
+        <h1>Clarity comes from better questions.</h1>
+        <p>ATLAS will challenge four parts of the idea, then turn your answers into a focused next step.</p>
+      </div>
+
+      <ol class="progress-list" id="progressList">
+        <li data-k="idea"><span>01</span><div><strong>The idea</strong><small>Up next</small></div></li>
+        <li data-k="problem"><span>02</span><div><strong>The problem</strong><small>Up next</small></div></li>
+        <li data-k="proof"><span>03</span><div><strong>The proof</strong><small>Up next</small></div></li>
+        <li data-k="test"><span>04</span><div><strong>The first test</strong><small>Up next</small></div></li>
+      </ol>
+
+      <div class="privacy-note">
+        <span aria-hidden="true">◎</span>
+        <p><strong>Demo privacy</strong> Your answers stay in this browser and are not submitted.</p>
+      </div>
+    </aside>
+
+    <section class="conversation-panel">
+      <div class="conversation-header">
+        <div class="atlas-title">
+          <span class="atlas-avatar is-small" aria-label="ATLAS"><span>A</span></span>
+          <div>
+            <strong>ATLAS</strong>
+            <span><i aria-hidden="true"></i> Idea guide online</span>
+          </div>
+        </div>
+        <div class="question-count" id="signalCount">Signal 0 of 4</div>
+      </div>
+
+      <div class="conversation-scroll" id="scroll" aria-live="polite">
+        <div class="conversation-date">Your private working session</div>
+        <div id="thread"></div>
+      </div>
+
+      <div class="composer">
+        <div class="composer-box" id="composerBox">
+          <textarea id="input" aria-label="Your answer" rows="3" placeholder="I want to build a service that helps students find paid project work with local businesses…"></textarea>
+          <div class="composer-actions">
+            <span>Enter to send · Shift + Enter for a new line</span>
+            <button type="button" id="sendBtn" aria-label="Send answer"><span aria-hidden="true">↑</span></button>
+          </div>
+        </div>
+        <p class="composer-error" id="composerError" style="display:none"></p>
+      </div>
+    </section>
+  </section>
+</main>
+
+<!-- ============ RESULTS ============ -->
+<main class="results-page screen" id="screen-results">
+  <header class="site-header is-compact">
+    <div class="brand-lockup" aria-label="Strada HBCU Initiative">
+      <img class="strada-logo" src="strada-logo.svg" alt="Strada" width="122" height="30" />
+      <span class="brand-divider" aria-hidden="true"></span>
+      <span class="initiative-name">HBCU Initiative</span>
+    </div>
+    <div class="powered-by"><span class="powered-dot" aria-hidden="true"></span> Powered by <strong>SKIN ATLAS</strong></div>
+  </header>
+
+  <section class="results-shell">
+    <div class="results-heading">
+      <div>
+        <span class="section-kicker">Your idea stress test</span>
+        <h1 id="r-title"></h1>
+      </div>
+      <div class="overall-score" id="r-overall-wrap"><span id="r-overall"></span><small>/ 100</small></div>
+    </div>
+
+    <div class="results-grid">
+      <section class="verdict-card">
+        <div class="verdict-label"><span class="signal-pulse" aria-hidden="true"></span><span id="r-label"></span></div>
+        <p class="verdict-detail" id="r-detail"></p>
+        <div class="idea-quote">
+          <span>Your idea</span>
+          <p id="r-quote"></p>
+        </div>
+        <p class="score-context">This is not a grade or a prediction. It is a view of how clearly the idea can be tested today.</p>
+      </section>
+
+      <section class="score-card">
+        <div class="card-heading">
+          <div>
+            <span class="section-kicker">Signal map</span>
+            <h2>Where the idea stands</h2>
+          </div>
+          <span class="mini-badge">ATLAS readout</span>
+        </div>
+        <div class="score-list" id="scoreList"></div>
+      </section>
+    </div>
+
+    <section class="priority-section">
+      <div class="priority-heading">
+        <div>
+          <span class="section-kicker">The next best moves</span>
+          <h2>Three ways to make the idea stronger</h2>
+        </div>
+        <p>Focus on learning before features. These actions are designed to reduce uncertainty quickly.</p>
+      </div>
+
+      <div class="priority-grid">
+        <article class="priority-card is-teal">
+          <span class="priority-number">01</span>
+          <div><h3 id="m1-title"></h3><p id="m1-body"></p></div>
+          <span class="priority-chip">Focus</span>
+        </article>
+        <article class="priority-card is-yellow">
+          <span class="priority-number">02</span>
+          <div><h3 id="m2-title"></h3><p id="m2-body"></p></div>
+          <span class="priority-chip">Proof</span>
+        </article>
+        <article class="priority-card is-coral">
+          <span class="priority-number">03</span>
+          <div><h3 id="m3-title"></h3><p id="m3-body"></p></div>
+          <span class="priority-chip">Action</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="plan-section">
+      <div class="plan-intro">
+        <span class="section-kicker">Your 14 day experiment</span>
+        <h2>Turn the concept into evidence.</h2>
+        <p>A good first test should feel small enough to run now and real enough to change your mind.</p>
+      </div>
+
+      <div class="plan-steps">
+        <div class="plan-step"><span>Days 1–3</span><strong>Define</strong><p id="p-define"></p></div>
+        <div class="plan-step"><span>Days 4–7</span><strong>Listen</strong><p id="p-listen"></p></div>
+        <div class="plan-step"><span>Days 8–12</span><strong>Test</strong><p id="p-test"></p></div>
+        <div class="plan-step"><span>Days 13–14</span><strong>Decide</strong><p id="p-decide"></p></div>
+      </div>
+    </section>
+
+    <div class="results-actions">
+      <button class="primary-button" type="button" id="againBtn">Stress test another idea <span aria-hidden="true">↗</span></button>
+      <button class="outline-button" type="button" onclick="window.print()">Print or save report <span aria-hidden="true">↓</span></button>
+    </div>
+  </section>
+
+  <footer class="results-footer">
+    <span>Strada HBCU Initiative</span>
+    <span>Powered by SKIN ATLAS</span>
+  </footer>
+</main>
+
+<script>
+/* SKIN · Strada Atlas · v1.0. Dom's design, live Atlas brain */
+const VERSION = "strada-1.0";
+
+const SYSTEM_PROMPT = `You are ATLAS, the idea guide for the Strada HBCU Initiative, built by SKIN Studios. You are a warm, sharp guide helping a college student stress test a business idea, often their first one. You are not a chatbot or a questionnaire. Never describe yourself as an AI. Never run a script.
+
+WHO YOU ARE TALKING TO:
+A student. Not a founder mid raise. This might be the first time they have said this idea out loud. They are curious, maybe nervous, and they do not speak startup language. No investor speak, no jargon: never say traction, ICP, GTM, TAM, runway, or product market fit. Plain words only.
+
+THE MOST IMPORTANT RULE:
+The student needs to feel heard before they can be challenged. Every message does two jobs in this order: first receive what they said, then move the conversation. You are still honest. When the idea is vague or the evidence is thin, you say so plainly, because that honesty is the whole value of this conversation. But say it like someone rooting for them, because you are. Testing an idea is the smart move, and you treat every idea as worth testing.
+
+RHYTHM, NOT OPTIONAL:
+- Start most messages by receiving what they just said, in their words. One sentence.
+- One question at most per message. Roughly every third message has no question, just an observation they can react to.
+- Invite, do not demand. "I am curious who runs into this the most" rather than "Who is your target user?"
+- If they say they do not know, slow down completely. Not knowing is exactly what a stress test is for. Say that. Then ask something smaller and more concrete.
+- 1 to 4 sentences per message. Never a wall of text. Never use em dashes.
+- Never promise their idea will succeed, get funded, or make money.
+
+WHAT YOU ARE LEARNING, four things:
+- idea: what they want to create, in one clear thought
+- problem: who feels the problem most, and what those people do about it today
+- proof: what they have seen, heard, or tested that says the problem is real
+- test: the smallest version they could try in the next 14 days
+Learn these by following their thread, not in order. If one answer covers two, do not ask about those again. The best next question hides in their last sentence.
+
+WHEN TO CLOSE:
+This should take about ninety seconds to two minutes. Close after 4 to 6 student turns, as soon as you have the idea, the problem, and a rough sense of the evidence. If you are unsure whether to ask one more question or close, close. Never go past 7 student turns.
+To close: reflect back what you heard in 2 or 3 warm sentences and ask if you got it right. When they confirm, tell them you have what you need for their stress test readout, and set ready_for_results to true on that message.
+
+SHORTCUTS:
+When a question has a small set of obvious answers, offer them as tappable options. Categorical questions only: has it been tested or not, rough counts, yes or no confirmations. Never for open questions about the idea itself or their story. At most 4 options, 1 to 3 words each, roughly one message in four, never twice in a row.
+
+OUTPUT FORMAT. Respond ONLY with valid JSON, no markdown fences, no other text:
+{
+  "kicker": "2 to 4 word supportive label in caps, e.g. START WITH THE CONCEPT, HEARD, WORTH SITTING WITH, GETTING CLEARER",
+  "reply": "your message to the student",
+  "helper": "" or "one short encouraging hint under 15 words, like 'Conversations, waitlists, and workarounds all count as signals.'",
+  "chips": [] or ["up to 4 short tappable answers, categorical questions only"],
+  "ready_for_results": false,
+  "signal": {
+    "idea": null or "short phrase",
+    "problem": null or "short phrase",
+    "proof": null or "short phrase",
+    "test": null or "short phrase"
+  }
+}
+Fill a signal field only once you actually know it. Keep each under 12 words. Update cumulatively. Never mention the signal or the JSON to the student.`;
+
+const REPORT_PROMPT = `You are the SKIN ATLAS engine drafting an idea stress test readout for a college student in the Strada HBCU Initiative, from a short conversation. Warm and direct at once: the student just shared openly, so write like someone who listened and is on their side, and who respects them enough to be straight. Plain words, no startup jargon, no em dashes. Never promise success, funding, or money. Scores are a view of how clearly the idea can be tested today, not a grade or a prediction. Score honestly: most early ideas land between 40 and 75.
+
+Respond ONLY with valid JSON, no fences, every field terse:
+{
+  "title": "5 to 9 words, plain language, names where the idea stands. Sentence case.",
+  "label": "Strong early signal" or "Promising direction" or "Early exploration",
+  "detail": "2 sentences. The honest core of the readout, said kindly.",
+  "quote": "the student's idea in their own words, under 20 words",
+  "overall": 0 to 100 integer,
+  "scores": [
+    {"label":"Idea clarity","note":"Is the concept easy to understand?","value":0-100},
+    {"label":"User focus","note":"Is the first audience specific?","value":0-100},
+    {"label":"Real world proof","note":"Is there evidence beyond an opinion?","value":0-100},
+    {"label":"Testability","note":"Can the riskiest assumption be tested quickly?","value":0-100}
+  ],
+  "moves": [
+    {"title":"3 to 5 words","body":"1 to 2 sentences, concrete, doable in days, specific to THIS idea"},
+    {"title":"3 to 5 words","body":"1 to 2 sentences about getting real commitment or evidence"},
+    {"title":"3 to 5 words","body":"1 to 2 sentences about testing without building technology"}
+  ],
+  "plan": {
+    "define": "1 sentence: the one assumption to prove and who to recruit, specific to this idea",
+    "listen": "1 sentence: what to ask and capture in short conversations",
+    "test": "1 sentence: the smallest manual version to deliver and the commitment to ask for",
+    "decide": "1 sentence: what signal would mean continue, and what would mean change course"
+  }
+}
+Use "Strong early signal" only with real evidence and a clear test. "Early exploration" when the problem or audience is still fuzzy. Match overall to the label: 82 plus for strong, 68 to 81 for promising, below 68 for early.`;
+
+const OPENER = {
+  kicker: "START WITH THE CONCEPT",
+  reply: "What idea are you exploring? Describe it in one or two sentences.",
+  helper: "Do not worry about making it sound polished. Tell me what you want to create and why.",
+  chips: [],
+  ready_for_results: false,
+  signal: {}
+};
+
+const SAMPLE = {
+  quote: "A project marketplace that helps HBCU students build paid experience by completing short, real business projects for local employers.",
+  title: "This idea is ready for a focused pilot.",
+  label: "Strong early signal",
+  detail: "You have a clear user, a credible need, and a practical way to learn before investing heavily. The next step is turning interest into commitments.",
+  overall: 84,
+  scores: [
+    {label:"Idea clarity", note:"Is the concept easy to understand?", value:88},
+    {label:"User focus", note:"Is the first audience specific?", value:85},
+    {label:"Real world proof", note:"Is there evidence beyond an opinion?", value:78},
+    {label:"Testability", note:"Can the riskiest assumption be tested quickly?", value:86}
+  ],
+  moves: [
+    {title:"Narrow the first win", body:"Choose one student group, one urgent moment, and one outcome you can improve first."},
+    {title:"Ask for real commitment", body:"Move beyond positive feedback. Find three people willing to try, pay, refer, or give you time."},
+    {title:"Test it without code", body:"Deliver the core value manually, observe what happens, and only then decide what needs to be built."}
+  ],
+  plan: {
+    define:"Write one assumption you must prove and recruit 8 to 10 juniors and seniors who need paid experience.",
+    listen:"Run short conversations. Capture how they find work today, their workarounds, and their exact language.",
+    test:"Match 10 students with three local businesses by hand and ask both sides for a concrete commitment.",
+    decide:"If students complete projects and employers ask for more, continue. If matching stalls, reshape the problem."
+  }
+};
+
+/* ---------- state ---------- */
+let history = [];
+let busy = false;
+let latest = {};
+const KEYS = ['idea','problem','proof','test'];
+
+const $ = id => document.getElementById(id);
+const thread = $('thread');
+const scrollEl = $('scroll');
+const inputEl = $('input');
+
+/* ---------- screens ---------- */
+function show(name){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('is-on'));
+  $('screen-' + name).classList.add('is-on');
+  window.scrollTo(0,0);
+}
+
+/* ---------- chat ui (Dom's markup) ---------- */
+function down(){ scrollEl.scrollTop = scrollEl.scrollHeight; }
+
+function addAtlas(kicker, text, helper){
+  const row = document.createElement('div');
+  row.className = 'message-row is-atlas';
+  row.innerHTML = '<span class="atlas-avatar is-small"><span>A</span></span><div class="atlas-message"><span></span><p></p></div>';
+  row.querySelector('.atlas-message span').textContent = kicker || 'ATLAS';
+  row.querySelector('.atlas-message p').textContent = text;
+  if (helper){
+    const s = document.createElement('small');
+    s.textContent = helper;
+    row.querySelector('.atlas-message').appendChild(s);
+  }
+  thread.appendChild(row);
+  down();
+}
+function addUser(text){
+  const row = document.createElement('div');
+  row.className = 'message-row is-user';
+  row.innerHTML = '<div class="user-message"></div><span class="user-avatar" aria-label="You">You</span>';
+  row.querySelector('.user-message').textContent = text;
+  thread.appendChild(row);
+  down();
+}
+function clearChips(){ const c = $('chips'); if (c) c.remove(); }
+function showChips(list){
+  clearChips();
+  if (!Array.isArray(list) || !list.length) return;
+  const wrap = document.createElement('div');
+  wrap.className = 'helper-chips'; wrap.id = 'chips';
+  list.slice(0,4).forEach(label => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.textContent = label;
+    b.addEventListener('click', () => send(label));
+    wrap.appendChild(b);
+  });
+  thread.appendChild(wrap);
+  down();
+}
+function wait(on, label){
+  const old = $('wait'); if (old) old.remove();
+  if (!on) return;
+  const row = document.createElement('div');
+  row.className = 'message-row is-atlas'; row.id = 'wait';
+  row.innerHTML = '<span class="atlas-avatar is-small"><span>A</span></span><div class="typing-message" aria-label="ATLAS is thinking">' + (label ? '<em></em>' : '') + '<i></i><i></i><i></i></div>';
+  if (label) row.querySelector('em').textContent = label;
+  thread.appendChild(row);
+  down();
+}
+function showError(msg){
+  const e = $('composerError');
+  e.textContent = msg; e.style.display = 'block';
+  $('composerBox').classList.add('has-error');
+}
+function clearError(){
+  $('composerError').style.display = 'none';
+  $('composerBox').classList.remove('has-error');
+}
+
+function applySignal(sig){
+  if (!sig) return;
+  latest = Object.assign({}, latest, sig);
+  let n = 0;
+  let currentSet = false;
+  KEYS.forEach(k => {
+    const li = document.querySelector('.progress-list li[data-k="' + k + '"]');
+    if (latest[k]){
+      n++;
+      li.className = 'is-complete';
+      li.querySelector('span').textContent = '✓';
+      li.querySelector('small').textContent = 'Captured';
+    } else {
+      li.className = currentSet ? '' : 'is-current';
+      li.querySelector('small').textContent = currentSet ? 'Up next' : 'In progress';
+      currentSet = true;
+    }
+  });
+  $('signalCount').textContent = 'Signal ' + n + ' of 4';
+}
+
+/* ---------- api ---------- */
+const PROXY = '/api/atlas';
+const DIRECT = 'https://api.anthropic.com/v1/messages';
+let endpoint = null;
+
+function parseJSON(t){
+  const c = t.replace(/```json|```/g,'').trim();
+  return JSON.parse(c.slice(c.indexOf('{'), c.lastIndexOf('}') + 1));
+}
+async function post(url, system, messages){
+  const r = await fetch(url, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1200, system, messages })
+  });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+async function api(system, messages){
+  let data;
+  if (endpoint) data = await post(endpoint, system, messages);
+  else {
+    try { data = await post(PROXY, system, messages); endpoint = PROXY; }
+    catch(e){ data = await post(DIRECT, system, messages); endpoint = DIRECT; }
+  }
+  return parseJSON(data.content.filter(b => b.type === 'text').map(b => b.text).join('\n'));
+}
+
+/* ---------- flow ---------- */
+async function send(text){
+  if (busy) return;
+  const val = (text || '').trim();
+  if (!val) return;
+  if (val.length < 5){ showError('Give ATLAS a little more detail so it can challenge the idea.'); return; }
+  const keep = val;
+  busy = true;
+  clearError(); clearChips();
+  addUser(val);
+  inputEl.value = '';
+  history.push({ role:'user', content:val });
+  wait(true);
+  try{
+    const out = await api(SYSTEM_PROMPT, history);
+    wait(false);
+    history.push({ role:'assistant', content: JSON.stringify(out) });
+    addAtlas(out.kicker, out.reply, out.helper);
+    applySignal(out.signal);
+    if (out.ready_for_results) await buildResults();
+    else showChips(out.chips);
+  }catch(err){
+    wait(false);
+    console.error('ATLAS error:', err);
+    addAtlas('ONE MOMENT', 'Something broke on my side and your last message did not reach me. It is back in the box below. Send it again and I will pick up where we were.');
+    history.pop();
+    inputEl.value = keep;
+  }
+  busy = false;
+  inputEl.focus();
+}
+
+async function buildResults(){
+  clearChips();
+  wait(true, 'Hold tight while we build your readout.');
+  try{
+    const transcript = history.map(m => (m.role === 'user' ? 'Student: ' : 'ATLAS: ') + m.content).join('\n');
+    const r = await api(REPORT_PROMPT, [{ role:'user', content:'Transcript:\n\n' + transcript + '\n\nCaptured signal: ' + JSON.stringify(latest) + '\n\nDraft the readout JSON now.' }]);
+    wait(false);
+    renderResults(r);
+  }catch(err){
+    wait(false);
+    console.error('Readout error:', err);
+    addAtlas('ONE MOMENT', 'I have what I need, but the readout did not come through. Say "try again" and I will run it once more.');
+  }
+}
+
+function renderResults(r){
+  $('r-title').textContent = r.title;
+  $('r-label').textContent = r.label;
+  $('r-detail').textContent = r.detail;
+  $('r-quote').textContent = '\u201C' + r.quote + '\u201D';
+  $('r-overall').textContent = Number(r.overall) || 0;
+
+  const list = $('scoreList');
+  list.innerHTML = '';
+  (r.scores || []).forEach(s => {
+    const row = document.createElement('div');
+    row.className = 'score-row';
+    row.innerHTML = '<div class="score-row-top"><div><strong></strong><span></span></div><b></b></div><div class="score-track" aria-hidden="true"><span style="width:0%"></span></div>';
+    row.querySelector('strong').textContent = s.label;
+    row.querySelector('.score-row-top span').textContent = s.note;
+    row.querySelector('b').textContent = Number(s.value) || 0;
+    list.appendChild(row);
+    setTimeout(() => { row.querySelector('.score-track span').style.width = (Number(s.value) || 0) + '%'; }, 250);
+  });
+
+  const m = r.moves || [];
+  [['m1',0],['m2',1],['m3',2]].forEach(([id,i]) => {
+    $(id + '-title').textContent = (m[i] || {}).title || '';
+    $(id + '-body').textContent = (m[i] || {}).body || '';
+  });
+  const p = r.plan || {};
+  $('p-define').textContent = p.define || '';
+  $('p-listen').textContent = p.listen || '';
+  $('p-test').textContent = p.test || '';
+  $('p-decide').textContent = p.decide || '';
+
+  show('results');
+}
+
+function resetChat(){
+  history = [];
+  latest = {};
+  busy = false;
+  thread.innerHTML = '';
+  clearError();
+  document.querySelectorAll('.progress-list li').forEach((li, i) => {
+    li.className = '';
+    li.querySelector('span').textContent = '0' + (i + 1);
+    li.querySelector('small').textContent = 'Up next';
+  });
+  const first = document.querySelector('.progress-list li');
+  first.className = 'is-current';
+  first.querySelector('small').textContent = 'In progress';
+  $('signalCount').textContent = 'Signal 0 of 4';
+  history.push({ role:'user', content:'(The student just opened the idea lab. Begin.)' });
+  history.push({ role:'assistant', content: JSON.stringify(OPENER) });
+  addAtlas(OPENER.kicker, OPENER.reply, OPENER.helper);
+}
+
+/* ---------- wiring ---------- */
+$('startBtn').addEventListener('click', () => { resetChat(); show('chat'); inputEl.focus(); });
+$('againBtn').addEventListener('click', () => { resetChat(); show('chat'); inputEl.focus(); });
+$('sampleBtn').addEventListener('click', () => renderResults(SAMPLE));
+$('backBtn').addEventListener('click', () => show('welcome'));
+$('sendBtn').addEventListener('click', () => send(inputEl.value));
+inputEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(inputEl.value); }
+});
+inputEl.addEventListener('input', clearError);
+</script>
+</body>
+</html>
