@@ -1,4 +1,4 @@
-/* SKIN · Strada Atlas · strada-1.3 */
+/* SKIN · Strada Atlas · strada-1.4 */
 @font-face{font-family:"Geist";src:url("strada-geist.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
 
 
@@ -20,7 +20,7 @@
   --coral-pale: #fedbd8;
   --line: rgba(28, 37, 45, 0.14);
 
-  --css-version: "strada-1.3";
+  --css-version: "strada-1.4";
 
   /* type scale - adjust here, never in the rules below */
   --fs-eyebrow: 12px;
@@ -1737,3 +1737,36 @@ textarea:focus-visible {
 .typing-message em{display:block;font-style:normal;font-size:14.5px;color:var(--ink-soft);margin-bottom:6px}
 .screen{display:none}
 .screen.is-on{display:block}
+
+
+/* ---------- viewport lock: conversation fits the screen, no page scroll ---------- */
+@media (min-width: 821px) {
+  body.is-chat {
+    overflow: hidden;
+  }
+
+  body.is-chat .chat-page {
+    display: flex;
+    height: 100svh;
+    min-height: 0;
+    flex-direction: column;
+  }
+
+  body.is-chat .site-header {
+    flex: none;
+  }
+
+  body.is-chat .chat-shell {
+    height: auto;
+    min-height: 0;
+    flex: 1;
+    grid-template-rows: minmax(0, 1fr);
+    margin-top: 22px;
+    padding-bottom: 22px;
+  }
+
+  body.is-chat .progress-panel {
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+}

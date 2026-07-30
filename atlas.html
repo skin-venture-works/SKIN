@@ -6,7 +6,7 @@
 <title>Atlas | SKIN</title>
 <meta name="description" content="Three minutes with Atlas. Say what feels hard, and get a First Read from SKIN." />
 <link rel="icon" href="skin-logo.png" />
-<!-- SKIN · Atlas · v2.4 -->
+<!-- SKIN · Atlas · v2.5 -->
 <style>
 :root{
   --obsidian:#0B0B0D;
@@ -276,6 +276,15 @@ a{color:inherit}
 .foot a{text-decoration:none;color:inherit}
 .foot a:hover{color:var(--obsidian)}
 
+/* ---------- viewport lock: conversation fits the screen, no page scroll ---------- */
+@media (min-width:1041px){
+  body.is-chat{overflow:hidden}
+  body.is-chat .shell{height:100svh;min-height:0}
+  body.is-chat .stage{min-height:0;grid-template-rows:minmax(0,1fr);padding-bottom:24px}
+  body.is-chat .panel{height:auto;min-height:0}
+  body.is-chat .rail{min-height:0;overflow-y:auto;scrollbar-width:thin}
+}
+
 @media (max-width:1040px){
   .stage{grid-template-columns:1fr;gap:26px;padding:26px 20px}
   .panel{height:auto;min-height:560px}
@@ -296,7 +305,7 @@ a{color:inherit}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body>
+<body class="is-chat">
 <div class="shell">
 
   <header class="topbar">
@@ -395,14 +404,14 @@ a{color:inherit}
   <main class="report" id="report"></main>
 
   <footer class="foot">
-    <span data-version>SKIN Studios · Atlas v2.4</span>
+    <span data-version>SKIN Studios · Atlas v2.5</span>
     <a href="index.html">skin.global</a>
   </footer>
 </div>
 
 <script>
-/* SKIN · Atlas · v2.4 */
-const VERSION = "2.4";
+/* SKIN · Atlas · v2.5 */
+const VERSION = "2.5";
 document.querySelectorAll("[data-version]").forEach(function (el) { el.textContent = "SKIN Studios \u00b7 Atlas v" + VERSION; });
 
 const CHECKOUT = {
@@ -818,6 +827,7 @@ function renderReport(r){
     </div>
   `;
 
+  document.body.classList.remove('is-chat');
   document.getElementById('stage').classList.add('gone');
   document.getElementById('report').classList.add('show');
   window.scrollTo({ top:0, behavior:'smooth' });
