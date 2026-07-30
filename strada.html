@@ -7,7 +7,7 @@
 <meta name="description" content="A guided idea stress test for HBCU students, powered by SKIN ATLAS." />
 <link rel="icon" href="strada-favicon.svg" />
 <link rel="stylesheet" href="strada.css" />
-<!-- SKIN · Strada Atlas · v1.1 -->
+<!-- SKIN · Strada Atlas · v1.2 -->
 </head>
 <body>
 
@@ -19,7 +19,7 @@
       <span class="brand-divider" aria-hidden="true"></span>
       <span class="initiative-name">HBCU Initiative</span>
     </div>
-    <div class="powered-by"><span class="powered-dot" aria-hidden="true"></span> Powered by <strong>SKIN ATLAS</strong></div>
+    <div class="powered-by"><span class="powered-dot" aria-hidden="true"></span> Powered by <strong>SKIN ATLAS</strong><span class="version-tag" data-version title="Build version">strada-1.2</span></div>
   </header>
 
   <section class="welcome-shell">
@@ -83,7 +83,7 @@
       <span class="brand-divider" aria-hidden="true"></span>
       <span class="initiative-name">HBCU Initiative</span>
     </div>
-    <div class="powered-by"><span class="powered-dot" aria-hidden="true"></span> Powered by <strong>SKIN ATLAS</strong></div>
+    <div class="powered-by"><span class="powered-dot" aria-hidden="true"></span> Powered by <strong>SKIN ATLAS</strong><span class="version-tag" data-version title="Build version">strada-1.2</span></div>
   </header>
 
   <section class="chat-shell">
@@ -148,7 +148,7 @@
       <span class="brand-divider" aria-hidden="true"></span>
       <span class="initiative-name">HBCU Initiative</span>
     </div>
-    <div class="powered-by"><span class="powered-dot" aria-hidden="true"></span> Powered by <strong>SKIN ATLAS</strong></div>
+    <div class="powered-by"><span class="powered-dot" aria-hidden="true"></span> Powered by <strong>SKIN ATLAS</strong><span class="version-tag" data-version title="Build version">strada-1.2</span></div>
   </header>
 
   <section class="results-shell">
@@ -239,8 +239,15 @@
 </main>
 
 <script>
-/* SKIN · Strada Atlas · v1.1. Dom's design, live Atlas brain */
-const VERSION = "strada-1.1";
+/* SKIN · Strada Atlas · v1.2. Dom's design, live Atlas brain */
+const VERSION = "strada-1.2";
+var CSS_VERSION = getComputedStyle(document.documentElement).getPropertyValue("--css-version").trim().replace(/"/g, "");
+var stale = CSS_VERSION && CSS_VERSION !== VERSION;
+document.querySelectorAll("[data-version]").forEach(function (el) {
+  el.textContent = stale ? VERSION + " \u00b7 css " + CSS_VERSION : VERSION;
+  el.title = stale ? "Stylesheet is out of date. Hard refresh." : "Build version";
+  if (stale) el.classList.add("is-stale");
+});
 
 const SYSTEM_PROMPT = `You are ATLAS, the idea guide for the Strada HBCU Initiative, built by SKIN Studios. You are a warm, sharp guide helping a college student stress test a business idea, often their first one. You are not a chatbot or a questionnaire. Never describe yourself as an AI. Never run a script.
 
