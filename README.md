@@ -1,6 +1,6 @@
 # SKIN · Atlas and public site
 
-Current: **site v2.0 · Atlas v2.2**
+Current: **site v2.0 · Atlas v2.3 · Strada Atlas v1.1**
 
 Live URLs after deploy:
 
@@ -14,7 +14,9 @@ Live URLs after deploy:
 | --- | --- |
 | `index.html` | New public homepage. Vision led, Atlas front and centre, then diagnostics and execution. |
 | `atlas.html` | **The live Atlas URL.** Always holds the current version. This link never changes. |
-| `atlas-v2.2.html` | Versioned archive copy of the current build. Byte identical to `atlas.html`. |
+| `atlas-v2.3.html` | Versioned archive copy of the current build. Byte identical to `atlas.html`. |
+| `atlas-v2.2.html` | Previous build, archived. |
+| `strada.html` + `strada.css` + `strada-*` assets | Strada ATLAS Idea Lab. Dom's design, live student-tuned brain. |
 | `atlas-v2.1.html` | Previous build, archived. |
 | `atlas-v2.0.html` | Previous build, archived. |
 | `os.html` | The former homepage, now the SKIN OS module hub. Atlas added as module 00. |
@@ -52,6 +54,8 @@ file as both `atlas.html` and `atlas-v2.1.html`, upload both. No links anywhere 
 Dom's interim direction document requires ATLAS and SKIN OS to sit behind server side authentication before public launch. That work is deliberately deferred until after the investor demos. It is a launch blocker, not a demo blocker.
 
 ## Changelog
+
+- **v2.3 / strada-1.1** — UX fixes from testing. Founder and student message text now matches Atlas's message size in both apps (was much smaller). Strada conversation rows get proper breathing room (the 28px rhythm from Dom's design, which only applied to the original fixed layout). Strada shortcut chips are now required for yes or no, counts, and confirmation questions, so students can tap instead of type.
 
 - **v2.2** — Session feedback build. The word "snapshot" is gone, it is a first read everywhere. Conversation shortened to 4 to 6 founder turns with a hard cap at 7, targeting about ninety seconds. Tappable shortcuts return for categorical questions only, never for open ones. Waiting for the report now says "Hold tight while we create your first read." The rail is four items; timeline is still captured silently and still reaches the report.
 
