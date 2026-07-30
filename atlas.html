@@ -6,7 +6,7 @@
 <title>Atlas | SKIN</title>
 <meta name="description" content="Three minutes with Atlas. Say what feels hard, and get a First Read from SKIN." />
 <link rel="icon" href="skin-logo.png" />
-<!-- SKIN · Atlas · v2.3 -->
+<!-- SKIN · Atlas · v2.4 -->
 <style>
 :root{
   --obsidian:#0B0B0D;
@@ -395,14 +395,15 @@ a{color:inherit}
   <main class="report" id="report"></main>
 
   <footer class="foot">
-    <span>SKIN Studios · Atlas v2.3</span>
+    <span data-version>SKIN Studios · Atlas v2.4</span>
     <a href="index.html">skin.global</a>
   </footer>
 </div>
 
 <script>
-/* SKIN · Atlas · v2.3 */
-const VERSION = "2.3";
+/* SKIN · Atlas · v2.4 */
+const VERSION = "2.4";
+document.querySelectorAll("[data-version]").forEach(function (el) { el.textContent = "SKIN Studios \u00b7 Atlas v" + VERSION; });
 
 const CHECKOUT = {
   fundable: "https://buy.stripe.com/28E28sdk7fBQ7yn1oYfrW02",
@@ -419,7 +420,7 @@ You are still honest. You still name gaps between what a founder believes and wh
 RHYTHM, THIS IS NOT OPTIONAL:
 - Start most messages by receiving what they just said. A short reflection, in their words, not a compliment. Not "great answer". Something like "So the deck is done and the conversations are not converting." One sentence is enough.
 - One question at most per message. Never two.
-- Roughly every third message should contain no question at all. Just an observation, or naming what you are noticing, and let them respond to it. Silence and space are tools.
+- Roughly every third message should contain no question at all. Just an observation, or naming what you are noticing, and let them respond to it. Silence and space are tools. Every no-question message MUST carry reaction chips (see SHORTCUTS) so the founder always has a one-tap way to respond to the observation.
 - Never fire consecutive questions with no acknowledgment between them. If your last two messages were both questions, this one starts with an observation.
 - Invite, do not demand. "I am curious what happened after that" rather than "What did they commit to?" Nudge, never force.
 - If a founder says they do not know, or admits something hard, or sounds deflated: that is the moment to slow down completely. Acknowledge that it is a real admission. Tell them plainly that not knowing is useful information, not a failure. Then either sit with it or ask something gentler and more concrete. Never push harder immediately after an admission.
@@ -465,6 +466,9 @@ SHORTCUTS:
 When your question has a small set of obvious answers, offer them as tappable options so the founder does not have to type. Use them for categorical questions only: funding stage, whether they are raising, rough timeline, who the audience is, yes or no confirmations.
 Never offer options for open questions about their situation, their story, or how something feels. Those must stay open. If in doubt, no options.
 At most 4 options, each 1 to 3 words. Roughly one message in four should carry them, never two messages in a row. The founder can always ignore them and type instead.
+
+REACTION CHIPS, for messages with no question:
+When a message ends on an observation instead of a question, it MUST include 2 or 3 reaction chips so the conversation never stalls. Write them from what you just observed, not from a template. Cover three moves: one that confirms the observation, one that pushes back on it, one that opens the door to more. Examples of the shape, not the words: "That's exactly it" / "Not quite" / "There's more". 2 to 4 plain words each, in the founder's voice, no punctuation beyond an apostrophe. Reaction chips do not count toward the never-two-in-a-row rule or the one-in-four rhythm.
 
 OUTPUT FORMAT. Respond ONLY with valid JSON, no markdown fences, no other text:
 {
@@ -667,7 +671,13 @@ async function send(text){
     addAtlas(out.kicker, out.reply);
     applySignal(out.signal);
     if (out.ready_for_first_read) await buildReport();
-    else showChips(out.chips);
+    else {
+      let chips = Array.isArray(out.chips) ? out.chips : [];
+      if (!chips.length && out.reply && out.reply.indexOf('?') === -1) {
+        chips = ["That's exactly it", "Not quite", "There's more"];
+      }
+      showChips(chips);
+    }
   }catch(err){
     wait(false);
     console.error('Atlas error:', err);
