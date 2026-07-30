@@ -1,4 +1,4 @@
-/* SKIN · Strada Atlas · strada-1.2 */
+/* SKIN · Strada Atlas · strada-1.3 */
 @font-face{font-family:"Geist";src:url("strada-geist.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
 
 
@@ -20,7 +20,7 @@
   --coral-pale: #fedbd8;
   --line: rgba(28, 37, 45, 0.14);
 
-  --css-version: "strada-1.2";
+  --css-version: "strada-1.3";
 
   /* type scale - adjust here, never in the rules below */
   --fs-eyebrow: 12px;
